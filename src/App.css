@@ -1,0 +1,153 @@
+.card-bg {
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  transition: all 0.15s ease;
+}
+
+.card-bg:hover {
+  border-color: var(--color-pill-bg);
+  box-shadow: 0 18px 35px rgba(0, 18, 36, 0.3);
+}
+
+.app-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--color-nav-border);
+  background: var(--color-nav-bg);
+  backdrop-filter: blur(10px);
+}
+
+.logo-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(160deg, rgba(52, 213, 255, 0.25), rgba(11, 139, 255, 0.14));
+  border: 1px solid rgba(75, 176, 255, 0.48);
+  display: grid;
+  place-items: center;
+}
+
+.logo-mark svg {
+  width: 30px;
+  height: 30px;
+}
+
+.logo-text {
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-heading);
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 96px;
+  border: 1px solid var(--color-toggle-border);
+  background: var(--color-toggle-bg);
+  color: var(--color-toggle-text);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--color-link-hover);
+  transform: translateY(-1px);
+}
+
+.site-title {
+  color: var(--color-heading);
+}
+
+.site-title-badge {
+  color: #f8fcff;
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+}
+
+.intro-copy {
+  color: var(--color-text-muted);
+}
+
+.text-link {
+  color: var(--color-link);
+  transition: color 0.15s ease;
+}
+
+.text-link:hover {
+  color: var(--color-link-hover);
+}
+
+.section-title {
+  color: var(--color-heading);
+}
+
+.link-list-title {
+  color: var(--color-card-title);
+}
+
+.link-list-description {
+  color: var(--color-card-description);
+}
+
+.link-pill {
+  color: var(--color-pill-text);
+  background-color: var(--color-pill-bg);
+}
+
+.link-pill:hover {
+  background-color: var(--color-pill-bg-hover);
+}
+
+.stat-card-title {
+  color: var(--color-card-title);
+}
+
+.stat-card-value {
+  color: var(--color-card-value);
+}
+
+#center {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  place-content: center;
+  place-items: center;
+  flex-grow: 1;
+
+  @media (max-width: 1024px) {
+    padding: 32px 20px 24px;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .app-navbar {
+    padding: 12px 16px;
+  }
+
+  .logo-mark {
+    width: 36px;
+    height: 36px;
+  }
+
+  .logo-text {
+    font-size: 0.9rem;
+  }
+}
