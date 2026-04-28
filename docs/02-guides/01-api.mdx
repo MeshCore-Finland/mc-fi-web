@@ -1,0 +1,112 @@
+# API Reference
+
+Integrate with MeshCore using the REST API.
+
+## Base URL
+
+```
+https://api.meshcore.io/v1
+```
+
+## Authentication
+
+All requests require a bearer token in the `Authorization` header:
+
+```bash
+Authorization: Bearer YOUR_API_TOKEN
+```
+
+Get your token from your [account dashboard](https://meshcore.io/dashboard).
+
+## Endpoints
+
+### Messages
+
+**Send Message**
+```
+POST /messages
+```
+
+Send a message to a node or broadcast to the network.
+
+Request:
+```json
+{
+  "to": "node_id",
+  "content": "Hello",
+  "broadcast": false
+}
+```
+
+Response:
+```json
+{
+  "id": "msg_123",
+  "status": "sent",
+  "timestamp": "2024-01-15T10:30:00Z"
+}
+```
+
+### Nodes
+
+**List Nodes**
+```
+GET /nodes
+```
+
+Get all accessible nodes in range.
+
+**Get Node Info**
+```
+GET /nodes/{node_id}
+```
+
+Get details about a specific node.
+
+Response:
+```json
+{
+  "id": "node_123",
+  "name": "My Node",
+  "location": {
+    "lat": 60.1699,
+    "lon": 24.9384
+  },
+  "online": true,
+  "last_seen": "2024-01-15T10:30:00Z"
+}
+```
+
+### Stats
+
+**Network Stats**
+```
+GET /stats
+```
+
+Get network statistics and health.
+
+## Error Handling
+
+All errors return JSON with status and message:
+
+```json
+{
+  "error": "invalid_token",
+  "message": "Authentication failed"
+}
+```
+
+Common status codes:
+- `200` - Success
+- `401` - Authentication failed
+- `404` - Resource not found
+- `429` - Rate limited
+- `500` - Server error
+
+## Rate Limits
+
+- **Free tier**: 100 requests/hour
+- **Pro**: 10,000 requests/hour
+
+Check `X-RateLimit-*` headers in responses for current usage.

@@ -1,0 +1,111 @@
+# Deployment Guide
+
+Deploy MeshCore nodes and manage your mesh network.
+
+## Network Planning
+
+Before deployment, plan your network:
+
+### Coverage Area
+- Identify primary coverage zone
+- Note terrain and obstacles
+- Plan for line-of-sight between nodes
+
+### Node Placement
+- Mount devices on rooftops or high points
+- Ensure weatherproof enclosures
+- Provide power (solar or mains)
+- Use proper antennas for range
+
+### Capacity Planning
+- Estimate message volume
+- Plan for redundancy
+- Consider failover nodes
+
+## Installing Nodes
+
+### Hardware Setup
+
+1. **Power Supply**
+   - Use regulated 5V/2A minimum
+   - Add battery backup for reliability
+   - Consider solar panels for remote areas
+
+2. **Antenna**
+   - Use external antenna for better range
+   - Position for 360° coverage
+   - Protect from weather
+
+3. **Enclosure**
+   - Use IP65+ rated outdoor box
+   - Ensure ventilation
+   - Mount securely
+
+### Software Setup
+
+1. Flash firmware (see [Setup Guide](../getting-started/setup))
+2. Configure network parameters
+3. Set node location via GPS or manually
+4. Enable mesh routing
+
+## Network Configuration
+
+### Mesh Settings
+
+```json
+{
+  "channel": 1,
+  "power": "high",
+  "bandwidth": "250kHz",
+  "spreading_factor": 10,
+  "coding_rate": "4/8"
+}
+```
+
+### Regional Compliance
+
+MeshCore follows local regulations:
+- **Finland**: ISM band 868MHz
+- Check local laws before deployment
+- Adjust power levels if required
+
+## Monitoring
+
+Monitor your network health:
+
+1. Use [CoreScope](https://corescope.meshcore.fi/#/map) to view nodes
+2. Check message delivery rates
+3. Monitor battery levels
+4. Watch for packet loss
+
+## Maintenance
+
+### Regular Tasks
+
+- **Weekly**: Check node status
+- **Monthly**: Verify antenna connections
+- **Quarterly**: Update firmware
+- **Annually**: Replace batteries/solar panels
+
+### Troubleshooting
+
+**Nodes not connecting**
+- Verify same channel and spreading factor
+- Check range and line-of-sight
+- Reboot nodes
+
+**Messages not delivered**
+- Check network connectivity
+- Verify node is online
+- Monitor for congestion
+
+**Poor coverage**
+- Add relay nodes
+- Improve antenna positioning
+- Reduce spreading factor if closer nodes
+
+## Getting Help
+
+- **Community Discord**: [Mesh Finland](https://discord.gg/QVQSmpaf)
+- **CoreScope Issues**: Report via web interface
+- **Documentation**: Check [guides](../guides)
