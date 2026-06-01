@@ -22,7 +22,7 @@ function StatsCards() {
 
     const fetchStats = async () => {
       try {
-        const response = await fetch("https://corescope.vaizki.fi/api/stats");
+        const response = await fetch("https://corescope.meshcore.fi/api/stats");
         if (!response.ok) {
           throw new Error("Failed to fetch stats");
         }
