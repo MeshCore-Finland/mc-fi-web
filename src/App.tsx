@@ -2,6 +2,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import StatsCards from "./components/StatsCards";
 import LinkList from "./components/LinkList";
+import { DocsPage } from "./pages/DocsPage";
 import {
   faComments,
   faCrosshairs,
@@ -14,6 +15,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type Theme = "light" | "dark";
+type Page = "home" | "docs";
 
 const THEME_STORAGE_KEY = "mc-fi-theme";
 
@@ -31,6 +33,10 @@ const getStoredTheme = (): Theme | null => {
 function App() {
   const [theme, setTheme] = useState<Theme>(() => getStoredTheme() ?? getSystemTheme());
   const [usesSystemTheme, setUsesSystemTheme] = useState(() => getStoredTheme() === null);
+  const [currentPage, setCurrentPage] = useState<Page>(() => {
+    const hash = window.location.hash.slice(1);
+    return hash === "docs" ? "docs" : "home";
+  });
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -51,6 +57,16 @@ function App() {
     return () => mediaQuery.removeEventListener("change", applySystemTheme);
   }, [usesSystemTheme]);
 
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1);
+      setCurrentPage(hash === "docs" ? "docs" : "home");
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
   const toggleTheme = () => {
     setUsesSystemTheme(false);
     setTheme((currentTheme) => {
@@ -63,7 +79,7 @@ function App() {
   return (
     <>
       <header className="app-navbar">
-        <div className="logo-placeholder">
+        <a href="#home" className="logo-placeholder">
           <div className="logo-mark" aria-hidden="true">
             <svg viewBox="0 0 64 64" role="presentation">
               <defs>
@@ -90,49 +106,61 @@ function App() {
             </svg>
           </div>
           <div className="logo-text">MC FI</div>
-        </div>
+        </a>
 
-        <button
-          type="button"
-          className="theme-toggle"
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-          title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-        >
-          <FontAwesomeIcon icon={theme === "dark" ? faSun : faMoon} />
-          {theme === "dark" ? "Light" : "Dark"}
-        </button>
+        <div className="flex gap-4 items-center">
+          <a href="#home" className="text-sm font-medium hover:opacity-75">
+            Home
+          </a>
+          <a href="#docs" className="text-sm font-medium hover:opacity-75">
+            Documentation
+          </a>
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+          >
+            <FontAwesomeIcon icon={theme === "dark" ? faSun : faMoon} />
+            {theme === "dark" ? "Light" : "Dark"}
+          </button>
+        </div>
       </header>
 
-      <section id="center">
-        <div>
-          <div className="text-5xl md:text-7xl font-semibold mb-6 mt-6 tracking-tight leading-loose-2 site-title">
-            MeshCore{" "}
-            <span className="site-title-badge rounded-md px-3">Finland</span>
-          </div>
-          <div className="text-lg max-w-3xl mx-auto mb-10 leading-relaxed intro-copy">
-            <div className="mb-4">
-              This is a regional MeshCore site for Finland by local community
-              enthusiasts. Work in progress, check back later for updates.
+      {currentPage === "docs" ? (
+        <DocsPage />
+      ) : (
+        <>
+          <section id="center">
+            <div>
+              <div className="text-5xl md:text-7xl font-semibold mb-6 mt-6 tracking-tight leading-loose-2 site-title">
+                MeshCore{" "}
+                <span className="site-title-badge rounded-md px-3">Finland</span>
+              </div>
+              <div className="text-lg max-w-3xl mx-auto mb-10 leading-relaxed intro-copy">
+                <div className="mb-4">
+                  This is a regional MeshCore site for Finland by local community
+                  enthusiasts. Work in progress, check back later for updates.
+                </div>
+                <div className="mb-4">
+                  MeshCore is a simple, secure, off-grid mesh communications system
+                  set up by a global community. For more information about MeshCore,
+                  visit the main website at{" "}
+                  <a
+                    href="https://meshcore.io"
+                    className="font-medium text-link"
+                  >
+                    meshcore.io
+                  </a>
+                  .
+                </div>
+                <StatsCards />
+              </div>
             </div>
-            <div className="mb-4">
-              MeshCore is a simple, secure, off-grid mesh communications system
-              set up by a global community. For more information about MeshCore,
-              visit the main website at{" "}
-              <a
-                href="https://meshcore.io"
-                className="font-medium text-link"
-              >
-                meshcore.io
-              </a>
-              .
-            </div>
-            <StatsCards />
-          </div>
-        </div>
-      </section>
+          </section>
 
-      <section id="links">
+               <section id="links">
         <div className="grid grid-cols-1 sm:grid-cols-2">
           <div id="main-links">
             <div className="text-2xl font-bold mb-4 section-title">MeshCore in Finland</div>
@@ -213,6 +241,8 @@ function App() {
           </div>
         </div>
       </section>
+        </>
+      )}
     </>
   );
 }

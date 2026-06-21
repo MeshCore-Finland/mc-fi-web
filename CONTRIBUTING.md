@@ -1,0 +1,29 @@
+# Contributing to MeshCore Finland
+
+documents can be found inside the `src/docs/` folder.
+
+submenus and pages can be ordered by numbering them
+
+```
+docs
+|
+\__ 01-About
+|        \__ 01-introductions.mdx
+|        \__ 02-FAQ
+|
+\__ 02-Contributing
+|         \__ 01-getting-started.mdx
+```
+
+You can write with markdown and javascript in the pages.
+
+
+
+## getting started
+
+  1. fork repo
+  2. clone repo to local machine
+  3. install dependencies with `npm i` (must have node and npm installed)
+  4. add youre changes and test them
+  5. make a pr
+  6. profit?
