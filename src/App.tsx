@@ -199,6 +199,17 @@ function App() {
                 },
               ]}
             />
+                        <LinkList
+              title="MeshCore Seinäjoki"
+              description="Seinäjoki MeshCore info coming soon..."
+              links={[
+                {
+                  icon: faMap,
+                  text: "MeshMapper SJY",
+                  href: "https://sjy.meshmapper.net/",
+                },
+              ]}
+            />
           </div>
         </div>
       </section>
