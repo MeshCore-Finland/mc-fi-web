@@ -229,9 +229,92 @@ function App() {
                 />
               </div>
             </div>
-          </section>
-        </>
-      )}
+            <StatsCards />
+          </div>
+        </div>
+      </section>
+
+      <section id="links">
+        <div className="grid grid-cols-1 sm:grid-cols-2">
+          <div id="main-links">
+            <div className="text-2xl font-bold mb-4 section-title">MeshCore in Finland</div>
+            <LinkList
+              title="Mesh Finland Discord"
+              description="Discord server for Meshtastic & MeshCore in Finland"
+              links={[
+                {
+                  icon: faComments,
+                  text: "Join Discord",
+                  href: "https://discord.gg/QVQSmpaf",
+                },
+              ]}
+            />
+            <LinkList
+              title="CoreScope Finland"
+              description="Explore MeshCore nodes & traffic in Finland"
+              links={[
+                {
+                  icon: faCrosshairs,
+                  text: "Open CoreScope",
+                  href: "https://corescope.meshcore.fi/#/map",
+                },
+              ]}
+            />
+            <LinkList
+              title="MeshCore Flasher"
+              description="Flash the firmware on your MeshCore nodes. Custom flasher coming soon"
+              links={[
+                {
+                  icon: faMicrochip,
+                  text: "Open Flasher",
+                  href: "https://flasher.meshcore.io",
+                },
+              ]}
+            />
+          </div>
+          <div id="regional-links">
+            <div className="text-2xl font-bold mb-4 section-title">Regional MeshCore Sites</div>
+            <LinkList
+              title="Mesh Pirkanmaa"
+              description="Pirkanmaa MeshCore & Meshtastic information"
+              links={[
+                {
+                  icon: faGlobe,
+                  text: "Visit Website",
+                  href: "https://meshpirkanmaa.org/",
+                },
+                {
+                  icon: faMap,
+                  text: "MeshMapper TMP",
+                  href: "https://tmp.meshmapper.net/",
+                },
+              ]}
+            />
+            <LinkList
+              title="MeshCore Uusimaa"
+              description="Uusimaa MeshCore info coming soon..."
+              links={[
+                {
+                  icon: faMap,
+                  text: "MeshMapper HEL",
+                  href: "https://hel.meshmapper.net/",
+                },
+              ]}
+            />
+                        <LinkList
+              title="MeshCore Seinäjoki"
+              description="Seinäjoki MeshCore info coming soon..."
+              links={[
+                {
+                  icon: faMap,
+                  text: "MeshMapper SJY",
+                  href: "https://sjy.meshmapper.net/",
+                },
+              ]}
+            />
+          </div>
+        </div>
+      </section>
     </>
   );
 }
