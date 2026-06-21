@@ -55,26 +55,10 @@ src/
   lib/                # Utilities (nav generation)
   App.tsx             # Main app routing
   index.css           # Global styles
-docs/
-  [section]/          # Documentation sections
-    [page].mdx        # MDX pages
+  docs/
+    [section]/          # Documentation sections
+      [page].mdx        # MDX pages
 ```
-
-## Documentation
-
-Documentation lives in `/docs` with automatic folder structure → navigation generation.
-
-Example:
-```
-docs/
-  getting-started/
-    intro.mdx
-    setup.mdx
-  guides/
-    api.mdx
-```
-
-Generates: "Getting Started" section with "Intro" and "Setup" pages, "Guides" section with "API" page.
 
 ## Theme System
 
