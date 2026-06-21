@@ -36,14 +36,17 @@ function getSlug(text: string): string {
 
 function generateNav(): NavStructure {
   const docs = import.meta.glob<{ default: React.ComponentType }>(
-    '/docs/**/*.mdx',
+    '/src/docs/**/*.mdx',
     { eager: true }
   )
+
+  console.log('Glob keys:', Object.keys(docs))
 
   const sections: Record<string, { pages: NavPage[]; sortKey: string }> = {}
 
   Object.keys(docs).forEach(path => {
-    const match = path.match(/\/docs\/([^/]+)\/([^/]+)\.mdx$/)
+    const match = path.match(/\/src\/docs\/([^/]+)\/([^/]+)\.mdx$/)
+
     if (!match) return
 
     const [, sectionDir, pageFile] = match
@@ -76,14 +79,14 @@ function generateNav(): NavStructure {
 
 function buildComponentMap(): Record<string, React.ComponentType> {
   const docs = import.meta.glob<{ default: React.ComponentType }>(
-    '/docs/**/*.mdx',
+    '/src/docs/**/*.mdx',
     { eager: true }
   )
 
   const components: Record<string, React.ComponentType> = {}
 
   Object.entries(docs).forEach(([filePath, mod]) => {
-    const match = filePath.match(/\/docs\/([^/]+)\/([^/]+)\.mdx$/)
+    const match = filePath.match(/\/src\/docs\/([^/]+)\/([^/]+)\.mdx$/)
     if (match) {
       const [, section, page] = match
       components[`/docs/${section}/${page}`] = mod.default

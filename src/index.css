@@ -217,6 +217,7 @@ code {
   border-radius: 6px;
   overflow-x: auto;
   margin-bottom: 1rem;
+  text-align: left;
 }
 
 .prose pre code {
