@@ -1,7 +1,47 @@
+import { Component, type ErrorInfo, type ReactNode } from 'react'
 import { docComponents } from '../lib/nav'
 
 interface DocViewerProps {
   path: string
+}
+
+interface DocErrorBoundaryProps {
+  children: ReactNode
+}
+
+interface DocErrorBoundaryState {
+  error: Error | null
+}
+
+class DocErrorBoundary extends Component<DocErrorBoundaryProps, DocErrorBoundaryState> {
+  state: DocErrorBoundaryState = {
+    error: null,
+  }
+
+  static getDerivedStateFromError(error: Error): DocErrorBoundaryState {
+    return { error }
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('Failed to render docs page', error, errorInfo)
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="docs-error" role="alert">
+          <h1>Page failed to render</h1>
+          <p>
+            The selected docs page hit a rendering error. The docs menu is still
+            available, so you can switch to another page.
+          </p>
+          <pre>{this.state.error.message}</pre>
+        </div>
+      )
+    }
+
+    return this.props.children
+  }
 }
 
 export function DocViewer({ path }: DocViewerProps) {
@@ -12,8 +52,10 @@ export function DocViewer({ path }: DocViewerProps) {
   }
 
   return (
-    <div className="prose max-w-4xl p-8">
-      <Component />
+    <div className="docs-prose max-w-4xl p-8">
+      <DocErrorBoundary key={path}>
+        <Component />
+      </DocErrorBoundary>
     </div>
   )
 }

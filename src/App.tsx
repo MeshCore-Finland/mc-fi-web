@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import StatsCards from "./components/StatsCards";
 import LinkList from "./components/LinkList";
 import { DocsPage } from "./pages/DocsPage";
+import { resolveDocPath } from "./lib/nav";
 import {
   faComments,
   faCrosshairs,
@@ -16,8 +17,38 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type Theme = "light" | "dark";
 type Page = "home" | "docs";
+interface AppRoute {
+  page: Page;
+  docPath?: string;
+}
 
 const THEME_STORAGE_KEY = "mc-fi-theme";
+const getRouteFromHash = (hash: string): AppRoute | null => {
+  const route = hash.replace(/^#/, "");
+
+  if (route === "docs" || route === "/docs") {
+    return { page: "docs" };
+  }
+
+  if (route.startsWith("/docs/")) {
+    const docPath = `/${route
+      .slice(1)
+      .split("/")
+      .map(segment => decodeURIComponent(segment))
+      .join("/")}`;
+
+    return {
+      page: "docs",
+      docPath: resolveDocPath(docPath) ?? docPath,
+    };
+  }
+
+  if (route === "" || route === "home" || route === "/home") {
+    return { page: "home" };
+  }
+
+  return null;
+};
 
 const getSystemTheme = (): Theme =>
   window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -33,9 +64,8 @@ const getStoredTheme = (): Theme | null => {
 function App() {
   const [theme, setTheme] = useState<Theme>(() => getStoredTheme() ?? getSystemTheme());
   const [usesSystemTheme, setUsesSystemTheme] = useState(() => getStoredTheme() === null);
-  const [currentPage, setCurrentPage] = useState<Page>(() => {
-    const hash = window.location.hash.slice(1);
-    return hash === "docs" ? "docs" : "home";
+  const [route, setRoute] = useState<AppRoute>(() => {
+    return getRouteFromHash(window.location.hash) ?? { page: "home" };
   });
 
   useEffect(() => {
@@ -59,8 +89,11 @@ function App() {
 
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.slice(1);
-      setCurrentPage(hash === "docs" ? "docs" : "home");
+      const nextRoute = getRouteFromHash(window.location.hash);
+
+      if (nextRoute) {
+        setRoute(nextRoute);
+      }
     };
 
     window.addEventListener("hashchange", handleHashChange);
@@ -79,7 +112,7 @@ function App() {
   return (
     <>
       <header className="app-navbar">
-        <a href="#home" className="logo-placeholder">
+        <a href="#/home" className="logo-placeholder">
           <div className="logo-mark" aria-hidden="true">
             <svg viewBox="0 0 64 64" role="presentation">
               <defs>
@@ -109,10 +142,10 @@ function App() {
         </a>
 
         <div className="flex gap-4 items-center">
-          <a href="#home" className="text-sm font-medium hover:opacity-75">
+          <a href="#/home" className="text-sm font-medium hover:opacity-75">
             Home
           </a>
-          <a href="#docs" className="text-sm font-medium hover:opacity-75">
+          <a href="#/docs" className="text-sm font-medium hover:opacity-75">
             Documentation
           </a>
           <button
@@ -128,8 +161,8 @@ function App() {
         </div>
       </header>
 
-      {currentPage === "docs" ? (
-        <DocsPage />
+      {route.page === "docs" ? (
+        <DocsPage selectedPath={route.docPath} />
       ) : (
         <>
           <section id="center">
