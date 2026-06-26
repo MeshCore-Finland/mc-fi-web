@@ -102,8 +102,8 @@ export function FaqPage({ markdown }: FaqPageProps) {
       ) : null}
 
       <div className="faq-list">
-        {faq.items.map((item, index) => (
-          <details className="faq-item" key={item.question} open={index === 0}>
+        {faq.items.map(item => (
+          <details className="faq-item" key={item.question}>
             <summary>{item.question}</summary>
             <div className="faq-answer">
               <MarkdownContent>{item.answer}</MarkdownContent>

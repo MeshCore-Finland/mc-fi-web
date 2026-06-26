@@ -5,6 +5,7 @@ import LinkList from "./components/LinkList";
 import { DocsPage } from "./pages/DocsPage";
 import { resolveDocPath } from "./lib/nav";
 import {
+  faBars,
   faComments,
   faCrosshairs,
   faGlobe,
@@ -64,6 +65,7 @@ const getStoredTheme = (): Theme | null => {
 function App() {
   const [theme, setTheme] = useState<Theme>(() => getStoredTheme() ?? getSystemTheme());
   const [usesSystemTheme, setUsesSystemTheme] = useState(() => getStoredTheme() === null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [route, setRoute] = useState<AppRoute>(() => {
     return getRouteFromHash(window.location.hash) ?? { page: "home" };
   });
@@ -93,6 +95,7 @@ function App() {
 
       if (nextRoute) {
         setRoute(nextRoute);
+        setIsMenuOpen(false);
       }
     };
 
@@ -101,6 +104,7 @@ function App() {
   }, []);
 
   const toggleTheme = () => {
+    setIsMenuOpen(false);
     setUsesSystemTheme(false);
     setTheme((currentTheme) => {
       const nextTheme: Theme = currentTheme === "dark" ? "light" : "dark";
@@ -138,26 +142,59 @@ function App() {
               />
             </svg>
           </div>
-          <div className="logo-text">MC FI</div>
+          <span className="logo-text">MeshCore Finland</span>
         </a>
+        <div className="mobile-brand-title" aria-hidden="true">MeshCore Finland</div>
 
-        <div className="flex gap-4 items-center">
-          <a href="#/home" className="text-sm font-medium hover:opacity-75">
+        <div className="app-nav-actions">
+          <a href="#/home" className="app-nav-link">
             Home
           </a>
-          <a href="#/docs" className="text-sm font-medium hover:opacity-75">
-            Documentation
+          <a href="#/docs" className="app-nav-link">
+            Docs
           </a>
           <button
             type="button"
-            className="theme-toggle"
+            className="theme-toggle app-nav-theme"
             onClick={toggleTheme}
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
           >
             <FontAwesomeIcon icon={theme === "dark" ? faSun : faMoon} />
-            {theme === "dark" ? "Light" : "Dark"}
           </button>
+          <div className="app-menu">
+            <button
+              type="button"
+              className="app-menu-trigger"
+              onClick={() => setIsMenuOpen(open => !open)}
+              aria-expanded={isMenuOpen}
+              aria-label="Open site menu"
+              title="Open site menu"
+            >
+              <FontAwesomeIcon icon={faBars} />
+            </button>
+
+            {isMenuOpen ? (
+              <div className="app-menu-panel">
+                <a href="#/home" className="app-menu-link">
+                  Home
+                </a>
+                <a href="#/docs" className="app-menu-link">
+                  Docs
+                </a>
+                <button
+                  type="button"
+                  className="theme-toggle"
+                  onClick={toggleTheme}
+                  aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                  title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                >
+                  <FontAwesomeIcon icon={theme === "dark" ? faSun : faMoon} />
+                  {theme === "dark" ? "Light" : "Dark"}
+                </button>
+              </div>
+            ) : null}
+          </div>
         </div>
       </header>
 
