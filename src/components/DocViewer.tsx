@@ -52,7 +52,7 @@ export function DocViewer({ path }: DocViewerProps) {
   }
 
   return (
-    <div className="docs-prose max-w-4xl p-8">
+    <div className="docs-prose">
       <DocErrorBoundary key={path}>
         <Component />
       </DocErrorBoundary>

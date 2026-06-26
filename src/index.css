@@ -144,6 +144,54 @@ code {
   background: var(--code-bg);
 }
 
+.docs-layout {
+  display: grid;
+  flex: 1;
+  gap: 2rem;
+  grid-template-columns: 220px minmax(0, 1fr);
+  padding: 2rem 1rem;
+  text-align: left;
+}
+
+.docs-sidebar {
+  min-width: 0;
+  padding-top: 1rem;
+}
+
+.docs-content {
+  min-width: 0;
+}
+
+.docs-mobile-nav {
+  display: none;
+}
+
+.docs-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 220px;
+}
+
+.docs-nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.docs-nav-section-title {
+  color: var(--color-heading);
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0 1rem;
+}
+
+.docs-nav-pages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
 .docs-nav-link {
   border-radius: 4px;
   color: var(--color-text-muted);
@@ -167,6 +215,8 @@ code {
   color: var(--color-text);
   font-size: 16px;
   line-height: 1.75;
+  max-width: 56rem;
+  padding: 2rem;
   text-align: left;
 }
 
@@ -415,4 +465,61 @@ code {
 .docs-prose .docs-error pre {
   margin-bottom: 0;
   white-space: pre-wrap;
+}
+
+@media (max-width: 767px) {
+  .docs-layout {
+    display: block;
+    padding: 1rem;
+  }
+
+  .docs-sidebar {
+    display: none;
+  }
+
+  .docs-mobile-nav {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .docs-mobile-nav-panel {
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background-color: var(--color-surface-2);
+  }
+
+  .docs-mobile-nav-panel summary {
+    color: var(--color-heading);
+    cursor: pointer;
+    font-weight: 700;
+    padding: 0.875rem 1rem;
+  }
+
+  .docs-mobile-nav-panel .docs-nav {
+    border-top: 1px solid var(--color-border);
+    gap: 1rem;
+    padding: 1rem;
+    width: 100%;
+  }
+
+  .docs-mobile-nav-panel .docs-nav-section-title {
+    padding: 0;
+  }
+
+  .docs-mobile-nav-panel .docs-nav-link {
+    padding-inline: 0.75rem;
+  }
+
+  .docs-prose {
+    max-width: none;
+    padding: 0;
+  }
+
+  .docs-prose h1 {
+    font-size: 2rem;
+  }
+
+  .docs-prose h2 {
+    font-size: 1.5rem;
+  }
 }

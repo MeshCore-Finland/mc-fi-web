@@ -6,16 +6,13 @@ interface DocsNavProps {
 
 export function DocsNav({ selectedPath }: DocsNavProps) {
   return (
-    <div className="flex flex-col gap-6" style={{ width: '220px' }}>
+    <nav className="docs-nav" aria-label="Documentation">
       {nav.sections.map(section => (
-        <div key={section.slug} className="flex flex-col gap-2">
-          <div
-            style={{ color: 'var(--color-heading)' }}
-            className="font-semibold px-4 text-sm"
-          >
+        <div key={section.slug} className="docs-nav-section">
+          <div className="docs-nav-section-title">
             {section.title}
           </div>
-          <div className="flex flex-col gap-1">
+          <div className="docs-nav-pages">
             {section.pages.map(page => {
               const isSelected = selectedPath === page.path
               return (
@@ -31,6 +28,6 @@ export function DocsNav({ selectedPath }: DocsNavProps) {
           </div>
         </div>
       ))}
-    </div>
+    </nav>
   )
 }
