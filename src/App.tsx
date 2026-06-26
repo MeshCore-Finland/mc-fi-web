@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import StatsCards from "./components/StatsCards";
 import LinkList from "./components/LinkList";
 import { DocsPage } from "./pages/DocsPage";
@@ -66,6 +66,7 @@ function App() {
   const [theme, setTheme] = useState<Theme>(() => getStoredTheme() ?? getSystemTheme());
   const [usesSystemTheme, setUsesSystemTheme] = useState(() => getStoredTheme() === null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const [route, setRoute] = useState<AppRoute>(() => {
     return getRouteFromHash(window.location.hash) ?? { page: "home" };
   });
@@ -102,6 +103,32 @@ function App() {
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
+
+  useEffect(() => {
+    if (!isMenuOpen) {
+      return;
+    }
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isMenuOpen]);
 
   const toggleTheme = () => {
     setIsMenuOpen(false);
@@ -162,7 +189,7 @@ function App() {
           >
             <FontAwesomeIcon icon={theme === "dark" ? faSun : faMoon} />
           </button>
-          <div className="app-menu">
+          <div className="app-menu" ref={menuRef}>
             <button
               type="button"
               className="app-menu-trigger"
