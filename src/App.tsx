@@ -1,9 +1,11 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import StatsCards from "./components/StatsCards";
 import LinkList from "./components/LinkList";
 import { DocsPage } from "./pages/DocsPage";
+import { resolveDocPath } from "./lib/nav";
 import {
+  faBars,
   faComments,
   faCrosshairs,
   faGlobe,
@@ -16,8 +18,38 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type Theme = "light" | "dark";
 type Page = "home" | "docs";
+interface AppRoute {
+  page: Page;
+  docPath?: string;
+}
 
 const THEME_STORAGE_KEY = "mc-fi-theme";
+const getRouteFromHash = (hash: string): AppRoute | null => {
+  const route = hash.replace(/^#/, "");
+
+  if (route === "docs" || route === "/docs") {
+    return { page: "docs" };
+  }
+
+  if (route.startsWith("/docs/")) {
+    const docPath = `/${route
+      .slice(1)
+      .split("/")
+      .map(segment => decodeURIComponent(segment))
+      .join("/")}`;
+
+    return {
+      page: "docs",
+      docPath: resolveDocPath(docPath) ?? docPath,
+    };
+  }
+
+  if (route === "" || route === "home" || route === "/home") {
+    return { page: "home" };
+  }
+
+  return null;
+};
 
 const getSystemTheme = (): Theme =>
   window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -33,9 +65,10 @@ const getStoredTheme = (): Theme | null => {
 function App() {
   const [theme, setTheme] = useState<Theme>(() => getStoredTheme() ?? getSystemTheme());
   const [usesSystemTheme, setUsesSystemTheme] = useState(() => getStoredTheme() === null);
-  const [currentPage, setCurrentPage] = useState<Page>(() => {
-    const hash = window.location.hash.slice(1);
-    return hash === "docs" ? "docs" : "home";
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const [route, setRoute] = useState<AppRoute>(() => {
+    return getRouteFromHash(window.location.hash) ?? { page: "home" };
   });
 
   useEffect(() => {
@@ -59,15 +92,46 @@ function App() {
 
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.slice(1);
-      setCurrentPage(hash === "docs" ? "docs" : "home");
+      const nextRoute = getRouteFromHash(window.location.hash);
+
+      if (nextRoute) {
+        setRoute(nextRoute);
+        setIsMenuOpen(false);
+      }
     };
 
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
+  useEffect(() => {
+    if (!isMenuOpen) {
+      return;
+    }
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isMenuOpen]);
+
   const toggleTheme = () => {
+    setIsMenuOpen(false);
     setUsesSystemTheme(false);
     setTheme((currentTheme) => {
       const nextTheme: Theme = currentTheme === "dark" ? "light" : "dark";
@@ -79,7 +143,7 @@ function App() {
   return (
     <>
       <header className="app-navbar">
-        <a href="#home" className="logo-placeholder">
+        <a href="#/home" className="logo-placeholder">
           <div className="logo-mark" aria-hidden="true">
             <svg viewBox="0 0 64 64" role="presentation">
               <defs>
@@ -105,31 +169,64 @@ function App() {
               />
             </svg>
           </div>
-          <div className="logo-text">MC FI</div>
+          <span className="logo-text">MeshCore Finland</span>
         </a>
+        <div className="mobile-brand-title" aria-hidden="true">MeshCore Finland</div>
 
-        <div className="flex gap-4 items-center">
-          <a href="#home" className="text-sm font-medium hover:opacity-75">
+        <div className="app-nav-actions">
+          <a href="#/home" className="app-nav-link">
             Home
           </a>
-          <a href="#docs" className="text-sm font-medium hover:opacity-75">
-            Documentation
+          <a href="#/docs" className="app-nav-link">
+            Docs
           </a>
           <button
             type="button"
-            className="theme-toggle"
+            className="theme-toggle app-nav-theme"
             onClick={toggleTheme}
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
           >
             <FontAwesomeIcon icon={theme === "dark" ? faSun : faMoon} />
-            {theme === "dark" ? "Light" : "Dark"}
           </button>
+          <div className="app-menu" ref={menuRef}>
+            <button
+              type="button"
+              className="app-menu-trigger"
+              onClick={() => setIsMenuOpen(open => !open)}
+              aria-expanded={isMenuOpen}
+              aria-label="Open site menu"
+              title="Open site menu"
+            >
+              <FontAwesomeIcon icon={faBars} />
+            </button>
+
+            {isMenuOpen ? (
+              <div className="app-menu-panel">
+                <a href="#/home" className="app-menu-link">
+                  Home
+                </a>
+                <a href="#/docs" className="app-menu-link">
+                  Docs
+                </a>
+                <button
+                  type="button"
+                  className="theme-toggle"
+                  onClick={toggleTheme}
+                  aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                  title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                >
+                  <FontAwesomeIcon icon={theme === "dark" ? faSun : faMoon} />
+                  {theme === "dark" ? "Light" : "Dark"}
+                </button>
+              </div>
+            ) : null}
+          </div>
         </div>
       </header>
 
-      {currentPage === "docs" ? (
-        <DocsPage />
+      {route.page === "docs" ? (
+        <DocsPage selectedPath={route.docPath} />
       ) : (
         <>
           <section id="center">

@@ -24,6 +24,6 @@ You can write with markdown and javascript in the pages.
   1. fork repo
   2. clone repo to local machine
   3. install dependencies with `npm i` (must have node and npm installed)
-  4. add youre changes and test them
+  4. add your changes and test them
   5. make a pr
   6. profit?

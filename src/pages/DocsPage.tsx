@@ -1,19 +1,43 @@
-import { useState } from 'react'
 import { DocsNav } from '../components/DocsNav'
 import { DocViewer } from '../components/DocViewer'
 import { nav } from '../lib/nav'
 
-export function DocsPage() {
+interface DocsPageProps {
+  selectedPath?: string
+}
+
+function getCurrentPageLabel(path: string): string {
+  for (const section of nav.sections) {
+    const page = section.pages.find(item => item.path === path)
+
+    if (page) {
+      return `${section.title} / ${page.title}`
+    }
+  }
+
+  return 'Documentation'
+}
+
+export function DocsPage({ selectedPath }: DocsPageProps) {
   const defaultPath = nav.sections[0]?.pages[0]?.path || ''
-  const [selectedPath, setSelectedPath] = useState(defaultPath)
+  const currentPath = selectedPath || defaultPath
+  const currentPageLabel = getCurrentPageLabel(currentPath)
 
   return (
-    <main className="flex-grow flex gap-8 px-4 py-8">
-      <aside className="pt-4">
-        <DocsNav onPageSelect={setSelectedPath} selectedPath={selectedPath} />
+    <main className="docs-layout">
+      <div className="docs-mobile-nav">
+        <details key={currentPath} className="docs-mobile-nav-panel">
+          <summary>{currentPageLabel}</summary>
+          <DocsNav selectedPath={currentPath} />
+        </details>
+      </div>
+
+      <aside className="docs-sidebar">
+        <DocsNav selectedPath={currentPath} />
       </aside>
-      <div className="flex-grow min-w-0">
-        <DocViewer path={selectedPath} />
+
+      <div className="docs-content">
+        <DocViewer path={currentPath} />
       </div>
     </main>
   )
