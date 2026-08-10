@@ -268,7 +268,7 @@ function App() {
                 {
                   icon: faComments,
                   text: "Join Discord",
-                  href: "https://discord.gg/QVQSmpaf",
+                  href: "https://discord.com/invite/GHnaVAjqed",
                 },
               ]}
             />
