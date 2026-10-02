@@ -1,0 +1,29 @@
+.network-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: center;
+  gap: 1.4rem;
+}
+.network-stats > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: 0.76rem;
+}
+.stat-value {
+  font-size: 2.9rem;
+  color: var(--sl-color-white);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.network-stats p {
+  grid-column: 1 / -1;
+  font-size: 0.67rem;
+  color: var(--sl-color-gray-3);
+}
+@media (max-width: 600px) {
+  .network-stats .stat-value {
+    font-size: 2.6rem;
+  }
+}

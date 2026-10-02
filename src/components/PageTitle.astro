@@ -1,5 +1,5 @@
 ---
 import Default from '@astrojs/starlight/components/PageTitle.astro';
-const isHome = ['fi', 'en'].includes(Astro.locals.starlightRoute.id.replace(/\/$/, ''));
 ---
-{!isHome && <Default />}
+
+{!Astro.locals.starlightRoute.entry.data.hidePageTitle && <Default />}

@@ -1,11 +1,22 @@
 ---
 import { radioSettings } from '../lib/site';
-const en = Astro.locals.starlightRoute.lang === 'en';
+const t = Astro.locals.t;
 const rows = [
-  [en ? 'Preset' : 'Esiasetus', radioSettings.preset],
-  [en ? 'Frequency' : 'Taajuus', radioSettings.frequency],
-  [en ? 'Bandwidth' : 'Kaistanleveys', radioSettings.bandwidth],
-  ['SF', radioSettings.spreadingFactor], ['CR', radioSettings.codingRate],
+  [t('app.radio.preset'), radioSettings.preset],
+  [t('app.radio.frequency'), radioSettings.frequency],
+  [t('app.radio.bandwidth'), radioSettings.bandwidth],
+  ['SF', radioSettings.spreadingFactor],
+  ['CR', radioSettings.codingRate],
 ];
 ---
-<table class="radio-settings"><tbody>{rows.map(([label, value]) => <tr><th scope="row">{label}</th><td>{value}</td></tr>)}</tbody></table>
+
+<table class="radio-settings">
+  <tbody>
+    {rows.map(([label, value]) => (
+      <tr>
+        <th scope="row">{label}</th>
+        <td>{value}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>

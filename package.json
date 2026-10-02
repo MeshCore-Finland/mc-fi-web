@@ -3,10 +3,12 @@
   "version": "2.0.0-prototype",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check && npm test && astro build && npm run check:links",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "check:links": "node scripts/check-links.mjs",
+    "format": "prettier --write ."
   },
   "license": "MIT",
   "description": "Finnish and English MeshCore community site built with Astro, Starlight and MDX",
@@ -21,8 +23,14 @@
   "type": "module",
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "typescript": "^6.0.3",
     "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0"
+    "@types/react-dom": "^19.3.0",
+    "parse5": "^8.0.1",
+    "prettier": "^3.9.9",
+    "prettier-plugin-astro": "^1.1.0",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }

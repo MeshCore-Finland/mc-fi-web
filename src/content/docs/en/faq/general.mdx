@@ -38,7 +38,7 @@ possibly location. Both companions and repeaters can advert. So why is nobody sh
 
 - **Companions** do not advert unless the user actively chooses to do so. So there might be other users nearby but they don't want to make noise about it.
 - **Repeaters** typically advert periodically but the default is 47 hours. Repeater adverts are
-purely informational, you do not need to hear an advert from a repeater to use it.
+  purely informational, you do not need to hear an advert from a repeater to use it.
 
 So just turning on a node and passively waiting for friends is going to take some time.
 
@@ -47,8 +47,9 @@ So just turning on a node and passively waiting for friends is going to take som
 <Question id="discovery" question="How do I find repeaters and other users? How do I know if my messages are heard?">
 
 You have some solid options:
+
 - Send a message on a public channel to say hi (Public and #finland are good candidates). Your companion will report how many repeaters it heard repeating your message. Someone might reply even
-though we are mostly Finnish.
+  though we are mostly Finnish.
 - The phone app / device firmware typically has a tool to discover repeaters. This will send out a request which all repeaters in range will answer.
 - Send an advert from your phone if you want to be seen without small talk
 
@@ -65,6 +66,7 @@ So you are probably in Helsinki region and it's not raining. Welcome! Our mesh i
 No. Yes. Companion nodes do not normally repeat. This is a core design decision in MeshCore.
 
 BUT there is an exception. If you are a group and completely off the mesh (for example hiking), you can enable the special Off-Grid mode on your Companions. In this mode:
+
 - Companions will switch to a special off-the-grid frequency which is NOT the same as the normal MC frequency. You are forming a separate mesh now.
 - Companions **will** now repeat every packet they hear
 - See the [MeshCore Blog](https://blog.meshcore.io/2026/02/13/off-grid-client-repeat-mode) for details.

@@ -1,0 +1,38 @@
+---
+import Default from '@astrojs/starlight/components/Footer.astro';
+const { lastReviewed, translationChecked } =
+  Astro.locals.starlightRoute.entry.data;
+const format = (date: string) =>
+  new Intl.DateTimeFormat(Astro.currentLocale, {
+    dateStyle: 'medium',
+    timeZone: 'UTC',
+  }).format(new Date(date));
+---
+
+{(lastReviewed || translationChecked) && (
+  <div class="review-dates" data-pagefind-ignore>
+    {lastReviewed && (
+      <span>
+        {Astro.locals.t('app.review.content')}:{' '}
+        <time datetime={lastReviewed}>{format(lastReviewed)}</time>
+      </span>
+    )}
+    {translationChecked && (
+      <span>
+        {Astro.locals.t('app.review.translation')}:{' '}
+        <time datetime={translationChecked}>{format(translationChecked)}</time>
+      </span>
+    )}
+  </div>
+)}
+<Default />
+<style>
+  .review-dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+  }
+</style>

@@ -1,0 +1,15 @@
+---
+// Temporary widget. Its endpoints, metric logic and styles live in temporary/.
+// Replace this wrapper and that directory together during the stats overhaul.
+import Widget from './temporary/NetworkStats';
+const t = Astro.locals.t;
+const labels = {
+  repeaters: t('app.stats.repeaters'),
+  packets: t('app.stats.packets'),
+  loading: t('app.stats.loading'),
+  updated: t('app.stats.updated'),
+  unavailable: t('app.stats.unavailable'),
+};
+---
+
+<Widget labels={labels} locale={Astro.currentLocale!} client:visible />

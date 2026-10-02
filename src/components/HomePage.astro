@@ -1,61 +1,142 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
-import NetworkStats from './NetworkStats';
+import MobileMenuFooter from '@astrojs/starlight/components/MobileMenuFooter.astro';
+import NetworkStats from './NetworkStats.astro';
 import FinlandMap from './FinlandMap.astro';
-import { pageLink, resources, regions, type Language } from '../lib/site';
-interface Props { lang: Language; }
-const { lang } = Astro.props;
-const en = lang === 'en';
-const t = en ? {
-  title: 'Stay connected.', accent: 'Off the grid.',
-  intro: 'Send messages over a LoRa radio mesh without internet or mobile coverage. Set up your device and connect to Finland’s MeshCore network.',
-  start: 'Get started', map: 'Network map',
-  next: 'Setup and guides', nextIntro: 'Device setup, repeater configuration and answers to common questions.',
-  guides: 'Device setup', guidesText: 'Choose a device, set it up and send your first message.',
-  repeater: 'Repeater configuration', repeaterText: 'Set a recognizable name and choose a suitable location.',
-  faq: 'Frequently asked questions', faqText: 'Find practical answers about devices, contacts and the Finnish mesh.',
-  activity: 'Network activity', activityText: 'A snapshot from the community’s monitoring tools.',
-  community: 'Local communities', communityText: 'Regional maps, community sites and MeshCore discussions.',
-  join: 'Join the conversation', regionMap: 'Regional map', visit: 'Community website',
-  footer: 'An independent community of MeshCore enthusiasts in Finland.', official: 'About MeshCore',
-} : {
-  title: 'Yhteys säilyy.', accent: 'Ilman internetiä.',
-  intro: 'Viestejä LoRa-radioverkossa ilman internetiä tai matkapuhelinverkkoa. Ohjeet laitteiden käyttöönottoon ja Suomen MeshCore-verkkoon liittymiseen.',
-  start: 'Aloita tästä', map: 'Verkon kartta',
-  next: 'Käyttöönotto ja oppaat', nextIntro: 'Laitteen käyttöönotto, toistimen asetukset ja vastaukset yleisiin kysymyksiin.',
-  guides: 'Laitteen käyttöönotto', guidesText: 'Valitse laite, ota se käyttöön ja lähetä ensimmäinen viestisi.',
-  repeater: 'Toistimen asetukset', repeaterText: 'Anna toistimelle tunnistettava nimi ja valitse sijoituspaikka.',
-  faq: 'Usein kysytyt kysymykset', faqText: 'Löydä vastaukset laitteista, kontakteista ja Suomen mesh-verkosta.',
-  activity: 'Verkon tilanne', activityText: 'Tilannekuva yhteisön seurantatyökaluista.',
-  community: 'Paikalliset yhteisöt', communityText: 'Alueelliset kartat, yhteisöjen sivut ja MeshCore-keskustelut.',
-  join: 'Liity keskusteluun', regionMap: 'Alueen kartta', visit: 'Yhteisön sivut',
-  footer: 'MeshCore-harrastajien itsenäinen yhteisö Suomessa.', official: 'Tietoa MeshCoresta',
-};
+import { resources, regions } from '../lib/site';
+import { defaultLocale } from '../lib/locales';
+const locale = Astro.currentLocale ?? defaultLocale;
+const t = Astro.locals.t;
 ---
-<StarlightPage frontmatter={{ title: en ? 'MeshCore in Finland' : 'MeshCore Suomessa', description: t.intro, template: 'splash', tableOfContents: false, prev: false, next: false }} hasSidebar={false}>
+
+<StarlightPage
+  frontmatter={{
+    title: t('app.home.pageTitle'),
+    hidePageTitle: true,
+    description: t('app.home.intro'),
+    template: 'splash',
+    tableOfContents: false,
+    prev: false,
+    next: false,
+  }}
+  hasSidebar={false}
+>
   <div class="home-page not-content">
     <section class="home-hero">
       <div class="hero-copy">
-        <h1 id="_top">{t.title}<br /><span>{t.accent}</span></h1>
-        <p class="hero-intro">{t.intro}</p>
-        <div class="hero-actions"><a class="button-primary" href={pageLink(lang, 'guides/getting-started')}>{t.start}<span aria-hidden="true">↗</span></a><a class="button-secondary" href={resources.map}>{t.map}<span aria-hidden="true">↗</span></a></div>
+        <h1 id="_top">
+          {t('app.home.title')}
+          <br />
+          <span>{t('app.home.accent')}</span>
+        </h1>
+        <p class="hero-intro">{t('app.home.intro')}</p>
+        <div class="hero-actions">
+          <a
+            class="button-primary"
+            href={getRelativeLocaleUrl(locale, 'guides/getting-started')}
+          >
+            {t('app.home.start')}
+            <span aria-hidden="true">↗</span>
+          </a>
+          <a class="button-secondary" href={resources.map}>
+            {t('app.home.map')}
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
       </div>
       <div class="home-map">
-        <FinlandMap lang={lang} />
+        <FinlandMap />
       </div>
     </section>
     <section class="home-paths">
-      <div class="section-heading"><p class="eyebrow">01 / {en ? 'GET STARTED' : 'ALKUUN'}</p><h2>{t.next}</h2><p>{t.nextIntro}</p></div>
+      <div class="section-heading">
+        <p class="eyebrow">01 / {t('app.home.startSection')}</p>
+        <h2>{t('app.home.next')}</h2>
+        <p>{t('app.home.nextIntro')}</p>
+      </div>
       <div class="path-grid">
         {[
-          { number: '01', title: t.guides, text: t.guidesText, path: 'guides/getting-started' },
-          { number: '02', title: t.repeater, text: t.repeaterText, path: 'repeaters/name' },
-          { number: '03', title: t.faq, text: t.faqText, path: 'faq/general' },
-        ].map(card => <a class="path-card" href={pageLink(lang, card.path)}><span class="card-number">{card.number}<span aria-hidden="true">↗</span></span><h3>{card.title}</h3><p>{card.text}</p></a>)}
+          {
+            number: '01',
+            title: t('app.home.guides'),
+            text: t('app.home.guidesText'),
+            path: 'guides/getting-started',
+          },
+          {
+            number: '02',
+            title: t('app.home.repeater'),
+            text: t('app.home.repeaterText'),
+            path: 'repeaters/name',
+          },
+          {
+            number: '03',
+            title: t('app.home.faq'),
+            text: t('app.home.faqText'),
+            path: 'faq/general',
+          },
+        ].map((card) => (
+          <a class="path-card" href={getRelativeLocaleUrl(locale, card.path)}>
+            <span class="card-number">
+              {card.number}
+              <span aria-hidden="true">↗</span>
+            </span>
+            <h3>{card.title}</h3>
+            <p>{card.text}</p>
+          </a>
+        ))}
       </div>
     </section>
-    <section class="home-activity"><div class="section-heading"><p class="eyebrow">02 / {en ? 'NETWORK' : 'VERKKO'}</p><h2>{t.activity}</h2><p>{t.activityText}</p><a class="text-link" href={resources.map}>CoreScope <span aria-hidden="true">↗</span></a></div><NetworkStats lang={lang} client:visible /></section>
-    <section class="home-community"><div class="section-heading"><p class="eyebrow">03 / {en ? 'COMMUNITY' : 'YHTEISÖ'}</p><h2>{t.community}</h2><p>{t.communityText}</p></div><div class="community-links"><a class="discord-link" href={resources.discord}><span>Mesh Finland Discord</span><strong>{t.join} ↗</strong></a><div class="regions">{regions.map(region => <div><h3>{region.name}</h3><a href={region.map}>{t.regionMap} ↗</a>{region.site && <a href={region.site}>{t.visit} ↗</a>}</div>)}</div></div></section>
-    <footer class="home-footer"><span>{t.footer}</span><a href={resources.official}>{t.official} ↗</a></footer>
+    <section class="home-activity">
+      <div class="section-heading">
+        <p class="eyebrow">02 / {t('app.home.networkSection')}</p>
+        <h2>{t('app.home.activity')}</h2>
+        <p>{t('app.home.activityText')}</p>
+        <a class="text-link" href={resources.map}>
+          CoreScope <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+      <NetworkStats />
+    </section>
+    <section class="home-community">
+      <div class="section-heading">
+        <p class="eyebrow">03 / {t('app.home.communitySection')}</p>
+        <h2>{t('app.home.community')}</h2>
+        <p>{t('app.home.communityText')}</p>
+      </div>
+      <div class="community-links">
+        <a class="discord-link" href={resources.discord}>
+          <span>Mesh Finland Discord</span>
+          <strong>{t('app.home.join')} ↗</strong>
+        </a>
+        <div class="regions">
+          {regions.map((region) => (
+            <div>
+              <h3>{region.name}</h3>
+              <a href={region.map}>{t('app.home.regionMap')} ↗</a>
+              {region.site && <a href={region.site}>{t('app.home.visit')} ↗</a>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+    <footer class="home-footer">
+      <span>{t('app.home.footer')}</span>
+      <a href={resources.official}>{t('app.home.official')} ↗</a>
+    </footer>
+    <div class="home-mobile-preferences">
+      <MobileMenuFooter />
+    </div>
   </div>
 </StarlightPage>
+
+<style>
+  .home-mobile-preferences {
+    display: none;
+  }
+  @media (max-width: 49.999rem) {
+    .home-mobile-preferences {
+      display: block;
+    }
+  }
+</style>

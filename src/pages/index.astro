@@ -1,3 +1,5 @@
 ---
-return Astro.redirect('/fi/');
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { defaultLocale } from '../lib/locales';
+return Astro.redirect(getRelativeLocaleUrl(defaultLocale, ''));
 ---

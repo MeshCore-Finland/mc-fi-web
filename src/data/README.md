@@ -11,7 +11,11 @@
 The intended location payload is:
 
 ```json
-{"version":1,"source":"network","nodes":[{"id":"stable-node-id","lat":60.17,"lon":24.94}]}
+{
+  "version": 1,
+  "source": "network",
+  "nodes": [{ "id": "stable-node-id", "lat": 60.17, "lon": 24.94 }]
+}
 ```
 
 `FinlandMap.astro` accepts the `nodes` array. A later JSON or MessagePack loader can supply the same coordinates; the projection and presentation do not depend on the wire format. The current prototype renders the bundled example data at build time, with no live location feed. Once real data is connected, update the accessible label and supply an observation timestamp.

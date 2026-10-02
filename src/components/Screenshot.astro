@@ -10,21 +10,55 @@ interface Props {
 }
 const { src, alt, caption, width = 360 } = Astro.props;
 if (!alt.trim()) throw new Error('Screenshot requires descriptive alt text.');
-if (!Number.isFinite(width) || width <= 0) throw new Error('Screenshot width must be positive.');
+if (!Number.isFinite(width) || width <= 0)
+  throw new Error('Screenshot width must be positive.');
 const displayWidth = Math.min(width, src.width);
-const widths = [...new Set([displayWidth, Math.min(displayWidth * 2, src.width)])];
-const en = Astro.locals.starlightRoute.lang === 'en';
-const fullSize = en ? 'Open full-size image' : 'Avaa täysikokoinen kuva';
+const widths = [
+  ...new Set([displayWidth, Math.min(displayWidth * 2, src.width)]),
+];
+const fullSize = Astro.locals.t('app.screenshot.fullSize');
 ---
+
 <figure class="screenshot" style={`--screenshot-width: ${displayWidth}px`}>
   <a href={src.src} aria-label={`${fullSize}: ${alt}`}>
-    <Image src={src} alt={alt} width={displayWidth} widths={widths} sizes={`(max-width: ${displayWidth}px) 100vw, ${displayWidth}px`} format="webp" quality={90} loading="lazy" decoding="async" />
+    <Image
+      src={src}
+      alt={alt}
+      width={displayWidth}
+      widths={widths}
+      sizes={`(max-width: ${displayWidth}px) 100vw, ${displayWidth}px`}
+      format="webp"
+      quality={90}
+      loading="lazy"
+      decoding="async"
+    />
   </a>
-  <figcaption>{caption && <span>{caption}</span>}<a href={src.src}>{fullSize} ↗</a></figcaption>
+  <figcaption>
+    {caption && <span>{caption}</span>}
+    <a href={src.src}>{fullSize} ↗</a>
+  </figcaption>
 </figure>
 <style>
-  .screenshot { width: min(100%, var(--screenshot-width)); margin: 1.5rem 0; }
-  .screenshot > a { display: block; }
-  .screenshot img { display: block; width: 100%; height: auto; border: 1px solid var(--sl-color-gray-5); border-radius: .4rem; }
-  .screenshot figcaption { display: grid; gap: .35rem; margin-top: .65rem; color: var(--sl-color-gray-3); font-size: .8rem; line-height: 1.5; }
+  .screenshot {
+    width: min(100%, var(--screenshot-width));
+    margin: 1.5rem 0;
+  }
+  .screenshot > a {
+    display: block;
+  }
+  .screenshot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.4rem;
+  }
+  .screenshot figcaption {
+    display: grid;
+    gap: 0.35rem;
+    margin-top: 0.65rem;
+    color: var(--sl-color-gray-3);
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
 </style>

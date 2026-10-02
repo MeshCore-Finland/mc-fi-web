@@ -1,0 +1,85 @@
+---
+import SiteTitle from '@astrojs/starlight/components/SiteTitle.astro';
+import Search from '@astrojs/starlight/components/Search.astro';
+import SocialIcons from '@astrojs/starlight/components/SocialIcons.astro';
+import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro';
+import LanguageSelect from '@astrojs/starlight/components/LanguageSelect.astro';
+---
+
+<div class="site-header">
+  <div class="brand">
+    <SiteTitle />
+  </div>
+  <div class="search print:hidden">
+    <Search />
+  </div>
+  <div class="controls print:hidden">
+    <SocialIcons />
+    <ThemeSelect />
+    <LanguageSelect />
+  </div>
+</div>
+<style>
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 100%;
+  }
+  .brand {
+    min-width: 0;
+    overflow: clip;
+    padding: 0.25rem;
+    margin: -0.25rem;
+  }
+  .search {
+    min-width: 0;
+  }
+  .controls {
+    display: none;
+    align-items: center;
+    justify-self: end;
+    gap: 1rem;
+  }
+  @media (min-width: 50rem) {
+    .site-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+    }
+    .controls {
+      display: flex;
+    }
+    .search :global(button[data-open-modal]) {
+      width: 2.25rem;
+      height: 2.25rem;
+      padding: 0.5rem;
+      border: 0;
+      background: transparent;
+    }
+    .search :global(button[data-open-modal] > span),
+    .search :global(button[data-open-modal] > kbd) {
+      display: none;
+    }
+  }
+  @media (min-width: 64rem) {
+    .site-header {
+      grid-template-columns: minmax(0, 1fr) minmax(12rem, 18rem) minmax(0, 1fr);
+    }
+    .search :global(site-search) {
+      width: 100%;
+    }
+    .search :global(button[data-open-modal]) {
+      width: 100%;
+      max-width: 18rem;
+      height: 2.25rem;
+      padding: 0 0.75rem;
+      border: 1px solid var(--sl-color-gray-5);
+      background: var(--sl-color-black);
+    }
+    .search :global(button[data-open-modal] > span),
+    .search :global(button[data-open-modal] > kbd) {
+      display: initial;
+    }
+  }
+</style>

@@ -1,20 +1,47 @@
 ---
-import { finlandPath, projectLocation, type RepeaterLocation } from '../lib/finland-map';
+import {
+  finlandPath,
+  projectLocation,
+  type RepeaterLocation,
+} from '../lib/finland-map';
 import prototype from '../data/repeaters.prototype.json';
-import type { Language } from '../lib/site';
-interface Props { lang: Language; nodes?: RepeaterLocation[]; }
-const { lang, nodes = prototype.nodes } = Astro.props;
-const en = lang === 'en';
-const dots = nodes.filter(node => Number.isFinite(node.lat) && Number.isFinite(node.lon)).map(node => ({ ...node, ...projectLocation(node.lat, node.lon) }));
+interface Props {
+  nodes?: RepeaterLocation[];
+}
+const { nodes = prototype.nodes } = Astro.props;
+const dots = nodes
+  .filter((node) => Number.isFinite(node.lat) && Number.isFinite(node.lon))
+  .map((node) => ({ ...node, ...projectLocation(node.lat, node.lon) }));
 ---
-<svg class="finland-map" viewBox="0 0 480 440" role="img" aria-label={en ? 'Outline of Finland with example repeater locations. Prototype data.' : 'Suomen kartta ja esimerkkisijainteja toistimille. Prototyyppidataa.'}>
+
+<svg
+  class="finland-map"
+  viewBox="0 0 480 440"
+  role="img"
+  aria-label={Astro.locals.t('app.map.prototype')}
+>
   <path d={finlandPath} class="finland-land" />
   <g class="repeater-dots">
-    {dots.map(dot => <g><circle cx={dot.x} cy={dot.y} r="6" class="dot-halo" /><circle cx={dot.x} cy={dot.y} r="2.3" class="dot-core" /></g>)}
+    {dots.map((dot) => (
+      <g>
+        <circle cx={dot.x} cy={dot.y} r="6" class="dot-halo" />
+        <circle cx={dot.x} cy={dot.y} r="2.3" class="dot-core" />
+      </g>
+    ))}
   </g>
 </svg>
 <style>
-  .finland-land { fill: var(--sl-color-accent-low); stroke: var(--home-accent); stroke-width: 1.25; stroke-linejoin: round; }
-  .dot-halo { fill: var(--home-accent); opacity: .12; }
-  .dot-core { fill: var(--home-accent); }
+  .finland-land {
+    fill: var(--sl-color-accent-low);
+    stroke: var(--home-accent);
+    stroke-width: 1.25;
+    stroke-linejoin: round;
+  }
+  .dot-halo {
+    fill: var(--home-accent);
+    opacity: 0.12;
+  }
+  .dot-core {
+    fill: var(--home-accent);
+  }
 </style>

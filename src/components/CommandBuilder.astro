@@ -1,0 +1,14 @@
+---
+import CommandBuilder from './CommandBuilder.tsx';
+const t = Astro.locals.t;
+const labels = {
+  name: t('app.command.name'),
+  help: t('app.command.help'),
+  invalid: t('app.command.invalid'),
+  copy: t('app.command.copy'),
+  copied: t('app.command.copied'),
+  copyFailed: t('app.command.copyFailed'),
+};
+---
+
+<CommandBuilder labels={labels} client:visible />
