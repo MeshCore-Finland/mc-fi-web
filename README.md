@@ -6,11 +6,16 @@ Work is on the independent-history branch `codex/starlight-prototype`, published
 
 ## Development
 
-Use Node 24 (`.node-version`).
+Use Node 24 (`.node-version`). For installation, cloning the correct branch and submitting your first change, start with [first-time setup in CONTRIBUTING.md](CONTRIBUTING.md#first-time-setup).
 
 ```sh
 npm ci
 npm run dev
+```
+
+This starts a live preview; use the local URL printed in the terminal. Stop it with Ctrl+C before checking the built site:
+
+```sh
 npm run build
 npm run preview
 ```
@@ -25,7 +30,7 @@ Matching document paths associate translations. Starlight handles missing transl
 
 ## Preview
 
-https://codex-starlight-prototype.mc-fi-web.pages.dev/fi/
+[Finnish preview](https://codex-starlight-prototype.mc-fi-web.pages.dev/fi/) · [English preview](https://codex-starlight-prototype.mc-fi-web.pages.dev/en/)
 
 Cloudflare previews pushes to this branch. Vercel remains configured for external pull-request previews. Production branch settings have not been changed.
 

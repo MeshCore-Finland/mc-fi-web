@@ -2,27 +2,90 @@
 
 Use Markdown for ordinary articles and MDX when you need screenshots, FAQ entries, tabs or interactive examples. You do not need to edit React components to contribute content.
 
-## Run and check
+## First-time setup
 
-Use Node 24 (see `.node-version`).
+You need Git, Node.js 24 and a text editor. This setup works on macOS, Linux and Windows; run the commands in Terminal or PowerShell.
+
+- Install [Git](https://git-scm.com/downloads) if it is not already available.
+- Install **Node.js 24** from the [official Node.js download page](https://nodejs.org/en/download). Select version 24; npm is included. If you already use a Node version manager, select the version in `.node-version` with it.
+- Reopen your terminal after installation and check:
+
+```sh
+git --version
+node --version
+npm --version
+```
+
+Node should print `v24.x.x`. You do not need to install Astro globally, set up a backend, or obtain deployment credentials to edit and preview content.
+
+### Get the working branch
+
+The new site currently lives on `codex/starlight-prototype`. The repository's default branch still contains the old site.
+
+If you have write access to the main repository:
+
+```sh
+git clone --branch codex/starlight-prototype https://github.com/MeshCore-Finland/mc-fi-web.git
+cd mc-fi-web
+git switch -c docs/your-topic
+```
+
+Replace `docs/your-topic` with a name for your contribution, for example `docs/companion-channels`.
+
+If you do not have write access, [fork the repository on GitHub](https://github.com/MeshCore-Finland/mc-fi-web/fork) first. Replace `YOUR_USERNAME` below with your GitHub username:
+
+```sh
+git clone https://github.com/YOUR_USERNAME/mc-fi-web.git
+cd mc-fi-web
+git remote add upstream https://github.com/MeshCore-Finland/mc-fi-web.git
+git fetch upstream
+git switch -c docs/your-topic upstream/codex/starlight-prototype
+```
+
+This fetches the new site even if your fork initially contains only the old default branch. In both cases, your contribution branch starts from the prototype; keep the old site out of your changes.
+
+## Live preview while editing
+
+Run these commands from the `mc-fi-web` directory, where `package.json` lives:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Optional formatting: `npm run format`. Before submitting:
+Open the local URL printed in the terminal, normally [http://localhost:4321/fi/](http://localhost:4321/fi/). Use `/en/` for English. Leave the command running while you edit: saving an article updates the browser automatically. Stop the server with **Ctrl+C**.
+
+For a first edit, open `src/content/docs/fi/guides/getting-started.mdx`, change a sentence, and save. The article is at `/fi/guides/getting-started/`. The file path after `fi/`, without `.md` or `.mdx`, becomes its URL path. See the examples below when adding your own page.
+
+The FAQ's local filter works during development. Site-wide search requires a built search index, so check it using the built preview.
+
+## Check the finished site
+
+Stop the development server, then run:
 
 ```sh
 npm run build
 npm run preview
 ```
 
-The build checks types, runs tests, generates the search index and validates internal document links, section anchors and duplicate IDs. Global search is available in the built preview, not the development server. CI runs the same build on pushes and pull requests.
+Open the URL printed by `preview`. This serves the generated static site and includes site-wide search. **It does not update when you edit files**: stop it, rebuild and restart it to see later changes. Use `dev` for everyday editing.
+
+The build checks types, runs tests, generates the search index and validates internal document links, section anchors and duplicate IDs. CI runs the same build on pushes and pull requests.
+
+Optional formatting: `npm run format` formats the repository. Check `git diff` afterward and include only changes relevant to your contribution. If dependencies change after you pull updates, run `npm ci` again.
+
+### Common setup problems
+
+- **`node`, `npm` or `git` is not found:** finish installing that tool and reopen the terminal.
+- **Node version errors:** check `node --version` in the same terminal you use to run the site; it must use Node 24.
+- **`package.json` cannot be found:** change into the cloned `mc-fi-web` directory before running npm commands.
+- **The port is already in use:** use the alternative URL printed by Astro, or run `npm run dev -- --port 4322`.
+- **An MDX edit fails:** read the terminal error for its file and line. Check closing component tags and keep blank lines around Markdown inside components. Literal braces in prose may need escaping; put commands in fenced code blocks.
+- **Site-wide search is unavailable:** use `npm run build` followed by `npm run preview`; the development server does not generate the index.
 
 ## Add an article or subsection
 
-Start in `src/content/docs/fi/`. Choose a stable, language-independent path, for example `companions/channels.md`. Put its English equivalent at `src/content/docs/en/companions/channels.md`; translations use matching paths. Finnish is the default source for new content, and Starlight serves it with a notice where a translation is missing.
+Start in `src/content/docs/fi/`. Choose a stable, language-independent path, for example `companions/channels.md`. Put its English equivalent at `src/content/docs/en/companions/channels.md`; translations use matching paths. Finnish is the default source for new content. If the English file is missing, Starlight serves the Finnish article under its `/en/` URL with English navigation and an untranslated-content notice. This fallback uses Finnish as the source; an English-only article does not automatically get a Finnish route.
 
 ```md
 ---
@@ -150,11 +213,29 @@ translationChecked: '2026-10-02'
 
 When changing Finnish content, update the English equivalent or flag translation review in the PR description. A translation can remain unchanged after comparison; update its review date when appropriate. Dates are evidence of review, not an automatic claim that content is current. There is no age-based warning or publishing block.
 
-## Pull requests
+## Submit a pull request
 
-Branch or fork from `codex/starlight-prototype` while this is the working base, and target that branch with your PR. It has independent history from the old site. Describe the subsection changed and any translation review still needed. Cloudflare previews branches in the main repository; Vercel remains configured for external PR previews.
+Before submitting, run `npm run build` and check your changed pages in the browser: links, the corresponding language page, and any tabs or screenshots at a narrow viewport. Review your changes and commit them:
 
-For review, check your links, the corresponding language page, and any tabs or screenshots at a narrow viewport. Deployment configuration and the eventual production cutover are maintained separately.
+```sh
+git status
+git diff
+```
+
+Stage the files you intended to change with `git add <file-path>` (replace the placeholder with actual paths), then:
+
+```sh
+git commit -m "Document companion channels"
+git push -u origin docs/your-topic
+```
+
+Use your own commit message and the branch name you chose during setup. The first push may ask you to authenticate with GitHub; use your usual GitHub authentication method.
+
+Open a pull request on GitHub with **base repository `MeshCore-Finland/mc-fi-web` and base branch `codex/starlight-prototype`**, selecting your contribution branch as the head. Fork contributors select their fork as the head repository. Target this branch while it is the working base; its history is independent from the old site.
+
+Describe what changed, how you checked it, and any English translation review still needed. Subsequent commits pushed to the same branch update the PR.
+
+Cloudflare previews branches pushed to the main repository; Vercel remains configured for external PR previews. After deployment finishes, use the preview link in the PR's deployment check or bot comment. The shared [prototype preview](https://codex-starlight-prototype.mc-fi-web.pages.dev/fi/) shows the latest prototype branch, not your unmerged contribution. Check that CI passes before asking for review. Deployment configuration and the eventual production cutover are maintained separately.
 
 ## Shared components and UI labels
 
