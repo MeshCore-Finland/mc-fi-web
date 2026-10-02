@@ -1,47 +1,99 @@
 ---
-import {
-  finlandPath,
-  projectLocation,
-  type RepeaterLocation,
-} from '../lib/finland-map';
-import prototype from '../data/repeaters.prototype.json';
+import { finlandPath } from '../lib/finland-map';
 interface Props {
-  nodes?: RepeaterLocation[];
+  bundleUrl?: string;
 }
-const { nodes = prototype.nodes } = Astro.props;
-const dots = nodes
-  .filter((node) => Number.isFinite(node.lat) && Number.isFinite(node.lon))
-  .map((node) => ({ ...node, ...projectLocation(node.lat, node.lon) }));
+const {
+  bundleUrl = import.meta.env.PUBLIC_REPEATER_BUNDLE_URL ||
+    'https://data.meshcore.fi/repeaters/v1.json',
+} = Astro.props;
 ---
 
-<svg
-  class="finland-map"
-  viewBox="0 0 480 440"
-  role="img"
-  aria-label={Astro.locals.t('app.map.prototype')}
+<finland-repeater-map
+  data-bundle-url={bundleUrl}
+  data-loaded-label={Astro.locals.t('app.map.repeaters')}
+  data-state="loading"
 >
-  <path d={finlandPath} class="finland-land" />
-  <g class="repeater-dots">
-    {dots.map((dot) => (
-      <g>
-        <circle cx={dot.x} cy={dot.y} r="6" class="dot-halo" />
-        <circle cx={dot.x} cy={dot.y} r="2.3" class="dot-core" />
-      </g>
-    ))}
-  </g>
-</svg>
+  <svg
+    class="finland-map"
+    viewBox="0 0 480 440"
+    role="img"
+    aria-label={Astro.locals.t('app.map.outline')}
+  >
+    <path d={finlandPath} class="finland-land" />
+    <g class="repeater-dots" />
+  </svg>
+</finland-repeater-map>
+
+<script>
+  import { projectLocation } from '../lib/finland-map';
+  import { loadRepeaterBundle } from '../lib/repeater-bundle';
+
+  class FinlandRepeaterMap extends HTMLElement {
+    async connectedCallback() {
+      if (this.dataset.initialized) return;
+      this.dataset.initialized = 'true';
+      const svg = this.querySelector('svg');
+      const dots = this.querySelector('.repeater-dots');
+      const url = this.dataset.bundleUrl;
+      if (!svg || !dots || !url) return;
+      try {
+        const bundle = await loadRepeaterBundle(url);
+        if (!this.isConnected) return;
+        const fragment = document.createDocumentFragment();
+        for (const node of bundle.nodes) {
+          const { x, y } = projectLocation(node.lat, node.lon);
+          const group = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'g',
+          );
+          const title = document.createElementNS(svg.namespaceURI, 'title');
+          title.textContent = node.name;
+          group.append(title);
+          for (const [radius, className] of [
+            ['6', 'dot-halo'],
+            ['2.3', 'dot-core'],
+          ]) {
+            const circle = document.createElementNS(svg.namespaceURI, 'circle');
+            circle.setAttribute('cx', String(x));
+            circle.setAttribute('cy', String(y));
+            circle.setAttribute('r', radius);
+            circle.setAttribute('class', className);
+            group.append(circle);
+          }
+          fragment.append(group);
+        }
+        dots.replaceChildren(fragment);
+        svg.setAttribute('aria-label', this.dataset.loadedLabel ?? '');
+        this.dataset.generatedAt = bundle.generatedAt;
+        this.dataset.state = 'ready';
+      } catch (error) {
+        // Leave the outline in place; never substitute fictional repeater dots.
+        this.dataset.state = 'unavailable';
+        console.warn('Repeater map data unavailable', error);
+      }
+    }
+  }
+  if (!customElements.get('finland-repeater-map')) {
+    customElements.define('finland-repeater-map', FinlandRepeaterMap);
+  }
+</script>
+
 <style>
+  finland-repeater-map {
+    display: block;
+  }
   .finland-land {
     fill: var(--sl-color-accent-low);
     stroke: var(--home-accent);
     stroke-width: 1.25;
     stroke-linejoin: round;
   }
-  .dot-halo {
+  .finland-map :global(.dot-halo) {
     fill: var(--home-accent);
     opacity: 0.12;
   }
-  .dot-core {
+  .finland-map :global(.dot-core) {
     fill: var(--home-accent);
   }
 </style>

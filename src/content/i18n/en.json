@@ -34,7 +34,6 @@
   "app.radio.preset": "Preset",
   "app.radio.frequency": "Frequency",
   "app.radio.bandwidth": "Bandwidth",
-  "app.map.prototype": "Outline of Finland with example repeater locations. Prototype data.",
   "app.command.name": "Repeater name",
   "app.command.help": "Use a short, recognizable name (up to 23 UTF-8 bytes).",
   "app.command.invalid": "Enter a name that fits the length limit.",
@@ -47,5 +46,7 @@
   "app.stats.updated": "Updated",
   "app.stats.unavailable": "Live data is temporarily unavailable.",
   "app.review.content": "Content reviewed",
-  "app.review.translation": "Translation checked"
+  "app.review.translation": "Translation checked",
+  "app.map.outline": "Outline of Finland, including Åland.",
+  "app.map.repeaters": "Map of Finland with known MeshCore repeater locations. Data updated daily."
 }

@@ -6,16 +6,27 @@
 - Licence: https://www.naturalearthdata.com/about/terms-of-use/
 - Retrieved: 2026-10-02
 
-`repeaters.prototype.json` contains deterministic random example locations inside the outline. These are **not actual repeaters**. The SVG accessible label identifies them as prototype data; the homepage has no visible map caption. No connections or coverage circles are inferred.
+## Repeater bundle
 
-The intended location payload is:
+The homepage and future maps share the versioned snapshot from `https://data.meshcore.fi/repeaters/v1.json`. It is generated daily at 06:00 Europe/Helsinki by `scripts/export_repeaters.py` in this repository and published to R2. See [the exporter and hosting guide](../../docs/repeater-bundle.md).
 
 ```json
 {
   "version": 1,
-  "source": "network",
-  "nodes": [{ "id": "stable-node-id", "lat": 60.17, "lon": 24.94 }]
+  "generatedAt": "2026-10-02T03:00:00Z",
+  "nodes": [
+    {
+      "id": "FULL_64_CHARACTER_PUBLIC_KEY",
+      "name": "Example repeater",
+      "lat": 60.17,
+      "lon": 24.94
+    }
+  ]
 }
 ```
 
-`FinlandMap.astro` accepts the `nodes` array. A later JSON or MessagePack loader can supply the same coordinates; the projection and presentation do not depend on the wire format. The current prototype renders the bundled example data at build time, with no live location feed. Once real data is connected, update the accessible label and supply an observation timestamp.
+The public endpoint uses gzip HTTP encoding; consumers use ordinary JSON fetching. The snapshot includes known repeaters in Finland and Åland with valid coordinates. Inclusion does not imply a repeater is online; dots do not infer radio coverage or connections.
+
+`src/lib/repeater-bundle.ts` owns the wire types, validation and shared browser request. Future maps call `loadRepeaterBundle(url)` and use `generatedAt` when displaying snapshot age. `FinlandMap.astro` renders the outline statically, loads repeater dots in the browser and exposes the successful timestamp as `data-generated-at`. Repeater names appear in SVG titles. If fetching fails, the outline remains without fabricated points. The homepage map is hidden on mobile.
+
+Set `PUBLIC_REPEATER_BUNDLE_URL` in `.env` to test against another JSON endpoint; restart the dev server when changing it. Alternatively, pass `bundleUrl` to `FinlandMap`. Neither content authors nor site builds need access to mc-shark or R2 credentials.

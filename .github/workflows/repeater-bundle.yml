@@ -1,0 +1,66 @@
+name: Publish Finland repeater bundle
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+      timezone: Europe/Helsinki
+  workflow_dispatch:
+  push:
+    paths:
+      - scripts/export_repeaters.py
+      - scripts/test_export_repeaters.py
+      - .github/workflows/repeater-bundle.yml
+  pull_request:
+    paths:
+      - scripts/export_repeaters.py
+      - scripts/test_export_repeaters.py
+      - .github/workflows/repeater-bundle.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: repeater-bundle-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - run: python -m unittest discover -s scripts -p 'test_export_repeaters.py' -v
+
+  publish:
+    needs: test
+    if: github.repository == 'MeshCore-Finland/mc-fi-web' && github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+      - name: Export complete validated snapshot
+        run: python scripts/export_repeaters.py --output /tmp/repeaters-v1.json.gz
+      - name: Replace public R2 object
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.WEBSITE_MAP_DATA_UPLOAD_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: d7954cd51b00c2b8e5e836d3708f4e21
+          WRANGLER_SEND_METRICS: 'false'
+        run: >-
+          npx --yes wrangler@4 r2 object put mcfi-network-data/repeaters/v1.json
+          --file /tmp/repeaters-v1.json.gz
+          --content-type application/json
+          --content-encoding gzip
+          --cache-control 'public, max-age=900'
+          --remote

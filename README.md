@@ -40,7 +40,7 @@ The general FAQ was carried over from old `dev` at `faedef5`; Finnish answers we
 
 The repeater-name guide demonstrates native synchronized Web / Mobile / CLI tabs and a command builder. Switching language may reset the tab selection. JavaScript is required for interactive features. Full FAQ pages use `faq: true` and ordinary `##` question headings, with optional stable anchors such as `[#contacts]`. They work in Markdown or MDX and each category gets its own local filter; Pagefind searches all categories. The explicit `FAQ` and `Question` components remain available for mini-FAQs embedded in ordinary MDX articles.
 
-The Finland silhouette includes Åland and is hidden on mobile. Its dots are bundled example locations, identified as prototype data in the accessible label. See [the map data description](src/data/README.md).
+The Finland silhouette includes Åland and is hidden on mobile. Its repeater dots load in the browser from the daily mc-shark bundle hosted in R2, independently of site builds. See [the map data description](src/data/README.md).
 
 `NetworkStats.astro` and `src/components/temporary/` contain the disposable stats widget, including its fetch logic and styles. It retains the previous API endpoints, geographical bounds and 1,000-node limit; its repeater metric is not a complete network total. Replace the wrapper and temporary directory during the planned overhaul.
 

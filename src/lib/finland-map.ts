@@ -1,9 +1,4 @@
 import outline from '../data/finland-outline.json';
-export interface RepeaterLocation {
-  id: string;
-  lat: number;
-  lon: number;
-}
 // An equirectangular projection at 65°N preserves the silhouette's proportions.
 const longitudeScale = Math.cos((65 * Math.PI) / 180);
 const points = outline.rings.flat();
