@@ -13,12 +13,6 @@
 .hero-actions a { display: inline-flex; align-items: center; gap: 1.4rem; padding: .8rem 1.05rem; border: 1px solid var(--sl-color-gray-5); border-radius: .4rem; font-size: .82rem; font-weight: 600; }
 .hero-actions .button-primary { background: var(--home-accent); color: var(--sl-color-black); border-color: var(--home-accent); }
 .hero-actions a:hover { transform: translateY(-1px); }
-.hero-caption { margin-top: 2rem; font: .68rem var(--sl-font-mono); color: var(--sl-color-gray-3); display: flex; align-items: center; gap: .6rem; }
-.network-art { border: 1px solid var(--sl-color-gray-5); border-radius: .65rem; overflow: hidden; background: color-mix(in srgb, var(--sl-color-gray-6) 40%, transparent); }
-.network-art svg { width: 100%; display: block; }
-.art-caption { padding: 1.15rem 1.4rem; border-top: 1px solid var(--sl-color-gray-5); display: grid; gap: .35rem; font-size: .74rem; }
-.art-caption strong { color: var(--sl-color-white); font-weight: 500; }
-.art-caption span { font-size: .68rem; color: var(--sl-color-gray-3); }
 .home-paths, .home-activity, .home-community { padding: 2.8rem 0; border-top: 1px solid var(--sl-color-gray-5); }
 .section-heading h2 { font-size: clamp(1.5rem, 2.6vw, 2rem); letter-spacing: -.035em; margin: .8rem 0; font-weight: 600; }
 .section-heading > p:not(.eyebrow) { font-size: .88rem; line-height: 1.8; max-width: 34rem; }
@@ -68,9 +62,27 @@ mesh-faq, interface-tabs { display: block; }
 .command-builder code { background: transparent; }
 [hidden] { display: none !important; }
 @media (max-width: 800px) { .home-hero { gap: 1.5rem; } .home-hero h1 { font-size: 2.8rem; } .hero-actions { gap: .6rem; } .home-activity, .home-community { gap: 1.5rem; } }
-@media (max-width: 600px) { .home-hero { grid-template-columns: 1fr; padding-top: 1rem; } .home-hero h1 { font-size: 3.1rem; } .network-art { max-width: 30rem; } .path-grid, .home-activity, .home-community { grid-template-columns: 1fr; } .path-card h3 { margin-top: 1rem; } .home-footer { flex-direction: column; } .faq-search-row { flex-wrap: wrap; } .faq-search-row input { flex: 1 1 100%; } .stat-value { font-size: 2.6rem; } }
+@media (max-width: 600px) { .home-hero { grid-template-columns: 1fr; padding-top: 1rem; } .home-hero h1 { font-size: 3.1rem; } .path-grid, .home-activity, .home-community { grid-template-columns: 1fr; } .path-card h3 { margin-top: 1rem; } .home-footer { flex-direction: column; } .faq-search-row { flex-wrap: wrap; } .faq-search-row input { flex: 1 1 100%; } .stat-value { font-size: 2.6rem; } }
 
 .sl-markdown-content .faq-question h2 { display: grid; grid-template-columns: 1fr auto; gap: .5rem 1rem; width: 100%; }
 .faq-excerpt { grid-column: 1 / -1; padding: 0; font-weight: 400; }
 
-@media (max-width: 48rem) { .home-hero { grid-template-columns: 1fr; } .home-hero .network-art { display: none; } }
+@media (max-width: 48rem) { .home-hero { grid-template-columns: 1fr; } .home-hero .home-map { display: none; } }
+
+.home-map { width: 100%; max-width: 24rem; justify-self: center; }
+.home-map svg { display: block; width: 100%; height: auto; }
+
+/* Keep search independent of the documentation column's position. */
+@media (min-width: 64rem) {
+  header .header { grid-template-columns: minmax(0, 1fr) minmax(12rem, 18rem) minmax(0, 1fr); }
+  header .header > :nth-child(2) { justify-content: center; min-width: 0; }
+  header .header > .right-group { justify-self: end; }
+  header site-search { width: 100%; }
+  header site-search button[data-open-modal] { max-width: 18rem; height: 2.25rem; }
+}
+@media (min-width: 50rem) and (max-width: 63.999rem) {
+  header .header > :nth-child(2) { justify-content: center; }
+  header site-search button[data-open-modal] { width: 2.25rem; height: 2.25rem; padding: .5rem; border: 0; background: transparent; }
+  header site-search button[data-open-modal] > span,
+  header site-search button[data-open-modal] > kbd { display: none; }
+}

@@ -8,26 +8,26 @@ const { lang } = Astro.props;
 const en = lang === 'en';
 const t = en ? {
   title: 'Stay connected.', accent: 'Off the grid.',
-  intro: 'Messages travel by radio, independent of the internet or mobile networks. Discover MeshCore and help build the network in Finland.',
-  start: 'Get started', map: 'Explore the network', visual: 'MeshCore in Finland', visualNote: 'Example locations · prototype data',
-  next: 'Find your way into the mesh', nextIntro: 'Your first message, a new repeater, or a local community. Start here.',
-  guides: 'Your first connection', guidesText: 'Choose a device, set it up and send your first message.',
-  repeater: 'Extend the network', repeaterText: 'Set up a repeater and connect your neighborhood.',
-  faq: 'Questions, answered', faqText: 'Find practical answers about devices, contacts and the Finnish mesh.',
-  activity: 'The network is alive', activityText: 'A snapshot from the community’s monitoring tools.',
-  community: 'Built together, locally', communityText: 'Meet nearby enthusiasts, compare notes and build connections.',
+  intro: 'Send messages over a LoRa radio mesh without internet or mobile coverage. Set up your device and connect to Finland’s MeshCore network.',
+  start: 'Get started', map: 'Network map',
+  next: 'Setup and guides', nextIntro: 'Device setup, repeater configuration and answers to common questions.',
+  guides: 'Device setup', guidesText: 'Choose a device, set it up and send your first message.',
+  repeater: 'Repeater configuration', repeaterText: 'Set a recognizable name and choose a suitable location.',
+  faq: 'Frequently asked questions', faqText: 'Find practical answers about devices, contacts and the Finnish mesh.',
+  activity: 'Network activity', activityText: 'A snapshot from the community’s monitoring tools.',
+  community: 'Local communities', communityText: 'Regional maps, community sites and MeshCore discussions.',
   join: 'Join the conversation', regionMap: 'Regional map', visit: 'Community website',
   footer: 'An independent community of MeshCore enthusiasts in Finland.', official: 'About MeshCore',
 } : {
   title: 'Yhteys säilyy.', accent: 'Ilman internetiä.',
-  intro: 'Viestit kulkevat radioverkossa ilman internetiä tai matkapuhelinverkkoa. Tutustu MeshCoreen ja rakenna kanssamme Suomen verkkoa.',
-  start: 'Aloita tästä', map: 'Tutustu verkkoon', visual: 'MeshCore Suomessa', visualNote: 'Esimerkkisijainnit · prototyyppidataa',
-  next: 'Löydä oma reittisi verkkoon', nextIntro: 'Ensimmäinen viesti, uusi toistin tai paikallinen yhteisö. Tästä pääset alkuun.',
-  guides: 'Ensimmäinen yhteys', guidesText: 'Valitse laite, ota se käyttöön ja lähetä ensimmäinen viestisi.',
-  repeater: 'Laajenna verkkoa', repeaterText: 'Perusta toistin ja yhdistä oma naapurustosi.',
-  faq: 'Kysymyksiä ja vastauksia', faqText: 'Löydä vastaukset laitteista, kontakteista ja Suomen mesh-verkosta.',
-  activity: 'Verkko elää', activityText: 'Tilannekuva yhteisön seurantatyökaluista.',
-  community: 'Rakennetaan yhdessä, paikallisesti', communityText: 'Löydä lähiseudun harrastajat, vaihda kokemuksia ja rakenna yhteyksiä.',
+  intro: 'Viestejä LoRa-radioverkossa ilman internetiä tai matkapuhelinverkkoa. Ohjeet laitteiden käyttöönottoon ja Suomen MeshCore-verkkoon liittymiseen.',
+  start: 'Aloita tästä', map: 'Verkon kartta',
+  next: 'Käyttöönotto ja oppaat', nextIntro: 'Laitteen käyttöönotto, toistimen asetukset ja vastaukset yleisiin kysymyksiin.',
+  guides: 'Laitteen käyttöönotto', guidesText: 'Valitse laite, ota se käyttöön ja lähetä ensimmäinen viestisi.',
+  repeater: 'Toistimen asetukset', repeaterText: 'Anna toistimelle tunnistettava nimi ja valitse sijoituspaikka.',
+  faq: 'Usein kysytyt kysymykset', faqText: 'Löydä vastaukset laitteista, kontakteista ja Suomen mesh-verkosta.',
+  activity: 'Verkon tilanne', activityText: 'Tilannekuva yhteisön seurantatyökaluista.',
+  community: 'Paikalliset yhteisöt', communityText: 'Alueelliset kartat, yhteisöjen sivut ja MeshCore-keskustelut.',
   join: 'Liity keskusteluun', regionMap: 'Alueen kartta', visit: 'Yhteisön sivut',
   footer: 'MeshCore-harrastajien itsenäinen yhteisö Suomessa.', official: 'Tietoa MeshCoresta',
 };
@@ -39,11 +39,9 @@ const t = en ? {
         <h1 id="_top">{t.title}<br /><span>{t.accent}</span></h1>
         <p class="hero-intro">{t.intro}</p>
         <div class="hero-actions"><a class="button-primary" href={pageLink(lang, 'guides/getting-started')}>{t.start}<span aria-hidden="true">↗</span></a><a class="button-secondary" href={resources.map}>{t.map}<span aria-hidden="true">↗</span></a></div>
-        <div class="hero-caption"><span aria-hidden="true">◎</span> LoRa · MeshCore · Finland</div>
       </div>
-      <div class="network-art">
+      <div class="home-map">
         <FinlandMap lang={lang} />
-        <div class="art-caption"><strong>{t.visual}</strong><span>{t.visualNote}</span></div>
       </div>
     </section>
     <section class="home-paths">

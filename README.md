@@ -23,7 +23,7 @@ Search is generated during a production build. Use `npm run build` and `npm run 
 - `/en/repeaters/placement/`: intentionally untranslated. Starlight provides the Finnish content with a fallback notice.
 - `/` redirects to `/fi/`. Both languages always have URL prefixes.
 
-The homepage shows a Natural Earth outline of Finland with deterministic example repeater dots, clearly labelled as prototype data. It is hidden on mobile. The [map data contract](src/data/README.md) prepares for a later backend JSON or MessagePack location feed; no live location feed is connected yet. Statistics use the existing CoreScope and MeshShark APIs. The observed-repeater metric retains the old site's coordinate bounds and 1,000-node API limit; it is not a complete count of all Finnish repeaters.
+The homepage shows a Natural Earth outline of Finland with deterministic example repeater dots, identified as prototype data in the accessible image label. The map includes Åland and is displayed without a frame or caption. It is hidden on mobile. The [map data contract](src/data/README.md) prepares for a later backend JSON or MessagePack location feed; no live location feed is connected yet. Statistics use the existing CoreScope and MeshShark APIs. The observed-repeater metric retains the old site's coordinate bounds and 1,000-node API limit; it is not a complete count of all Finnish repeaters.
 
 ## Authoring and languages
 
@@ -36,6 +36,8 @@ import DocLink from '@components/DocLink.astro';
 
 <DocLink page="faq/general" anchor="contacts">Read about contacts</DocLink>
 ```
+
+Each FAQ category can have its own MDX page, such as `faq/general.mdx`, `faq/companions.mdx` and `faq/repeaters.mdx`, under both language directories. Each page gets its own local Q&A filter, while Pagefind indexes questions and answers across every category. Add each page ID to the shared sidebar once.
 
 Use one `FAQ` wrapper per FAQ page and put Markdown answers inside `Question` entries. IDs must be stable across languages:
 
