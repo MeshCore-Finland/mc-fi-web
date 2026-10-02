@@ -1,7 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
-import MobileMenuFooter from '@astrojs/starlight/components/MobileMenuFooter.astro';
 import NetworkStats from './NetworkStats.astro';
 import FinlandMap from './FinlandMap.astro';
 import { resources, regions } from '../lib/site';
@@ -20,7 +19,7 @@ const t = Astro.locals.t;
     prev: false,
     next: false,
   }}
-  hasSidebar={false}
+  hasSidebar={true}
 >
   <div class="home-page not-content">
     <section class="home-hero">
@@ -124,19 +123,20 @@ const t = Astro.locals.t;
       <span>{t('app.home.footer')}</span>
       <a href={resources.official}>{t('app.home.official')} ↗</a>
     </footer>
-    <div class="home-mobile-preferences">
-      <MobileMenuFooter />
-    </div>
   </div>
 </StarlightPage>
 
 <style>
-  .home-mobile-preferences {
-    display: none;
+  /* Reuse Starlight's mobile menu while keeping the homepage full-width on desktop. */
+  :global(html:has(.home-page)) {
+    --sl-content-width: 67.5rem;
   }
-  @media (max-width: 49.999rem) {
-    .home-mobile-preferences {
-      display: block;
+  @media (min-width: 50rem) {
+    :global(html:has(.home-page)) {
+      --sl-content-inline-start: 0rem;
+    }
+    :global(html:has(.home-page) .sidebar) {
+      display: none;
     }
   }
 </style>
