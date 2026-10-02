@@ -2,7 +2,7 @@
 
 Astro + Starlight + MDX with a custom homepage, documentation sidebar and symmetric `/fi/` and `/en/` URLs. Finnish is the default content language; `/` redirects to `/fi/`.
 
-Work is on the independent-history branch `codex/starlight-prototype`, published to `upstream`. Production remains on the old `dev` branch until the one-time replacement.
+Work is on the independent-history branch `dev`, published to `upstream`. Production builds from `main`, which contains the old live site until the one-time replacement. Content contributions target `dev`.
 
 ## Development
 
@@ -46,4 +46,4 @@ The Finland silhouette includes Åland and is hidden on mobile. Its dots are bun
 
 ## Production replacement
 
-Preserve the old branch tips, promote the accepted new base and change Cloudflare's production branch deliberately. The site is replaced in one go; no legacy hash-route compatibility layer is included. This branch is not intended to merge into the unrelated old history.
+When the new site is ready, preserve the old `main` tip as `legacy_v1`, then replace `main` with the accepted `dev` history. Production remains configured to build from `main`. The histories are independent, so this is a deliberate branch replacement rather than a normal merge. Use a lease when replacing the remote branch so intervening updates cannot be overwritten accidentally. The site is replaced in one go; no legacy hash-route compatibility layer is included.

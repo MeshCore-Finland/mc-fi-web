@@ -20,12 +20,12 @@ Node should print `v24.x.x`. You do not need to install Astro globally, set up a
 
 ### Get the working branch
 
-The new site currently lives on `codex/starlight-prototype`. The repository's default branch still contains the old site.
+The new site currently lives on `dev`. The repository's default branch still contains the old site.
 
 If you have write access to the main repository:
 
 ```sh
-git clone --branch codex/starlight-prototype https://github.com/MeshCore-Finland/mc-fi-web.git
+git clone --branch dev https://github.com/MeshCore-Finland/mc-fi-web.git
 cd mc-fi-web
 git switch -c docs/your-topic
 ```
@@ -39,7 +39,7 @@ git clone https://github.com/YOUR_USERNAME/mc-fi-web.git
 cd mc-fi-web
 git remote add upstream https://github.com/MeshCore-Finland/mc-fi-web.git
 git fetch upstream
-git switch -c docs/your-topic upstream/codex/starlight-prototype
+git switch -c docs/your-topic upstream/dev
 ```
 
 This fetches the new site even if your fork initially contains only the old default branch. In both cases, your contribution branch starts from the prototype; keep the old site out of your changes.
@@ -268,7 +268,7 @@ git push -u origin docs/your-topic
 
 Use your own commit message and the branch name you chose during setup. The first push may ask you to authenticate with GitHub; use your usual GitHub authentication method.
 
-Open a pull request on GitHub with **base repository `MeshCore-Finland/mc-fi-web` and base branch `codex/starlight-prototype`**, selecting your contribution branch as the head. Fork contributors select their fork as the head repository. Target this branch while it is the working base; its history is independent from the old site.
+Open a pull request on GitHub with **base repository `MeshCore-Finland/mc-fi-web` and base branch `dev`**, selecting your contribution branch as the head. Fork contributors select their fork as the head repository. Target this branch while it is the working base; its history is independent from the old site.
 
 Describe what changed, how you checked it, and any English translation review still needed. Subsequent commits pushed to the same branch update the PR.
 
