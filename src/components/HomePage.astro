@@ -1,0 +1,63 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import NetworkStats from './NetworkStats';
+import FinlandMap from './FinlandMap.astro';
+import { pageLink, resources, regions, type Language } from '../lib/site';
+interface Props { lang: Language; }
+const { lang } = Astro.props;
+const en = lang === 'en';
+const t = en ? {
+  title: 'Stay connected.', accent: 'Off the grid.',
+  intro: 'Messages travel by radio, independent of the internet or mobile networks. Discover MeshCore and help build the network in Finland.',
+  start: 'Get started', map: 'Explore the network', visual: 'MeshCore in Finland', visualNote: 'Example locations · prototype data',
+  next: 'Find your way into the mesh', nextIntro: 'Your first message, a new repeater, or a local community. Start here.',
+  guides: 'Your first connection', guidesText: 'Choose a device, set it up and send your first message.',
+  repeater: 'Extend the network', repeaterText: 'Set up a repeater and connect your neighborhood.',
+  faq: 'Questions, answered', faqText: 'Find practical answers about devices, contacts and the Finnish mesh.',
+  activity: 'The network is alive', activityText: 'A snapshot from the community’s monitoring tools.',
+  community: 'Built together, locally', communityText: 'Meet nearby enthusiasts, compare notes and build connections.',
+  join: 'Join the conversation', regionMap: 'Regional map', visit: 'Community website',
+  footer: 'An independent community of MeshCore enthusiasts in Finland.', official: 'About MeshCore',
+} : {
+  title: 'Yhteys säilyy.', accent: 'Ilman internetiä.',
+  intro: 'Viestit kulkevat radioverkossa ilman internetiä tai matkapuhelinverkkoa. Tutustu MeshCoreen ja rakenna kanssamme Suomen verkkoa.',
+  start: 'Aloita tästä', map: 'Tutustu verkkoon', visual: 'MeshCore Suomessa', visualNote: 'Esimerkkisijainnit · prototyyppidataa',
+  next: 'Löydä oma reittisi verkkoon', nextIntro: 'Ensimmäinen viesti, uusi toistin tai paikallinen yhteisö. Tästä pääset alkuun.',
+  guides: 'Ensimmäinen yhteys', guidesText: 'Valitse laite, ota se käyttöön ja lähetä ensimmäinen viestisi.',
+  repeater: 'Laajenna verkkoa', repeaterText: 'Perusta toistin ja yhdistä oma naapurustosi.',
+  faq: 'Kysymyksiä ja vastauksia', faqText: 'Löydä vastaukset laitteista, kontakteista ja Suomen mesh-verkosta.',
+  activity: 'Verkko elää', activityText: 'Tilannekuva yhteisön seurantatyökaluista.',
+  community: 'Rakennetaan yhdessä, paikallisesti', communityText: 'Löydä lähiseudun harrastajat, vaihda kokemuksia ja rakenna yhteyksiä.',
+  join: 'Liity keskusteluun', regionMap: 'Alueen kartta', visit: 'Yhteisön sivut',
+  footer: 'MeshCore-harrastajien itsenäinen yhteisö Suomessa.', official: 'Tietoa MeshCoresta',
+};
+---
+<StarlightPage frontmatter={{ title: en ? 'MeshCore in Finland' : 'MeshCore Suomessa', description: t.intro, template: 'splash', tableOfContents: false, prev: false, next: false }} hasSidebar={false}>
+  <div class="home-page not-content">
+    <section class="home-hero">
+      <div class="hero-copy">
+        <h1 id="_top">{t.title}<br /><span>{t.accent}</span></h1>
+        <p class="hero-intro">{t.intro}</p>
+        <div class="hero-actions"><a class="button-primary" href={pageLink(lang, 'guides/getting-started')}>{t.start}<span aria-hidden="true">↗</span></a><a class="button-secondary" href={resources.map}>{t.map}<span aria-hidden="true">↗</span></a></div>
+        <div class="hero-caption"><span aria-hidden="true">◎</span> LoRa · MeshCore · Finland</div>
+      </div>
+      <div class="network-art">
+        <FinlandMap lang={lang} />
+        <div class="art-caption"><strong>{t.visual}</strong><span>{t.visualNote}</span></div>
+      </div>
+    </section>
+    <section class="home-paths">
+      <div class="section-heading"><p class="eyebrow">01 / {en ? 'GET STARTED' : 'ALKUUN'}</p><h2>{t.next}</h2><p>{t.nextIntro}</p></div>
+      <div class="path-grid">
+        {[
+          { number: '01', title: t.guides, text: t.guidesText, path: 'guides/getting-started' },
+          { number: '02', title: t.repeater, text: t.repeaterText, path: 'repeaters/name' },
+          { number: '03', title: t.faq, text: t.faqText, path: 'faq/general' },
+        ].map(card => <a class="path-card" href={pageLink(lang, card.path)}><span class="card-number">{card.number}<span aria-hidden="true">↗</span></span><h3>{card.title}</h3><p>{card.text}</p></a>)}
+      </div>
+    </section>
+    <section class="home-activity"><div class="section-heading"><p class="eyebrow">02 / {en ? 'NETWORK' : 'VERKKO'}</p><h2>{t.activity}</h2><p>{t.activityText}</p><a class="text-link" href={resources.map}>CoreScope <span aria-hidden="true">↗</span></a></div><NetworkStats lang={lang} client:visible /></section>
+    <section class="home-community"><div class="section-heading"><p class="eyebrow">03 / {en ? 'COMMUNITY' : 'YHTEISÖ'}</p><h2>{t.community}</h2><p>{t.communityText}</p></div><div class="community-links"><a class="discord-link" href={resources.discord}><span>Mesh Finland Discord</span><strong>{t.join} ↗</strong></a><div class="regions">{regions.map(region => <div><h3>{region.name}</h3><a href={region.map}>{t.regionMap} ↗</a>{region.site && <a href={region.site}>{t.visit} ↗</a>}</div>)}</div></div></section>
+    <footer class="home-footer"><span>{t.footer}</span><a href={resources.official}>{t.official} ↗</a></footer>
+  </div>
+</StarlightPage>

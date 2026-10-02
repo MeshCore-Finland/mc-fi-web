@@ -1,0 +1,9 @@
+---
+interface Props { id: string; question: string; }
+const { id, question } = Astro.props;
+if (!/^[a-z][a-z0-9-]*$/.test(id)) throw new Error(`FAQ IDs must be stable lower-case identifiers: ${id}`);
+---
+<details class="faq-question" data-faq-item>
+  <summary><h2 id={id}><span data-faq-title>{question}</span><span class="faq-plus" aria-hidden="true" data-pagefind-ignore>+</span><span class="faq-excerpt" data-faq-excerpt hidden data-pagefind-ignore></span></h2></summary>
+  <div class="faq-answer"><slot /></div>
+</details>

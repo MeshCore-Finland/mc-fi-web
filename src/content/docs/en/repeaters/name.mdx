@@ -1,0 +1,60 @@
+---
+title: Give your repeater a name
+description: Name a repeater using a web interface, mobile app or serial console.
+---
+
+import InterfaceTabs from '@components/InterfaceTabs.astro';
+import CommandBuilder from '@components/CommandBuilder';
+import DocLink from '@components/DocLink.astro';
+
+A recognizable name helps you and other users identify your repeater. Choose the interface you use; your choice carries through the steps and across languages.
+
+## 1. Change the name
+
+<InterfaceTabs id="rename">
+  <div slot="web">
+
+Connect the repeater to a supported web interface and open its device settings. Edit the name and save it. Available controls depend on the interface and firmware.
+
+  </div>
+  <div slot="mobile">
+
+Open the repeater’s administration view in your mobile app. Connect with your admin credentials, then edit and save its name where supported.
+
+  </div>
+  <div slot="cli">
+
+Connect to the repeater’s serial console. Use the commands below; they apply to repeater firmware, not the companion CLI protocol.
+
+<CommandBuilder lang="en" client:visible />
+
+  </div>
+</InterfaceTabs>
+
+## 2. Check the result
+
+<InterfaceTabs id="verify">
+  <div slot="web">
+
+Refresh the device settings and check that the saved name is displayed.
+
+  </div>
+  <div slot="mobile">
+
+Reopen the repeater’s administration view and check the name. A contact name may update after a new advertisement.
+
+  </div>
+  <div slot="cli">
+
+Read the name back from the repeater:
+
+```text
+get name
+```
+
+  </div>
+</InterfaceTabs>
+
+If the app or web interface does not expose this setting, use the serial console. The [official command reference](https://github.com/meshcore-dev/MeshCore/blob/main/docs/cli_commands.md) documents the repeater commands.
+
+<DocLink page="faq/general" anchor="placement">Questions about repeaters?</DocLink>

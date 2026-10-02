@@ -1,0 +1,15 @@
+{
+  "pagefind.clear_search": "Tyhjennä",
+  "pagefind.load_more": "Näytä lisää tuloksia",
+  "pagefind.search_label": "Hae sivustolta",
+  "pagefind.filters_label": "Suodattimet",
+  "pagefind.zero_results": "Ei osumia haulle [SEARCH_TERM]",
+  "pagefind.many_results": "[COUNT] osumaa haulle [SEARCH_TERM]",
+  "pagefind.one_result": "[COUNT] osuma haulle [SEARCH_TERM]",
+  "pagefind.alt_search": "Ei osumia haulle [SEARCH_TERM]. Näytetään tulokset haulle [DIFFERENT_TERM].",
+  "pagefind.search_suggestion": "Ei osumia haulle [SEARCH_TERM]. Kokeile jotakin seuraavista hauista:",
+  "pagefind.searching": "Haetaan: [SEARCH_TERM]…",
+  "expressiveCode.copyButtonCopied": "Kopioitu!",
+  "expressiveCode.copyButtonTooltip": "Kopioi leikepöydälle",
+  "expressiveCode.terminalWindowFallbackTitle": "Pääte"
+}

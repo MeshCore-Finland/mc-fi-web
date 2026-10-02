@@ -1,0 +1,60 @@
+---
+title: Anna toistimelle nimi
+description: Nimeä toistin verkkokäyttöliittymällä, mobiilisovelluksella tai sarjakonsolilla.
+---
+
+import InterfaceTabs from '@components/InterfaceTabs.astro';
+import CommandBuilder from '@components/CommandBuilder';
+import DocLink from '@components/DocLink.astro';
+
+Tunnistettava nimi auttaa sinua ja muita käyttäjiä löytämään toistimen. Valitse käyttämäsi käyttöliittymä; valinta säilyy ohjeen vaiheissa ja kielestä toiseen.
+
+## 1. Vaihda nimi
+
+<InterfaceTabs id="rename">
+  <div slot="web">
+
+Yhdistä toistin sitä tukevaan verkkokäyttöliittymään ja avaa laitteen asetukset. Muokkaa nimeä ja tallenna se. Saatavilla olevat toiminnot riippuvat käyttöliittymästä ja ohjelmistosta.
+
+  </div>
+  <div slot="mobile">
+
+Avaa toistimen hallintanäkymä mobiilisovelluksessa. Yhdistä ylläpitotunnuksilla ja muokkaa sekä tallenna nimi, jos sovellus tukee toimintoa.
+
+  </div>
+  <div slot="cli">
+
+Yhdistä toistimen sarjakonsoliin. Alla olevat komennot koskevat toistinohjelmistoa, eivät companionin CLI-protokollaa.
+
+<CommandBuilder lang="fi" client:visible />
+
+  </div>
+</InterfaceTabs>
+
+## 2. Tarkista lopputulos
+
+<InterfaceTabs id="verify">
+  <div slot="web">
+
+Päivitä laitteen asetukset ja tarkista, että tallennettu nimi näkyy.
+
+  </div>
+  <div slot="mobile">
+
+Avaa toistimen hallintanäkymä uudelleen ja tarkista nimi. Kontaktin nimi saattaa päivittyä vasta uuden ilmoituksen jälkeen.
+
+  </div>
+  <div slot="cli">
+
+Lue nimi takaisin toistimelta:
+
+```text
+get name
+```
+
+  </div>
+</InterfaceTabs>
+
+Jos sovellus tai verkkokäyttöliittymä ei tarjoa tätä asetusta, käytä sarjakonsolia. Toistimen komennot on kuvattu [virallisessa komentoviitteessä](https://github.com/meshcore-dev/MeshCore/blob/main/docs/cli_commands.md).
+
+<DocLink page="faq/general" anchor="placement">Kysymyksiä toistimista?</DocLink>

@@ -1,0 +1,74 @@
+---
+import { randomUUID } from 'node:crypto';
+const en = Astro.locals.starlightRoute.lang === 'en';
+const id = 'faq-' + randomUUID();
+const labels = en ? {
+  search: 'Search questions and answers', placeholder: 'Try “contacts” or “repeater”…',
+  clear: 'Clear', count: '{count} of {total} questions', empty: 'No matching questions. Try another word.',
+} : {
+  search: 'Hae kysymyksistä ja vastauksista', placeholder: 'Kokeile “kontaktit” tai “toistin”…',
+  clear: 'Tyhjennä', count: '{count} / {total} kysymystä', empty: 'Ei osumia. Kokeile toista hakusanaa.',
+};
+---
+<mesh-faq data-count-label={labels.count}>
+  <div class="faq-search not-content" data-pagefind-ignore hidden>
+    <label for={id}>{labels.search}</label>
+    <div class="faq-search-row"><input id={id} type="search" placeholder={labels.placeholder} autocomplete="off" /><button type="button" data-clear>{labels.clear}</button></div>
+    <p data-result-count role="status" aria-live="polite" aria-atomic="true"></p>
+    <p data-empty hidden>{labels.empty}</p>
+  </div>
+  <div class="faq-list"><slot /></div>
+</mesh-faq>
+
+<script>
+  import { filterFaq, excerptFor } from '../lib/faq-search.mjs';
+  class MeshFaq extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset.ready) return;
+      this.dataset.ready = 'true';
+      const controls = this.querySelector<HTMLElement>('.faq-search')!;
+      const input = this.querySelector<HTMLInputElement>('input')!;
+      const items = [...this.querySelectorAll<HTMLDetailsElement>('[data-faq-item]')];
+      // Preserve word boundaries across Markdown paragraphs, table cells and lists.
+      const plainText = (node: Node): string => {
+        if (node.nodeType === Node.TEXT_NODE) return node.textContent || '';
+        const text = [...node.childNodes].map(plainText).join('');
+        return node instanceof Element && node.matches('p, div, li, ul, ol, table, tr, td, th, br, pre, h1, h2, h3, h4, h5, h6') ? ` ${text} ` : text;
+      };
+      const records = items.map(item => ({ question: item.querySelector('[data-faq-title]')!.textContent || '', answer: plainText(item.querySelector('.faq-answer')!) }));
+      const count = this.querySelector<HTMLElement>('[data-result-count]')!;
+      const empty = this.querySelector<HTMLElement>('[data-empty]')!;
+      const update = () => {
+        const matches = filterFaq(records, input.value);
+        items.forEach((item, index) => {
+          item.hidden = !matches[index];
+          const excerpt = item.querySelector<HTMLElement>('[data-faq-excerpt]')!;
+          const text = input.value.trim() && !item.open ? excerptFor(records[index].answer, input.value) : '';
+          excerpt.textContent = text;
+          excerpt.hidden = !text || !matches[index];
+        });
+        const visible = matches.filter(Boolean).length;
+        count.textContent = (this.dataset.countLabel || '').replace('{count}', String(visible)).replace('{total}', String(items.length));
+        empty.hidden = visible !== 0;
+      };
+      const clear = () => { input.value = ''; update(); };
+      const openAnchor = () => {
+        let hash: string;
+        try { hash = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+        if (!hash) return;
+        const target = document.getElementById(hash);
+        const item = target?.closest<HTMLDetailsElement>('[data-faq-item]');
+        if (item && this.contains(item)) {
+          clear(); item.open = true; update();
+          requestAnimationFrame(() => target?.scrollIntoView({ block: 'start' }));
+        }
+      };
+      input.addEventListener('input', update);
+      this.querySelector('[data-clear]')!.addEventListener('click', () => { clear(); input.focus(); });
+      items.forEach(item => item.addEventListener('toggle', update));
+      window.addEventListener('hashchange', openAnchor);
+      controls.hidden = false; update(); openAnchor();
+    }
+  }
+  if (!customElements.get('mesh-faq')) customElements.define('mesh-faq', MeshFaq);
+</script>

@@ -1,0 +1,7 @@
+---
+import { pageLink, type Language } from '../lib/site';
+interface Props { page: string; anchor?: string; }
+const { page, anchor } = Astro.props;
+const lang = (Astro.locals.starlightRoute.locale || 'fi') as Language;
+---
+<a href={pageLink(lang, page) + (anchor ? '#' + anchor : '')}><slot /></a>

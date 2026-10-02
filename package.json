@@ -1,0 +1,28 @@
+{
+  "name": "meshcore-finland-starlight",
+  "version": "2.0.0-prototype",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "license": "MIT",
+  "description": "Finnish and English MeshCore community site built with Astro, Starlight and MDX",
+  "dependencies": {
+    "@astrojs/react": "^7.0.0",
+    "@astrojs/starlight": "^0.42.5",
+    "astro": "^7.3.5",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0"
+  }
+}

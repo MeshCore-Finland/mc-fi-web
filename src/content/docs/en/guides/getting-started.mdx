@@ -1,0 +1,36 @@
+---
+title: Getting started
+description: Choose a device and make your first connection to the Finnish MeshCore network.
+---
+
+import DocLink from '@components/DocLink.astro';
+import RadioSettings from '@components/RadioSettings.astro';
+import NetworkStats from '@components/NetworkStats';
+
+MeshCore messages travel by radio. Your phone is the interface, while a companion device handles the radio connection.
+
+## 1. Choose a device
+
+Start with a device supported by MeshCore companion firmware. Before buying, check [the official flasher](https://flasher.meshcore.io) for supported hardware.
+
+## 2. Install firmware and connect
+
+Install companion firmware using the flasher, then pair the device with the MeshCore mobile app. Follow the device-specific instructions linked by the flasher.
+
+## 3. Use the Finnish settings
+
+Select the **EU/UK Narrow** preset and check the values:
+
+<RadioSettings />
+
+## 4. Send your first message
+
+Try a greeting on Public or #finland. A quiet contacts list does not necessarily mean there is no network nearby.
+
+<DocLink page="faq/general" anchor="contacts">Read why contacts may not appear immediately.</DocLink>
+
+## A snapshot of the network
+
+The community’s monitoring tools show observed network activity. Explore [CoreScope](https://corescope.meshcore.fi/#/map) for more detail.
+
+<NetworkStats lang="en" client:visible />
