@@ -15,6 +15,7 @@ export const collections = {
     loader: docsLoader(),
     schema: docsSchema({
       extend: z.object({
+        faq: z.boolean().default(false),
         lastReviewed: reviewDate,
         translationChecked: reviewDate,
         hidePageTitle: z.boolean().default(false),

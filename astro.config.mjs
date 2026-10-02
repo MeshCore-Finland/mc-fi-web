@@ -1,11 +1,14 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import react from '@astrojs/react';
+import { satteri } from '@astrojs/markdown-satteri';
+import faqPages from './src/lib/faq-pages.mjs';
 import { defaultLocale, locales } from './src/lib/locales';
 
 export default defineConfig({
   site: 'https://meshcore.fi',
   trailingSlash: 'always',
+  markdown: { processor: satteri() },
   integrations: [
     starlight({
       title: { fi: 'MeshCore Suomi', en: 'MeshCore Finland' },
@@ -24,6 +27,7 @@ export default defineConfig({
         PageTitle: './src/components/PageTitle.astro',
         Header: './src/components/Header.astro',
         Footer: './src/components/Footer.astro',
+        MarkdownContent: './src/components/MarkdownContent.astro',
       },
       sidebar: [
         {
@@ -40,5 +44,6 @@ export default defineConfig({
       credits: false,
     }),
     react(),
+    faqPages(),
   ],
 });

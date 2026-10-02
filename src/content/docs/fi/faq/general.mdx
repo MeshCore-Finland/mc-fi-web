@@ -1,18 +1,15 @@
 ---
 title: Usein kysytyt kysymykset
 description: Vastauksia MeshCoren käyttöön ja Suomen verkkoon liittyviin kysymyksiin.
+faq: true
 tableOfContents: false
 ---
 
-import FAQ from '@components/FAQ.astro';
-import Question from '@components/Question.astro';
 import RadioSettings from '@components/RadioSettings.astro';
 
 Suomen yhteisön vastauksia yleisiin kysymyksiin. Hae kysymyksistä ja vastauksista tai avaa haluamasi kohta.
 
-<FAQ>
-
-<Question id="about" question="Mikä MeshCore on ja miksi tämä sivusto on olemassa?">
+## Mikä MeshCore on ja miksi tämä sivusto on olemassa? [#about]
 
 MeshCore on radioverkossa toimiva viestintäjärjestelmä, joka ei tarvitse internetiä tai matkapuhelinverkkoa. Verkkoa rakentavat sen käyttäjät.
 
@@ -20,17 +17,13 @@ Virallinen sivusto on [meshcore.io](https://meshcore.io). Sieltä löydät maail
 
 MeshCore Finland on suomalaisten harrastajien yhteisö. Tälle sivustolle kootaan Suomen verkon tietoja, käytännön oppaita ja paikallisia yhteisöjä.
 
-</Question>
-
-<Question id="settings" question="Mitä radioasetuksia Suomessa käytetään?">
+## Mitä radioasetuksia Suomessa käytetään? [#settings]
 
 Suomen yhteisö käyttää **EU/UK Narrow** -esiasetusta.
 
 <RadioSettings />
 
-</Question>
-
-<Question id="contacts" question="Miksi kontakteja ei näy, vaikka laite on ollut päällä jo tunteja?">
+## Miksi kontakteja ei näy, vaikka laite on ollut päällä jo tunteja? [#contacts]
 
 Kontaktit löytyvät ADVERT-paketeista, joissa laite ilmoittaa tunnisteensa ja mahdollisesti sijaintinsa. Pelkkä laitteen käynnistäminen ei siis välttämättä tuo kontakteja näkyviin heti.
 
@@ -40,9 +33,7 @@ Kontaktit löytyvät ADVERT-paketeista, joissa laite ilmoittaa tunnisteensa ja m
 
 Lähetä tervehdys julkiselle kanavalle tai käytä sovelluksen toistinhakua.
 
-</Question>
-
-<Question id="discovery" question="Miten löydän toistimia ja muita käyttäjiä?">
+## Miten löydän toistimia ja muita käyttäjiä? [#discovery]
 
 Voit kokeilla seuraavia tapoja:
 
@@ -52,17 +43,13 @@ Voit kokeilla seuraavia tapoja:
 
 Verkon seurantaan voit käyttää myös [CoreScopea](https://corescope.meshcore.fi/#/map).
 
-</Question>
-
-<Question id="cross-border" question="Miksi Public-kanavalla puhutaan viroa tai latviaa?">
+## Miksi Public-kanavalla puhutaan viroa tai latviaa? [#cross-border]
 
 Erityisesti Helsingin seudulla Suomen verkosta voi syntyä radioyhteyksiä Suomenlahden yli Tallinnaan ja Viron rannikon toistimiin. Yhteydet voivat jatkua muualle Baltiaan.
 
 Pitkät radioyhteydet riippuvat säästä ja muista etenemisolosuhteista. Ne voivat ilmestyä ja kadota nopeasti.
 
-</Question>
-
-<Question id="companion-repeat" question="Voiko companion toimia myös toistimena?">
+## Voiko companion toimia myös toistimena? [#companion-repeat]
 
 Companion-laitteet eivät normaalisti toista muiden viestejä. MeshCore käyttää tähän erillisiä toistimia.
 
@@ -70,9 +57,7 @@ Erillisessä Off-Grid-tilassa companion-laitteet voivat muodostaa oman, normaali
 
 Suora viestintä kahden kantaman sisällä olevan companionin välillä toimii ilman toistinta. Retkelle voi ottaa mukaan myös erillisen toistimen.
 
-</Question>
-
-<Question id="placement" question="Tarvitaanko toistimen lisäämiseen verkon ylläpitäjän lupa?">
+## Tarvitaanko toistimen lisäämiseen verkon ylläpitäjän lupa? [#placement]
 
 MeshCore on avoin verkko, eikä toistimen lisäämiseen tarvita keskitetyn verkko-operaattorin hyväksyntää.
 
@@ -82,16 +67,10 @@ Sovi asennuspaikan käytöstä sen omistajan kanssa. Katto, parveke tai ikkunan 
 - Sijaintiin viittaava nimi auttaa muita tunnistamaan laitteen.
 - Kotitoistin voi parantaa sisätilojen yhteyttä ja auttaa samalla naapurustoa.
 
-</Question>
-
-<Question id="mobile-repeaters" question="Voiko toistimen asentaa autoon?">
+## Voiko toistimen asentaa autoon? [#mobile-repeaters]
 
 Liikkuvat toistimet ovat kehittyvä käytäntö. MeshCore oppii reittejä tallentamalla viestien kulkemat toistimet. Laitteen liikkuminen voi tehdä aiemmin opitusta suorasta reitistä toimimattoman.
 
 Lähettäjä voi joutua yrittämään reittiä uudelleen ja palaamaan FLOOD-reititykseen löytääkseen uuden reitin. Vaikutus riippuu verkon tilanteesta ja käyttötavasta.
 
 Paikallaan oleva tilapäinen toistin, esimerkiksi retken tukikohdassa, on eri tilanne kuin jatkuvasti liikkuva toistin.
-
-</Question>
-
-</FAQ>

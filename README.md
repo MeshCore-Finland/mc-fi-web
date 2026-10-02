@@ -38,7 +38,7 @@ Cloudflare previews pushes to this branch. Vercel remains configured for externa
 
 The general FAQ was carried over from old `dev` at `faedef5`; Finnish answers were translated and edited. Exact technical claims and app instructions still need editorial review. No review dates have been invented for this material.
 
-The repeater-name guide demonstrates native synchronized Web / Mobile / CLI tabs and a command builder. Switching language may reset the tab selection. JavaScript is required for interactive features. FAQ categories can be split into separate pages with their own local filters; Pagefind searches all categories.
+The repeater-name guide demonstrates native synchronized Web / Mobile / CLI tabs and a command builder. Switching language may reset the tab selection. JavaScript is required for interactive features. Full FAQ pages use `faq: true` and ordinary `##` question headings, with optional stable anchors such as `[#contacts]`. They work in Markdown or MDX and each category gets its own local filter; Pagefind searches all categories. The explicit `FAQ` and `Question` components remain available for mini-FAQs embedded in ordinary MDX articles.
 
 The Finland silhouette includes Åland and is hidden on mobile. Its dots are bundled example locations, identified as prototype data in the accessible label. See [the map data description](src/data/README.md).
 

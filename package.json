@@ -13,6 +13,7 @@
   "license": "MIT",
   "description": "Finnish and English MeshCore community site built with Astro, Starlight and MDX",
   "dependencies": {
+    "@astrojs/markdown-satteri": "^0.4.2",
     "@astrojs/react": "^7.0.0",
     "@astrojs/starlight": "^0.42.5",
     "astro": "^7.3.5",
@@ -28,6 +29,7 @@
     "parse5": "^8.0.1",
     "prettier": "^3.9.9",
     "prettier-plugin-astro": "^1.1.0",
+    "satteri": "^0.10.5",
     "typescript": "^6.0.3"
   },
   "engines": {

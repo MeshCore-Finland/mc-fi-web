@@ -1,6 +1,6 @@
 # Contributing content
 
-Use Markdown for ordinary articles and MDX when you need screenshots, FAQ entries, tabs or interactive examples. You do not need to edit React components to contribute content.
+Use Markdown for ordinary articles and full FAQ pages. Use MDX when you need screenshots, tabs, embedded mini-FAQs or interactive examples. You do not need to edit React components to contribute content.
 
 ## First-time setup
 
@@ -128,28 +128,65 @@ The destination is the document path, not a filename: no `/fi/`, leading slash o
 
 ## FAQ pages
 
-Each category is a separate document: `faq/general.mdx`, `faq/companions.mdx`, `faq/repeaters.mdx`, etc. Add it to the sidebar like an ordinary article. One FAQ wrapper per page provides a local filter; global search indexes all categories and their answers.
+Each category is a separate document: `faq/general.md`, `faq/companions.md`, `faq/repeaters.md`, etc. Use `.mdx` if answers need components. Add the page to the sidebar like an ordinary article.
 
-```mdx
+Set `faq: true` in frontmatter. Each top-level `##` heading becomes a question, and everything up to the next `##` becomes its answer. Introductory text before the first question remains visible. Use `###` or deeper headings within answers; headings inside code blocks and blockquotes do not create questions.
+
+```md
 ---
 title: Companion-laitteiden kysymyksiä
 description: Käytännön vastauksia companion-laitteista.
+faq: true
 tableOfContents: false
 ---
 
+Lyhyt johdanto.
+
+## Miten yhdistän puhelimen laitteeseen? [#bluetooth-connection]
+
+Kirjoita vastaus tavallisena Markdownina.
+
+## Mitä teen jos yhteys katkeaa?
+
+Seuraava vastaus. Listat, linkit, taulukot ja koodilohkot toimivat normaalisti.
+```
+
+You do not need to import or wrap FAQ components for a full FAQ page. The generator adds the accordion and local text filter at build time. Site-wide search indexes all FAQ pages and their answers, and a question link opens the corresponding answer.
+
+The optional `[#bluetooth-connection]` suffix sets a stable anchor and is removed from the displayed question. Use the same suffix in Finnish and English when sharing question links across translations. IDs must start with a lowercase letter and contain only lowercase letters, digits and hyphens; they must be unique on the page. Keep them when editing question text. Without a suffix, the heading gets the usual automatic anchor derived from its text.
+
+In an MDX FAQ, import components as usual and place them inside answers. For example:
+
+```mdx
+import RadioSettings from '@components/RadioSettings.astro';
+
+## Mitä radioasetuksia käytetään? [#settings]
+
+<RadioSettings />
+```
+
+### Mini-FAQs inside other articles
+
+Keep the article as an ordinary MDX page (omit `faq: true`). The explicit components remain available for a small FAQ alongside regular sections, or several independent FAQ blocks. Each block gets its own filter.
+
+```mdx
 import FAQ from '@components/FAQ.astro';
 import Question from '@components/Question.astro';
+
+## Vianetsintä
+
+Tavallinen ohjeosio.
 
 <FAQ>
   <Question id="bluetooth-connection" question="Miten yhdistän puhelimen laitteeseen?">
 
-Kirjoita vastaus tavallisena Markdownina. Voit käyttää listoja, linkkejä ja komponentteja.
+Kirjoita vastaus tavallisena Markdownina.
 
   </Question>
 </FAQ>
 ```
 
-Question IDs must be unique on the page, start with a lowercase letter and contain only lowercase letters, digits and hyphens. Keep an ID when editing its question text. English uses the same ID with translated question and answer text.
+Question IDs must be unique across the whole article, including its ordinary heading IDs and other mini-FAQ blocks. On generated FAQ pages, use question headings instead of mixing in manual FAQ blocks.
 
 ## Workflow tabs
 

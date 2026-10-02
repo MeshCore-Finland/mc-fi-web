@@ -1,0 +1,15 @@
+---
+import Default from '@astrojs/starlight/components/MarkdownContent.astro';
+import FAQ from './FAQ.astro';
+const { faq } = Astro.locals.starlightRoute.entry.data;
+---
+
+<Default>
+  {faq ? (
+    <FAQ>
+      <slot />
+    </FAQ>
+  ) : (
+    <slot />
+  )}
+</Default>
