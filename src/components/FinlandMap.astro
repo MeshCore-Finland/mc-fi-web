@@ -1,5 +1,5 @@
 ---
-import { finlandPath } from '../lib/finland-map';
+import { finlandPath, finlandViewBox } from '../lib/finland-map';
 interface Props {
   bundleUrl?: string;
 }
@@ -16,7 +16,7 @@ const {
 >
   <svg
     class="finland-map"
-    viewBox="0 0 480 440"
+    viewBox={finlandViewBox}
     role="img"
     aria-label={Astro.locals.t('app.map.outline')}
   >

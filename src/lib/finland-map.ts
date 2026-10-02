@@ -9,6 +9,14 @@ const top = Math.max(...points.map(([, lat]) => lat));
 const scale = Math.min(310 / (right - left), 374 / (top - bottom));
 const offsetX = (480 - (right - left) * scale) / 2;
 const offsetY = (440 - (top - bottom) * scale) / 2;
+// Frame the outline tightly, with room for the repeater halos at its edges.
+const padding = 12;
+export const finlandViewBox = [
+  offsetX - padding,
+  offsetY - padding,
+  (right - left) * scale + padding * 2,
+  (top - bottom) * scale + padding * 2,
+].join(' ');
 export function projectLocation(lat: number, lon: number) {
   return {
     x: offsetX + (lon * longitudeScale - left) * scale,

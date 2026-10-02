@@ -30,11 +30,13 @@
   margin: 0;
 }
 .home-hero {
+  --hero-padding-top: 2.5rem;
+  --hero-padding-bottom: 4rem;
   display: grid;
   grid-template-columns: 1.13fr 1fr;
   align-items: center;
   gap: 2rem;
-  padding: 2.5rem 0 4rem;
+  padding: var(--hero-padding-top) 0 var(--hero-padding-bottom);
 }
 .eyebrow {
   font: 600 0.68rem/1.5 var(--sl-font-mono);
@@ -374,10 +376,16 @@ mesh-faq {
 .home-map {
   width: 100%;
   max-width: 24rem;
+  position: relative;
+  align-self: stretch;
+  margin-block: calc(-1 * var(--hero-padding-top))
+    calc(-1 * var(--hero-padding-bottom));
   justify-self: center;
 }
 .home-map svg {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
 }
