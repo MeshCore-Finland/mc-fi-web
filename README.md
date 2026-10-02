@@ -30,9 +30,9 @@ Matching document paths associate translations. Starlight handles missing transl
 
 ## Preview
 
-[Finnish preview](https://codex-starlight-prototype.mc-fi-web.pages.dev/fi/) · [English preview](https://codex-starlight-prototype.mc-fi-web.pages.dev/en/)
+[Finnish preview](https://dev.mc-fi-web.pages.dev/fi/) · [English preview](https://dev.mc-fi-web.pages.dev/en/)
 
-Cloudflare previews pushes to this branch. Vercel remains configured for external pull-request previews. Production branch settings have not been changed.
+Cloudflare builds `main` for production and previews pushes to `dev`. Vercel provides external pull-request previews.
 
 ## Current content and temporary features
 

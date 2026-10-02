@@ -272,7 +272,7 @@ Open a pull request on GitHub with **base repository `MeshCore-Finland/mc-fi-web
 
 Describe what changed, how you checked it, and any English translation review still needed. Subsequent commits pushed to the same branch update the PR.
 
-Cloudflare previews branches pushed to the main repository; Vercel remains configured for external PR previews. After deployment finishes, use the preview link in the PR's deployment check or bot comment. The shared [prototype preview](https://codex-starlight-prototype.mc-fi-web.pages.dev/fi/) shows the latest prototype branch, not your unmerged contribution. Check that CI passes before asking for review. Deployment configuration and the eventual production cutover are maintained separately.
+Cloudflare previews branches pushed to the main repository; Vercel remains configured for external PR previews. After deployment finishes, use the preview link in the PR's deployment check or bot comment. The shared [dev preview](https://dev.mc-fi-web.pages.dev/fi/) shows the latest dev branch, not your unmerged contribution. Check that CI passes before asking for review. Deployment configuration and the eventual production cutover are maintained separately.
 
 ## Shared components and UI labels
 
