@@ -1,6 +1,6 @@
 export const resources = {
   discord: 'https://discord.com/invite/GHnaVAjqed',
-  map: 'https://corescope.meshcore.fi/#/map',
+  map: 'https://corescope.meshcore.fi/#/live',
   flasher: 'https://flasher.meshcore.io',
   official: 'https://meshcore.io',
 };
