@@ -1,14 +1,24 @@
 ---
-import SiteTitle from '@astrojs/starlight/components/SiteTitle.astro';
+import meshcoreLogo from '../assets/meshcore.svg?url';
 import Search from '@astrojs/starlight/components/Search.astro';
 import SocialIcons from '@astrojs/starlight/components/SocialIcons.astro';
 import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro';
 import LanguageSelect from '@astrojs/starlight/components/LanguageSelect.astro';
+const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
+const countryName = siteTitle.replace(/^MeshCore\s+/u, '');
 ---
 
 <div class="site-header">
   <div class="brand">
-    <SiteTitle />
+    <a
+      href={siteTitleHref}
+      class="site-brand"
+      aria-label={siteTitle}
+      translate="no"
+    >
+      <img src={meshcoreLogo} alt="" width="134" height="15" />
+      <span>{countryName}</span>
+    </a>
   </div>
   <div class="search print:hidden">
     <Search />
@@ -32,6 +42,48 @@ import LanguageSelect from '@astrojs/starlight/components/LanguageSelect.astro';
     overflow: clip;
     padding: 0.25rem;
     margin: -0.25rem;
+  }
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .site-brand img {
+    display: block;
+    width: 11rem;
+    height: auto;
+  }
+  :global(:root[data-theme='light'] .header) {
+    background: #003580;
+    border-bottom-color: rgb(255 255 255 / 0.2);
+  }
+  :global(:root[data-theme='light']) .controls :global(a),
+  :global(:root[data-theme='light']) .controls :global(label) {
+    color: #fff;
+  }
+  :global(:root[data-theme='light']) .search :global(button[data-open-modal]) {
+    color: #fff;
+    border-color: rgb(255 255 255 / 0.3);
+    background: rgb(255 255 255 / 0.08);
+  }
+  :global(:root[data-theme='light'])
+    .search
+    :global(button[data-open-modal] > kbd) {
+    background: rgb(255 255 255 / 0.12);
+  }
+  @media (max-width: 49.999rem) {
+    .site-brand {
+      font-size: 1.05rem;
+      gap: 0.5rem;
+    }
+    .site-brand img {
+      width: 8.5rem;
+    }
   }
   .search {
     min-width: 0;

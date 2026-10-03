@@ -1,5 +1,9 @@
 ---
-import { finlandPath } from '../lib/finland-map';
+import {
+  finlandPath,
+  finlandViewBox,
+  finlandMainlandPath,
+} from '../lib/finland-map';
 interface Props {
   bundleUrl?: string;
 }
@@ -16,11 +20,17 @@ const {
 >
   <svg
     class="finland-map"
-    viewBox="0 0 480 440"
+    viewBox={finlandViewBox}
     role="img"
     aria-label={Astro.locals.t('app.map.outline')}
   >
     <path d={finlandPath} class="finland-land" />
+    <path
+      d={finlandMainlandPath}
+      class="outline-runner"
+      pathLength="100"
+      aria-hidden="true"
+    />
     <g class="repeater-dots" />
   </svg>
 </finland-repeater-map>
@@ -51,14 +61,31 @@ const {
           title.textContent = node.name;
           group.append(title);
           for (const [radius, className] of [
-            ['6', 'dot-halo'],
-            ['2.3', 'dot-core'],
+            ['4.5', 'dot-ring'],
+            ['1.5', 'dot-core'],
           ]) {
-            const circle = document.createElementNS(svg.namespaceURI, 'circle');
+            const circle = document.createElementNS(
+              'http://www.w3.org/2000/svg',
+              'circle',
+            );
             circle.setAttribute('cx', String(x));
             circle.setAttribute('cy', String(y));
             circle.setAttribute('r', radius);
             circle.setAttribute('class', className);
+            if (className === 'dot-ring') {
+              // Stable timing per repeater keeps pulses independent across reloads.
+              const duration =
+                6 + (parseInt(node.id.slice(0, 8), 16) / 0xffffffff) * 3;
+              const phase = parseInt(node.id.slice(8, 16), 16) / 0xffffffff;
+              circle.style.setProperty(
+                '--pulse-duration',
+                `${duration.toFixed(2)}s`,
+              );
+              circle.style.setProperty(
+                '--pulse-delay',
+                `${(-phase * duration).toFixed(2)}s`,
+              );
+            }
             group.append(circle);
           }
           fragment.append(group);
@@ -83,17 +110,83 @@ const {
   finland-repeater-map {
     display: block;
   }
+  .finland-map {
+    --repeater-color: var(--home-accent);
+  }
+  :global(:root[data-theme='light']) .finland-map {
+    --repeater-color: #8b2933;
+  }
   .finland-land {
     fill: var(--sl-color-accent-low);
     stroke: var(--home-accent);
+    stroke-opacity: 0.45;
     stroke-width: 1.25;
     stroke-linejoin: round;
   }
-  .finland-map :global(.dot-halo) {
-    fill: var(--home-accent);
-    opacity: 0.12;
+  /* Two-second circuit followed by five seconds of rest. */
+  .outline-runner {
+    fill: none;
+    stroke: color-mix(in srgb, var(--home-accent) 65%, white);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 2 98;
+    opacity: 0.8;
+    pointer-events: none;
+    animation: outline-circuit 7s linear infinite;
+  }
+  @keyframes outline-circuit {
+    0% {
+      stroke-dashoffset: 0;
+      opacity: 0.8;
+    }
+    28.57% {
+      stroke-dashoffset: -100;
+      opacity: 0.8;
+    }
+    28.58%,
+    100% {
+      stroke-dashoffset: -100;
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .outline-runner {
+      animation: none;
+      opacity: 0;
+    }
+  }
+  .finland-map :global(.dot-ring) {
+    fill: none;
+    stroke: var(--repeater-color);
+    stroke-width: 0.7;
+    vector-effect: non-scaling-stroke;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: repeater-pulse var(--pulse-duration, 8s) linear
+      var(--pulse-delay, 0s) infinite;
+  }
+  @keyframes repeater-pulse {
+    0% {
+      transform: scale(0.4);
+      opacity: 0;
+    }
+    10% {
+      transform: scale(0.48);
+      opacity: 0.3;
+    }
+    100% {
+      transform: scale(1.2);
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .finland-map :global(.dot-ring) {
+      animation: none;
+    }
   }
   .finland-map :global(.dot-core) {
-    fill: var(--home-accent);
+    fill: var(--repeater-color);
   }
 </style>
