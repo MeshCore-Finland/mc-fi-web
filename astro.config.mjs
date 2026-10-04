@@ -31,14 +31,16 @@ export default defineConfig({
       },
       sidebar: [
         {
-          label: 'Aloita tästä',
-          translations: { en: 'Start here' },
-          items: ['guides/getting-started', 'faq/general'],
+          label: 'MeshCoren käyttäjäksi',
+          translations: { en: 'Start using MeshCore' },
+          // Osion sivujärjestys määritellään tässä
+          items: ['guides/landing', 'guides/devices', 'guides/settings', 'guides/regions', 'guides/identity', 'guides/channels', 'guides/dms'],
         },
         {
-          label: 'Toistimet',
-          translations: { en: 'Repeaters' },
-          items: ['repeaters/name', 'repeaters/placement'],
+          label: 'Verkon rakentajaksi',
+          translations: { en: 'Build more MeshCore' },
+          // Osion sivujärjestys määritellään tässä
+          items: ['repeaters/landing', 'repeaters/devices', 'repeaters/flash', 'repeaters/settings', 'repeaters/construction', 'repeaters/regions', 'repeaters/planning', 'repeaters/observers', 'repeaters/tuning'],
         },
       ],
       credits: false,
