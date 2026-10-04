@@ -5,17 +5,35 @@ description: Tärkeät perusasiat ja erittely oppaan sisällöstä.
 
 import DocLink from '@components/DocLink.astro';
 
-Sisältöä luvassa myöhemmin.
+MeshCore-käyttäjänä pääset mukaan viestirinkiin, jota eivät infrastruktuurin häiriöt hetkauta.
 
-## Testataan otsikko yläpalkkiin
+Ensimmäinen askel on hankkia ja asentaa valmiiksi ns. *kumppaniradio* (Companion radio). Kun kumppaniradiosi on valmis, se tarkkailee jatkuvasti radioaaltoja ja poimii MeshCore-viestinnän talteen. Lähettämäsi viestit päätyvät kaikkiin kantamalla oleviin kumppaniradioihin ja toisin päin. MeshCore-yhteisöt Suomessa ja muualla maailmassa rakentavat toistinverkostoa, joka välittää viestejä kantamaa laajemmalla alueella.
 
-Jepskit
+Laitevalinnastasi riippuen käytät MeshCorea joko puhelimen sovelluksella, joka toimii pitkälti tuttujen Internet-viestisovellusten tavoin, tai laitteella itsellään, jos päädyt näytön ja näppäimistön omaavaan laitteeseen.
 
-## Toinenkin otsikko
+Tämä opas auttaa matkan jokaisessa vaiheessa. Aihepiirit seuraavat toisiaan sivun alaosan navigaatiossa suurin piirtein siinä järjestyksessä, missä ne tulevat touhutessa vastaan; yläpalkin hampurilaisvalikosta voit hyppiä aiheesta toiseen.
 
-Hippipuppejunkkari!
+Heti kättelyssä tärkeintä on ymmärtää, että MeshCoren käyttämä **LoRa on hidas radiotekniikka**. Toisin kuin Internetissä, LoRa-radioilla toimittaessa kaistaa ei ole rajattomasti. Toiveemme on, että Suomen MeshCore -yhteisö ymmärtää tämän perusasian, ja voimme välttää tyypilliset ylilyönnit, joita on nähty aiemmissa mesh-verkkoprojekteissa ympäri maailman.
 
-<DocLink page="faq/general" anchor="contacts">
-  Sisäinen linkki.
-</DocLink>
+## Perusasioita evästykseksi matkalla
+
+Suomessa ja muualla Euroopassa toimitaan radioliikenteessä EU:n ([CEPT](https://en.wikipedia.org/wiki/European_Conference_of_Postal_and_Telecommunications_Administrations)) sekä suomalaisten ([Traficom](https://traficom.fi/fi/radioluvat-ja-taajuudet)) sääntöjen puitteissa. Näitä sääntöjä **on tarkoitus noudattaa** myös MeshCore-yhteisössä.
+
+Oleellista on pysytellä luvallisilla taajuusalueilla – tämä ehto täyttyy, kun käytät Suomen MeshCoren suosittelemia radioasetuksia – ja kunnioittaa EU-alueella vallitsevaa sääntöä, jonka mukaan **yksittäinen laite ei saa tehdä lähetystä kuin 10 % ajasta liukuvan tunnin aikaikkunan sisällä** – tämäkin ehto täyttyy suositeltuja asetuksia käytettäessä. Muita kovia sääntöjä eivät asetukset määrää.
+
+On myös hyvä tietää, että käytettävä 868 MHz:n taajuusalue on luonteeltaan sellainen, etteivät signaalit juurikaan etene jykevien esteiden, kuten maaston tai betoniseinien läpi.
+
+## Tämän oppaan sisällöstä
+
+* Ensimmäinen sivu opastaa laitteen valintaan ja käyttöönottoon. Kaupasta käteen tullut laite täytyy poikkeuksetta *flashätä* eli siihen täytyy asentaa ohjelmisto.
+
+* Toinen sivu käy läpi asetukset, jotka laitteeseen täytyy määritellä, että se toimii Suomen (ja koko Euroopan) MeshCore-verkossa ja täyttää lakien ja asetusten määräykset.
+
+* Kolmas sivu käsittelee Suomen MeshCoressa käytössä olevia aluerajauksia (Region Scopes). Tämä on oleellista ymmärtää – ilman tätä tietoa viestisi eivät välttämättä kulje toistinverkossa.
+
+* Neljäs sivu kertoo, miten voit jakaa 'osoitteesi' meshissä muille, jotta yksityisviestit päätyvät sinulle.
+
+* Viides sivu esittelee MeshCoren kolme kanavatyyppiä, joilla viestitään ryhmien kesken.
+
+* Kuudes sivu syventää yksityisviestien käyttöä.
 

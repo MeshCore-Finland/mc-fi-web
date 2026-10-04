@@ -5,8 +5,32 @@ description: Verkon rakentaminen on vaativaa, mutta palkitsevaa.
 
 import DocLink from '@components/DocLink.astro';
 
-Sivu saa sisältöä kunhan kerkee.
+Näillä sivuilla tutustutaan toistinten rakentamisen ja hallinnoinnin koko kuvaan. Aihepiirit seuraavat toisiaan sivun alaosan navigaatiossa suurin piirtein siinä järjestyksessä, missä ne tulevat touhutessa vastaan; yläpalkin hampurilaisvalikosta voit hyppiä aiheesta toiseen.
 
-<DocLink page="faq/general" anchor="placement">
-  Sisäinen linkki.
-</DocLink>
+Heti kättelyssä tärkeintä on ymmärtää, että **LoRa on hidas radiotekniikka**. Toisin kuin Internetissä, LoRa-radioilla toimittaessa kaistaa ei ole rajattomasti. Toiveemme on, että Suomen MeshCore -yhteisö ymmärtää tämän perusasian, ja voimme välttää tyypilliset ylilyönnit, joita on nähty aiemmissa mesh-verkkoprojekteissa ympäri maailman.
+
+## Perusasioita evästykseksi matkalla
+
+Suomessa ja muualla Euroopassa toimitaan radioliikenteessä EU:n ([CEPT](https://en.wikipedia.org/wiki/European_Conference_of_Postal_and_Telecommunications_Administrations)) sekä suomalaisten ([Traficom](https://traficom.fi/fi/radioluvat-ja-taajuudet)) sääntöjen puitteissa. Näitä sääntöjä **on tarkoitus noudattaa** myös MeshCore-yhteisössä.
+
+Oleellista on pysytellä luvallisilla taajuusalueilla – tämä ehto täyttyy, kun käytät Suomen MeshCoren suosittelemia radioasetuksia – ja kunnioittaa EU-alueella vallitsevaa sääntöä, jonka mukaan **yksittäinen laite ei saa tehdä lähetystä kuin 10 % ajasta liukuvan tunnin aikaikkunan sisällä** – tämäkin ehto täyttyy suositeltuja asetuksia käytettäessä.
+
+On myös hyvä tietää, että käytettävä 868 MHz:n taajuusalue on luonteeltaan sellainen, etteivät signaalit juurikaan etene jykevien esteiden läpi. Yhteyden sanotaan vaativan *line of sightin* eli näköyhteyden. Tämän vuoksi suunnittelu nousee korkeaan arvoon meshin rakentamisessa.
+
+## Tämän oppaan sisällöstä
+
+* Ensimmäiset kaksi sivua käsittelevät toistinkäyttöön tulevan laitteen valintaa ja ohjelmiston asennusta. Näissä on eroavaisuuksia verrattaessa kumppaniradioihin.
+
+* Kolmas sivu auttaa, kun laitteessa on ohjelmisto sisällä ja on aika määrittää asetukset. Asetukset voi nopeasti tarkastaa myös <DocLink page="faq/settings" anchor="placement">UKK-sivuilta</DocLink>.
+
+* Neljäs sivu käsittelee erityisesti ulkokäyttöön tulevan toistimen kotelointia, antaa ideoita rakentamiseen ja käsittelee esimerkiksi aurinkopaneeli- ja akkuasioita.
+
+* Viides sivu käsittelee tärkeätä aluerajaus- eli Region Scope -aihetta. Suomen yhteisöllä on näihin vahvat suositukset, joten tämä osio kannattaa lukea – jos jätät aluerajausaiheen läpikäymättä, saattaa käydä niin, ettei toistintasi toisteta eteenpäin.
+
+* Kuudes sivu tarjoaa työkaluja ja käytännön vinkkejä meshin suunnitteluun, eli omien toistinten sijoittamiseen, sijoitusten testaamiseen ennen laitteen paikallevientiä, eri vuodenaikojen vaikutusta radioaaltojen etenemiseen ja muihin suunnitteluun vaikuttaviin aiheisiin.
+
+* Seitsemäs sivu on omistettu Observer-laitteille, CoreScopelle, omien toistinten näkyville tuontiin eri kartoilla, kuuluvuuskartoitukseen osallistumiseen ja muuhun olemassaolevan meshin diagnostiikkaan ja seurantaan.
+
+* Kahdeksas sivu katsoo pidemmälle mesheihin, joissa alkaa olla paljon toistimia ja käyttäjiä, ja taustoittaa hienosäätömahdollisuudet meshin toimintakyvyn terästämiseen.
+
+
