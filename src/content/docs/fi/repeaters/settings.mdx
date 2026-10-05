@@ -19,7 +19,7 @@ Nämä voi määritellä sekä käyttöliittymässä että komentorivillä:
 * Toistimelle pitää antaa **nimi**. Useimmiten nimi viittaa paikkaan, jonne toistin päätyy työtään tekemään. Nimen suhteen sinulla on vapaat kädet.
 * Toistimen **sijainti** annetaan koordinaatteina.
 * **Mainostuksen toistotiheys** eli Advert Interval asetetaan erikseen koko meshin alueelle välitettäviin mainoksiin (yksikkönä tunnit) sekä vain toistimen kantaman kattaviin suoriin mainoksiin (yksikkönä minuutit). Muista, että jokainen mainos on lähete, joka rasittaa akkukäyttöisen toistimen akkua, ja että jokainen flood-mainos rasittaa koko meshiä. [Lue syventävä osuus.](#mainostamisesta)
-* Toistetaanko viestit, joissa **ei ole aluerajausta** tai rajoitetaanko niitä? Suomen MeshCoressa pyritään siihen, että kotimainen viestintä käyttää fi-aluerajausta. Näin maan ulkopuolelta aika-ajoin saapuvat viestit voidaan erottaa meille tärkeimmästä paikallisesta viestinnästä. Viestit ulkomailta välitetään kaikille alueesi meshin käyttäjille, jos ne sallitaan, ja tämä saattaa paikoin ärsyttää. Lisäksi ne kuluttavat toistinverkon radioaikaa ja akkuja. <DocLink page="repeaters/regions" anchor="placement">Lue syventävä osuus.</DocLink>
+* Toistetaanko viestit, joissa **ei ole aluerajausta** tai rajoitetaanko niitä? Suomen MeshCoressa pyritään siihen, että kotimainen viestintä käyttää fi-aluerajausta. Näin maan ulkopuolelta aika-ajoin saapuvat viestit voidaan erottaa meille tärkeimmästä paikallisesta viestinnästä. Viestit ulkomailta välitetään kaikille alueesi meshin käyttäjille, jos ne sallitaan, ja tämä saattaa paikoin ärsyttää. Lisäksi ne kuluttavat toistinverkon radioaikaa ja akkuja. <DocLink page="repeaters/regions">Lue syventävä osuus.</DocLink>
 * Toistettavat regionit: **fi** joka tapauksessa. **offgrid**, jos toistin on sähköverkosta riippumaton. Lisäksi paikallisesti sovitut [pienemmät aluerajaukset](#paikalliset-aluerajaukset). Jos toistin on paikalla, jossa se voi olla naapurimaan MeshCoren apuna (rannikot ja rajaseudut), voidaan lisätä myös naapurimaan kansallinen aluerajaus ja tehdä naapuriapua.
 * Lähetyksen teho (**set tx / Transmit Power (dBm)**) täytyy asettaa oman laitteiston speksin mukaan: 21 / 22 / 23. Huomattavaa on, että 23 dBm saattaa **ylittää sallitun lähtötehon** suuntaavia antenneja käytettäessä.
 
@@ -41,9 +41,9 @@ set path.hash.mode 1
 set advert.interval 0
 set flood.advert.interval 30
 set loop.detect moderate
-region default fi
 
 region put fi
+region default fi
 # region put offgrid
 # region put omat_lisäykset
 # region put naapuri_regionit
