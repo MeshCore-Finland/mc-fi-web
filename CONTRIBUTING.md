@@ -20,7 +20,7 @@ Node should print `v24.x.x`. You do not need to install Astro globally, set up a
 
 ### Get the working branch
 
-The new site currently lives on `dev`. The repository's default branch still contains the old site.
+The new site lives on `dev`, which is the repository's default branch. The old live site remains on `main` until the production cutover.
 
 If you have write access to the main repository:
 
