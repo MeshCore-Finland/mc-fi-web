@@ -43,7 +43,7 @@ Create a Cloudflare Cache Rule matching the hostname and `/repeaters/` path: mak
 
 ## Schedule and recovery
 
-The **Publish Finland repeater bundle** workflow runs daily at 06:00 **Europe/Helsinki**, including summer time. Use its **Run workflow** button on `main` for an immediate refresh. Pushes/PRs run exporter tests only; they never publish. Forks cannot publish through this workflow. Scheduled workflows must be present on the default branch: `main` currently includes the exporter infrastructure while `dev` also includes the new map consumer. Keep the infrastructure identical when replacing the old live site.
+The **Publish Finland repeater bundle** workflow runs daily at 06:00 **Europe/Helsinki**, including summer time, from the repository's default branch (currently `dev`). Use its **Run workflow** button with that branch selected for an immediate refresh. Publication follows the configured default branch automatically; it does not depend on Cloudflare's production branch. Pushes/PRs run exporter tests only; they never publish. Forks and manual runs on other branches cannot publish through this workflow. Keep the workflow on the default branch when changing the branch structure.
 
 GitHub schedules are best-effort and public repositories disable them after 60 days without repository activity. A quiet repository needs its scheduled workflow re-enabled; do not generate artificial commits to bypass that behavior.
 
