@@ -92,8 +92,20 @@ async function main() {
   }
   const issues = checkPages(pages, names);
   if (issues.length) {
-    console.error(issues.join('\n'));
-    process.exitCode = 1;
+    if (process.argv.includes('--warn-only')) {
+      for (const issue of issues) {
+        if (process.env.GITHUB_ACTIONS === 'true') {
+          const message = issue
+            .replaceAll('%', '%25')
+            .replaceAll('\r', '%0D')
+            .replaceAll('\n', '%0A');
+          console.warn(`::warning title=Internal link validation::${message}`);
+        } else console.warn(`Warning: ${issue}`);
+      }
+    } else {
+      console.error(issues.join('\n'));
+      process.exitCode = 1;
+    }
   } else
     console.log(
       `Checked internal links, anchors and IDs in ${pages.size} HTML pages.`,

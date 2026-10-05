@@ -20,7 +20,7 @@ npm run build
 npm run preview
 ```
 
-The build checks types, runs tests, builds Pagefind search and validates generated internal links, anchors and duplicate IDs. GitHub Actions, Cloudflare and Vercel use the same build command. Search is available after a production build; use `preview` to evaluate it locally.
+The build checks types, runs tests, builds Pagefind search and reports warnings for broken internal links, anchors and duplicate IDs. GitHub Actions, Cloudflare and Vercel use the same build command, so link warnings do not block PR previews. For PRs targeting `dev` or `main` and pushes to those branches, GitHub Actions runs a separate strict `links` check; requiring it in a branch ruleset blocks merging until issues are fixed. Run `npm run check:links` after building to check strictly yourself. Search is available after a production build; use `preview` to evaluate it locally.
 
 ## Contributing
 

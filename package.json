@@ -3,7 +3,7 @@
   "version": "2.0.0-prototype",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && npm test && astro build && npm run check:links",
+    "build": "astro check && npm test && astro build && npm run check:links -- --warn-only",
     "preview": "astro preview",
     "check": "astro check",
     "test": "node --test tests/*.test.mjs",
