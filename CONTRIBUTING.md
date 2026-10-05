@@ -70,7 +70,9 @@ npm run preview
 
 Open the URL printed by `preview`. This serves the generated static site and includes site-wide search. **It does not update when you edit files**: stop it, rebuild and restart it to see later changes. Use `dev` for everyday editing.
 
-The build checks types, runs tests, generates the search index and validates internal document links, section anchors and duplicate IDs. CI runs the same build on pushes and pull requests.
+The build checks types, runs tests, generates the search index and reports warnings for broken internal document links, section anchors and duplicate IDs. These warnings do not fail local builds or PR previews. GitHub Actions displays them as warning annotations on pushes and pull requests.
+
+For pull requests targeting `dev` or `main`, and pushes to those branches, CI runs a separate strict `links` check against the generated site. It fails if any issues remain, while the preview build can still succeed with warnings. Making `links` a required check in the target branch's ruleset blocks merging until those issues are fixed. Before merging, run `npm run check:links` after building to check strictly yourself. Rebasing locally does not trigger CI; checks run when you push.
 
 Optional formatting: `npm run format` formats the repository. Check `git diff` afterward and include only changes relevant to your contribution. If dependencies change after you pull updates, run `npm ci` again.
 

@@ -1,5 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
 import { readPage, checkPages } from '../scripts/check-links.mjs';
 
 function check(source, target = '<h2 id="contacts">Contacts</h2>') {
@@ -9,6 +14,47 @@ function check(source, target = '<h2 id="contacts">Contacts</h2>') {
   ]);
   return checkPages(pages, new Set([...pages.keys(), '_astro/screenshot.png']));
 }
+
+test('CLI warns without failing previews but fails strict validation', async (t) => {
+  const cwd = await mkdtemp(join(tmpdir(), 'mcfi-links-'));
+  t.after(() => rm(cwd, { recursive: true, force: true }));
+  await mkdir(join(cwd, 'dist'));
+  const html = join(cwd, 'dist', 'index.html');
+  await writeFile(
+    html,
+    '<a href="/missing/">Missing page</a><a href="#gone">Missing anchor</a>',
+  );
+  const script = fileURLToPath(
+    new URL('../scripts/check-links.mjs', import.meta.url),
+  );
+  const run = (args = [], githubActions = 'false') =>
+    spawnSync(process.execPath, [script, ...args], {
+      cwd,
+      encoding: 'utf8',
+      env: { ...process.env, GITHUB_ACTIONS: githubActions },
+    });
+
+  const strict = run();
+  assert.equal(strict.status, 1);
+  assert.match(strict.stderr, /missing destination/);
+  assert.match(strict.stderr, /missing anchor/);
+
+  const preview = run(['--warn-only']);
+  assert.equal(preview.status, 0);
+  assert.match(preview.stderr, /Warning: .*missing destination/);
+  assert.match(preview.stderr, /Warning: .*missing anchor/);
+
+  const github = run(['--warn-only'], 'true');
+  assert.equal(github.status, 0);
+  assert.match(github.stderr, /::warning title=Internal link validation::/);
+
+  await writeFile(
+    html,
+    '<h2 id="present">Present</h2><a href="#present">Valid</a>',
+  );
+  assert.equal(run().status, 0);
+  assert.equal(run(['--warn-only']).status, 0);
+});
 
 test('validates relative, locale-prefixed and absolute internal links', () => {
   assert.deepEqual(

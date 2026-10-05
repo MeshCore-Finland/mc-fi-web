@@ -24,3 +24,39 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - name: Save generated site for link validation
+        if: >-
+          (github.event_name == 'pull_request' &&
+           (github.base_ref == 'dev' || github.base_ref == 'main')) ||
+          (github.event_name == 'push' &&
+           (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'))
+        uses: actions/upload-artifact@v7
+        with:
+          name: generated-site
+          path: dist/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
+
+  links:
+    needs: build
+    if: >-
+      (github.event_name == 'pull_request' &&
+       (github.base_ref == 'dev' || github.base_ref == 'main')) ||
+      (github.event_name == 'push' &&
+       (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v8
+        with:
+          name: generated-site
+          path: dist/
+      - run: npm run check:links
