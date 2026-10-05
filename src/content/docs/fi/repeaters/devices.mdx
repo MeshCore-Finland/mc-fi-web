@@ -5,8 +5,36 @@ description: Laitevaihtoehtoja on paljon. Lue täältä, mitä kannattaa tietä�
 
 import DocLink from '@components/DocLink.astro';
 
-Sivu saa sisältöä kunhan kerkee.
+Toistimeksi sopivia laitteita on markkinoilla valmiiksi rakennettuna, mutta usein harrastajat rakentavat toistimet myös itse. Alla mainitut valintaperusteet pätevät molemmissa tapauksissa.
 
-<DocLink page="faq/general" anchor="placement">
-  Sisäinen linkki.
-</DocLink>
+Laitteen valinta aloitetaan toistimen käyttötarkoitus edellä. Nämä asiat kannattaa harkita läpi:
+
+* Tuleeko toistin paikkaan, jossa on käytettävissä kiinteät sähköt, vai toimiiko se akun varassa? Tuleeko toistimeen myös aurinkopaneeli?
+
+* Halutaanko toistimesta myös <DocLink page="repeaters/observers" anchor="placement">Observer</DocLink> eli meshistä yleiseen jakeluun tietoa keräävä laite? Nämä voi yhdistää samaan laitteeseen.
+
+* Tuleeko toistin paikkaan, jossa ohjelmiston päivitys on mahdollista suorittaa USB-kaapelin yli, vai täytyykö päivitykset hoitaa langattomasti?
+
+## Aurinkopaneeli- tai akkutoistin
+
+Kun virrankulutus halutaan pitää kurissa, valinta kohdistuu usein Nordic RF:n nRF52840 -järjestelmäpiirillä toteutettuun malliin. Ne ovat merkittävästi virtapihimpiä kuin vaihtoehto eli ESP32-piirillä toimivat mallit.
+
+Aurinkopaneelin hyödyntäminen on helpointa, jos laitteessa on valmis aurinkopaneeliliitäntä. Tällöin toistimeen ei tarvita muuta elektroniikkaa kuin itse mesh-laite. Tällaisia laitteita löytyy sekä nRF- että ESP32 -leireistä.
+
+## Observer-toistin -yhdistelmä
+
+Tällaisen laitteen observer-toiminnallisuus edellyttää Internet-yhteyttä WiFillä. Näin ollen laitteessa täytyy olla WiFi-tuki, joka on tarjolla vain ESP32-laitteissa, ja asennuspaikalla on syytä olla WiFi-yhteys käytettävissä. Laitteelle täytyy myös löytyä tuki [Gessamanin observer](https://observer.gessaman.com/) -ohjelmistolle.
+
+## Toistin hankalassa paikassa
+
+Toistimen ohjelmistoa joutuu päivittämään ainakin silloin tällöin, koska MeshCore kehittyy nopeasti. Hankalaan paikkaan asennetun toistimen voi päivittää langattomasti. Tähän kannattaa varautua ennalta asentamalla OTA-bootloader.
+
+nRF52840-pohjaisilla laitteilla käytettävissä on vain Bluetooth-yhteys, jonka kantama on vaatimaton, mutta ratkaisu on vartavasten suunniteltu 'kenttäolosuhteisiin'. ESP32-laitteissa on muutamia, jotka voidaan päivittää WiFi-yhteyden yli, mutta  lähinnä tilanteissa, joissa laite on yhdistettynä WiFi-verkkoon jatkuvasti.
+
+Edelliset koskevat vain ohjelmiston päivitystä – normaali hallintayhteys asetusten työstöön onnistuu MeshCoren yli.
+
+## Lähetysteho saa olla korkeintaan 500 mW
+
+Markkinoilla on muutamia laitteita, jotka lähettävät 1 W teholla niin pyydettäessä. Näitä ei kuitenkaan saa Euroopassa ajaa täydellä teholla!
+
+
