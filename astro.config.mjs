@@ -4,6 +4,7 @@ import react from '@astrojs/react';
 import { satteri } from '@astrojs/markdown-satteri';
 import faqPages from './src/lib/faq-pages.mjs';
 import { defaultLocale, locales } from './src/lib/locales';
+import sidebar from './sidebar.config.mjs';
 
 export default defineConfig({
   site: 'https://meshcore.fi',
@@ -49,20 +50,7 @@ export default defineConfig({
         Footer: './src/components/Footer.astro',
         MarkdownContent: './src/components/MarkdownContent.astro',
       },
-      sidebar: [
-        {
-          label: 'MeshCoren käyttäjäksi',
-          translations: { en: 'Start using MeshCore' },
-          // Osion sivujärjestys määritellään tässä
-          items: ['users/start', 'users/devices', 'users/settings', 'users/regions', 'users/identity', 'users/channels', 'users/dms'],
-        },
-        {
-          label: 'Verkon rakentajaksi',
-          translations: { en: 'Build more MeshCore' },
-          // Osion sivujärjestys määritellään tässä
-          items: ['repeaters/start', 'repeaters/devices', 'repeaters/flash', 'repeaters/settings', 'repeaters/construction', 'repeaters/regions', 'repeaters/planning', 'repeaters/observers', 'repeaters/tuning'],
-        },
-      ],
+      sidebar,
       credits: false,
     }),
     react(),
