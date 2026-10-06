@@ -76,6 +76,8 @@ For pull requests targeting `dev` or `main`, and pushes to those branches, CI ru
 
 The separate `external-links` check visits external HTTP/HTTPS URLs from the built pages, follows redirects and retries transient failures. It checks responses, not anchors on external sites, and skips private network addresses. Open the check's job summary or download its `external-link-report` artifact for failed URLs, source pages and HTTP/network errors. This check is **not required for merging** and does not affect preview builds; the merge approver should review failures for broken destinations, temporary outages or sites that block automated requests. Only `build` and `links` belong in the required checks.
 
+The [CI workflow reference](docs/ci.md) lists exact triggers and filters for every workflow, including why a PR can show both push and PR checks or skipped jobs.
+
 Optional formatting: `npm run format` formats the repository. Check `git diff` afterward and include only changes relevant to your contribution. If dependencies change after you pull updates, run `npm ci` again.
 
 ### Common setup problems
