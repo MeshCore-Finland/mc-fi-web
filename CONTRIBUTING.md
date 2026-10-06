@@ -72,7 +72,11 @@ Open the URL printed by `preview`. This serves the generated static site and inc
 
 The build checks types, runs tests, generates the search index and reports warnings for broken internal document links, section anchors and duplicate IDs. These warnings do not fail local builds or PR previews. GitHub Actions displays them as warning annotations on pushes and pull requests.
 
-For pull requests targeting `dev` or `main`, and pushes to those branches, CI runs a separate strict `links` check against the generated site. It fails if any issues remain, while the preview build can still succeed with warnings. Making `links` a required check in the target branch's ruleset blocks merging until those issues are fixed. Before merging, run `npm run check:links` after building to check strictly yourself. Rebasing locally does not trigger CI; checks run when you push.
+For pull requests targeting `dev` or `main`, CI runs a separate strict `links` check against the generated site. It fails if any issues remain, while the preview build can still succeed with warnings. Making `links` a required check in the target branch's ruleset blocks merging until those issues are fixed. Push runs only build the site; the separate link jobs run on PRs. Before merging, run `npm run check:links` after building to check strictly yourself. Rebasing locally does not trigger CI; pushing updates to an open PR triggers its checks.
+
+On PRs targeting `dev` or `main`, the separate `external-links` check visits external HTTP/HTTPS URLs from the built pages, follows redirects and retries transient failures. It checks responses, not anchors on external sites, and skips private network addresses. Open the check's job summary or download its `external-link-report` artifact for failed URLs, source pages and HTTP/network errors. This check is **not required for merging** and does not affect preview builds; the merge approver should review failures for broken destinations, temporary outages or sites that block automated requests. Only `build` and `links` belong in the required checks.
+
+The [CI workflow reference](docs/ci.md) lists exact triggers and filters for every workflow, including why a PR can show both push and PR checks or skipped jobs.
 
 Optional formatting: `npm run format` formats the repository. Check `git diff` afterward and include only changes relevant to your contribution. If dependencies change after you pull updates, run `npm ci` again.
 
