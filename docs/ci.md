@@ -2,17 +2,23 @@
 
 This documents the workflows in `.github/workflows/`. Trigger and job conditions apply to the workflow version available to the run; changes on a contribution branch do not replace the workflows on other branches until merged.
 
-## Site checks
+## Push builds
+
+Source: [`.github/workflows/push-build.yml`](../.github/workflows/push-build.yml).
+
+Any branch or tag push triggers this workflow, with no changed-file filter. Its only job is `push-build`, which installs dependencies with `npm ci` and runs `npm run build`. There are no separate link jobs or generated-site uploads in a push run, including after a merge into `dev` or `main`. Internal link warnings still appear as part of the build. Keep `push-build` optional; PR validation provides the required `build` check.
+
+There are no PR, scheduled or manual triggers. Concurrency is grouped by Git ref; a newer push cancels an older push build for that same ref.
+
+## Site checks (pull requests)
 
 Source: [`.github/workflows/check.yml`](../.github/workflows/check.yml).
 
 | Event        | Exact trigger                                                                                                         | `build` | `links` and `external-links`                                    |
 | ------------ | --------------------------------------------------------------------------------------------------------------------- | ------- | --------------------------------------------------------------- |
-| Branch push  | Any branch, with no changed-file filter                                                                               | Runs    | Run only when the pushed branch is exactly `dev` or `main`      |
-| Tag push     | Any tag, with no changed-file filter                                                                                  | Runs    | Skipped                                                         |
 | Pull request | Opened, reopened, or updated with new head commits (`synchronize`), targeting any branch, with no changed-file filter | Runs    | Run only when the target/base branch is exactly `dev` or `main` |
 
-Draft PRs have the same triggers. Switching a PR between draft and ready for review, editing its description, submitting a review, or closing it does not itself trigger this workflow. Merging a PR updates the target branch and can trigger a push run there. There is no schedule or **Run workflow** trigger for Site checks.
+Draft PRs have the same triggers. Switching a PR between draft and ready for review, editing its description, submitting a review, or closing it does not itself trigger this workflow. Merging a PR updates the target branch and can trigger the separate Push builds workflow there. There are no push, scheduled or **Run workflow** triggers for Site checks.
 
 `build` installs dependencies with `npm ci` and runs `npm run build`: Astro diagnostics, tests, the static site and search index, then internal link validation in warning-only mode. Type errors, failed tests and rendering failures fail the build; broken internal links, anchors and duplicate IDs produce warnings. For runs eligible for the two link jobs, the generated `dist/` is saved as `generated-site` for one day.
 
@@ -27,11 +33,11 @@ Keep **`build` and `links` required**, and **`external-links` optional**, in the
 
 ### Duplicate and skipped checks
 
-A push to a same-repository branch with an open PR can start two runs. The **push** run checks the branch commit; the **pull_request** run checks GitHub's temporary merge of that branch with its target. GitHub may display both sets of results on the PR.
+A push to a same-repository branch with an open PR can start two builds. The **Push builds / push-build** run checks the branch commit; the **Site checks / build** PR run checks GitHub's temporary merge of that branch with its target. GitHub may display both results on the PR. Distinct job names separate the optional push check from the required PR check; the existing required names `build` and `links` are unchanged.
 
-For a contribution branch targeting `dev`, the push run builds but skips its link jobs; the PR run builds and runs both link jobs. A PR targeting another branch skips both link jobs. A failed or cancelled build also prevents dependent link jobs from running.
+For a contribution branch targeting `dev`, only the PR run contains `links` and `external-links`; there are no corresponding push entries, even skipped ones. A PR targeting a branch other than `dev` or `main` skips both link jobs. A failed or cancelled PR build also prevents dependent link jobs from running.
 
-Concurrency is grouped by workflow and Git ref. A newer run cancels an older run for the same ref. Branch refs and PR merge refs differ, so this does not combine their runs.
+Site checks concurrency is grouped by workflow and PR merge ref. A newer run cancels an older run for the same PR. Its concurrency group is separate from Push builds, so one does not cancel the other.
 
 ## Publish Finland repeater bundle
 
@@ -61,8 +67,8 @@ Runs are grouped by Git ref, with cancellation of an in-progress run disabled. A
 
 ## Preview deployments and local commands
 
-Cloudflare Pages and Vercel deployment checks come from their Git integrations, outside these two Actions workflows. Production is configured to use `main`; Cloudflare provides previews for branches in the upstream repository, and Vercel provides fork previews. Provider settings determine deployment selection and PR notifications. Their site build command is `npm run build`, so broken internal links warn without blocking the preview; the separate Actions link jobs do not gate those builds.
+Cloudflare Pages and Vercel deployment checks come from their Git integrations, outside these three Actions workflows. Production is configured to use `main`; Cloudflare provides previews for branches in the upstream repository, and Vercel provides fork previews. Provider settings determine deployment selection and PR notifications. Their site build command is `npm run build`, so broken internal links warn without blocking the preview; the separate Actions link jobs do not gate those builds.
 
-Local commits, merges and rebases do not trigger Actions until pushed. There are no repository-managed local Git hooks. Run `npm run build` locally, then `npm run check:links` for strict internal validation. Neither workflow listens for `repository_dispatch`, `deployment_status` or `merge_group` events.
+Local commits, merges and rebases do not trigger Actions until pushed. There are no repository-managed local Git hooks. Run `npm run build` locally, then `npm run check:links` for strict internal validation. None of the workflows listens for `repository_dispatch`, `deployment_status` or `merge_group` events.
 
 GitHub's [event reference](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows) and [workflow syntax reference](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax) describe platform event defaults and changed-file filtering.

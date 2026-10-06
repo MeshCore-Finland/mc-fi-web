@@ -1,7 +1,6 @@
 name: Site checks
 
 on:
-  push:
   pull_request:
 
 permissions:
@@ -26,10 +25,7 @@ jobs:
       - run: npm run build
       - name: Save generated site for link validation
         if: >-
-          (github.event_name == 'pull_request' &&
-           (github.base_ref == 'dev' || github.base_ref == 'main')) ||
-          (github.event_name == 'push' &&
-           (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'))
+          github.base_ref == 'dev' || github.base_ref == 'main'
         uses: actions/upload-artifact@v7
         with:
           name: generated-site
@@ -41,10 +37,7 @@ jobs:
   links:
     needs: build
     if: >-
-      (github.event_name == 'pull_request' &&
-       (github.base_ref == 'dev' || github.base_ref == 'main')) ||
-      (github.event_name == 'push' &&
-       (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'))
+      github.base_ref == 'dev' || github.base_ref == 'main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -65,10 +58,7 @@ jobs:
   external-links:
     needs: build
     if: >-
-      (github.event_name == 'pull_request' &&
-       (github.base_ref == 'dev' || github.base_ref == 'main')) ||
-      (github.event_name == 'push' &&
-       (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'))
+      github.base_ref == 'dev' || github.base_ref == 'main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
