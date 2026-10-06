@@ -5,17 +5,17 @@ description: Verkon rakentaminen on vaativaa, mutta palkitsevaa.
 
 import DocLink from '@components/DocLink.astro';
 
-Näillä sivuilla tutustutaan toistinten rakentamisen ja hallinnoinnin koko kuvaan. Aihepiirit seuraavat toisiaan sivun alaosan navigaatiossa suurin piirtein siinä järjestyksessä, missä ne tulevat touhutessa vastaan; yläpalkin hampurilaisvalikosta voit hyppiä aiheesta toiseen.
-
-Heti kättelyssä tärkeintä on ymmärtää, että **LoRa on hidas radiotekniikka**. Toisin kuin Internetissä, LoRa-radioilla toimittaessa kaistaa ei ole rajattomasti. Toiveemme on, että Suomen MeshCore -yhteisö ymmärtää tämän perusasian, ja voimme välttää tyypilliset ylilyönnit, joita on nähty aiemmissa mesh-verkkoprojekteissa ympäri maailman.
+Näillä sivuilla tutustutaan toistinten rakentamisen ja hallinnointiin. Aihepiirit seuraavat toisiaan sivun alaosan navigaatiossa suurin piirtein siinä järjestyksessä, missä ne tulevat touhutessa vastaan; vasemman laidan valikosta (tai mobiililla yläpalkin hampurilaisvalikosta) voit hyppiä aiheesta toiseen.
 
 ## Perusasioita evästykseksi matkalla
 
-Suomessa ja muualla Euroopassa toimitaan radioliikenteessä EU:n ([CEPT](https://en.wikipedia.org/wiki/European_Conference_of_Postal_and_Telecommunications_Administrations)) sekä suomalaisten ([Traficom](https://traficom.fi/fi/radioluvat-ja-taajuudet)) sääntöjen puitteissa. Näitä sääntöjä **on tarkoitus noudattaa** myös MeshCore-yhteisössä.
+Heti kättelyssä tärkeintä on ymmärtää, että MeshCoren käyttämä **LoRa on hidas radiotekniikka**. Toisin kuin Internetissä, LoRa-radioilla toimittaessa kaistaa on hyvin rajallisesti. Toiveemme on, että yhteisöön liittyvät ymmärtävät tämän perusasian, ja voimme välttää tyypilliset ylilyönnit, joita on nähty mesh-verkkoprojekteissa ympäri maailman.
 
-Oleellista on pysytellä luvallisilla taajuusalueilla – tämä ehto täyttyy, kun käytät Suomen MeshCoren suosittelemia radioasetuksia – ja kunnioittaa EU-alueella vallitsevaa sääntöä, jonka mukaan **yksittäinen laite ei saa tehdä lähetystä kuin 10 % ajasta liukuvan tunnin aikaikkunan sisällä** – tämäkin ehto täyttyy suositeltuja asetuksia käytettäessä.
+Suomessa ja muualla Euroopassa toimitaan radioliikenteessä EU:n ([CEPT](https://en.wikipedia.org/wiki/European_Conference_of_Postal_and_Telecommunications_Administrations)) sekä suomalaisten ([Traficom](https://traficom.fi/fi/radioluvat-ja-taajuudet)) määräysten puitteissa. Näitä määräyksiä **on noudatettava** myös MeshCore käytössä.
 
-On myös hyvä tietää, että käytettävä 868 MHz:n taajuusalue on luonteeltaan sellainen, etteivät signaalit juurikaan etene jykevien esteiden läpi. Yhteyden sanotaan vaativan *line of sightin* eli näköyhteyden. Tämän vuoksi suunnittelu nousee korkeaan arvoon meshin rakentamisessa.
+Oleellista on pysytellä luvallisilla taajuusalueilla, sallittujen säteilytehojen puitteissa sekä noudattaa EU-alueelle yhteistä sääntöä, jonka mukaan **yksittäinen laite ei saa olla lähetystilassa kuin 10% ajasta liukuvan tunnin aikaikkunan sisällä**. Kaikki nämä ehdot täyttyvät suositeltuja asetuksia käytettäessä.
+
+On myös hyvä tietää, että käytettävä 868 MHz:n lupavapaa taajuusalue on luonteeltaan sellainen, etteivät signaalit juurikaan etene jykevien esteiden, kuten maaston tai betoniseinien läpi.
 
 ## Tämän oppaan sisällöstä
 

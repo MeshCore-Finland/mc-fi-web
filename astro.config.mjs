@@ -54,13 +54,13 @@ export default defineConfig({
           label: 'MeshCoren käyttäjäksi',
           translations: { en: 'Start using MeshCore' },
           // Osion sivujärjestys määritellään tässä
-          items: ['guides/landing', 'guides/devices', 'guides/settings', 'guides/regions', 'guides/identity', 'guides/channels', 'guides/dms'],
+          items: ['users/start', 'users/devices', 'users/settings', 'users/regions', 'users/identity', 'users/channels', 'users/dms'],
         },
         {
           label: 'Verkon rakentajaksi',
           translations: { en: 'Build more MeshCore' },
           // Osion sivujärjestys määritellään tässä
-          items: ['repeaters/landing', 'repeaters/devices', 'repeaters/flash', 'repeaters/settings', 'repeaters/construction', 'repeaters/regions', 'repeaters/planning', 'repeaters/observers', 'repeaters/tuning'],
+          items: ['repeaters/start', 'repeaters/devices', 'repeaters/flash', 'repeaters/settings', 'repeaters/construction', 'repeaters/regions', 'repeaters/planning', 'repeaters/observers', 'repeaters/tuning'],
         },
       ],
       credits: false,
