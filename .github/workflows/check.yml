@@ -60,3 +60,46 @@ jobs:
           name: generated-site
           path: dist/
       - run: npm run check:links
+
+  # Advisory: keep this out of the required checks in branch rulesets.
+  external-links:
+    needs: build
+    if: >-
+      (github.event_name == 'pull_request' &&
+       (github.base_ref == 'dev' || github.base_ref == 'main')) ||
+      (github.event_name == 'push' &&
+       (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: generated-site
+          path: dist/
+      - name: Check external HTTP links
+        uses: lycheeverse/lychee-action@v2.9.0
+        with:
+          lycheeVersion: v0.24.2
+          fail: true
+          failIfEmpty: false
+          output: external-links.md
+          args: >-
+            --base-url https://meshcore.fi/
+            --scheme http --scheme https
+            --exclude '^https?://meshcore\.fi(?:[/:?#]|$)'
+            --exclude-all-private
+            --max-concurrency 4
+            --max-retries 2
+            --retry-wait-time 2
+            --timeout 20
+            --no-progress
+            --verbose
+            './dist/**/*.html'
+      - name: Save external link report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: external-link-report
+          path: external-links.md
+          if-no-files-found: warn
+          retention-days: 7

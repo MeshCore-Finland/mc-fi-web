@@ -74,6 +74,8 @@ The build checks types, runs tests, generates the search index and reports warni
 
 For pull requests targeting `dev` or `main`, and pushes to those branches, CI runs a separate strict `links` check against the generated site. It fails if any issues remain, while the preview build can still succeed with warnings. Making `links` a required check in the target branch's ruleset blocks merging until those issues are fixed. Before merging, run `npm run check:links` after building to check strictly yourself. Rebasing locally does not trigger CI; checks run when you push.
 
+The separate `external-links` check visits external HTTP/HTTPS URLs from the built pages, follows redirects and retries transient failures. It checks responses, not anchors on external sites, and skips private network addresses. Open the check's job summary or download its `external-link-report` artifact for failed URLs, source pages and HTTP/network errors. This check is **not required for merging** and does not affect preview builds; the merge approver should review failures for broken destinations, temporary outages or sites that block automated requests. Only `build` and `links` belong in the required checks.
+
 Optional formatting: `npm run format` formats the repository. Check `git diff` afterward and include only changes relevant to your contribution. If dependencies change after you pull updates, run `npm ci` again.
 
 ### Common setup problems
