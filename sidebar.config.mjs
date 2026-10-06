@@ -43,5 +43,16 @@ export default [
       'tools/observers',
     ],
   },
+  {
+    label: 'Yhteisöt',
+    translations: { en: 'Communities' },
+    // prettier-ignore
+    items: [
+      'communities/start',
+      'communities/southern-finland',
+      'communities/southwest-finland',
+      'communities/pirkanmaa',
+    ],
+  },
 
 ];
