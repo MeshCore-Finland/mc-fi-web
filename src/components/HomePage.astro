@@ -33,7 +33,7 @@ const t = Astro.locals.t;
         <div class="hero-actions">
           <a
             class="button-primary"
-            href={getRelativeLocaleUrl(locale, 'guides/getting-started')}
+            href={getRelativeLocaleUrl(locale, 'users/start')}
           >
             {t('app.home.start')}
             <span aria-hidden="true">↗</span>
@@ -60,13 +60,13 @@ const t = Astro.locals.t;
             number: '01',
             title: t('app.home.guides'),
             text: t('app.home.guidesText'),
-            path: 'guides/getting-started',
+            path: 'users/start',
           },
           {
             number: '02',
             title: t('app.home.repeater'),
             text: t('app.home.repeaterText'),
-            path: 'repeaters/name',
+            path: 'repeaters/start',
           },
           {
             number: '03',

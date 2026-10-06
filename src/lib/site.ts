@@ -1,6 +1,7 @@
 export const resources = {
   discord: 'https://discord.com/invite/GHnaVAjqed',
-  map: 'https://corescope.meshcore.fi/#/map',
+  // CoreScope-linkki osoittaa nyt live-karttaan
+  map: 'https://corescope.meshcore.fi/#/live', // forcegit!
   flasher: 'https://flasher.meshcore.io',
   official: 'https://meshcore.io',
 };

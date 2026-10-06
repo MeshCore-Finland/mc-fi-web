@@ -4,6 +4,7 @@ import react from '@astrojs/react';
 import { satteri } from '@astrojs/markdown-satteri';
 import faqPages from './src/lib/faq-pages.mjs';
 import { defaultLocale, locales } from './src/lib/locales';
+import sidebar from './sidebar.config.mjs';
 
 export default defineConfig({
   site: 'https://meshcore.fi',
@@ -49,18 +50,7 @@ export default defineConfig({
         Footer: './src/components/Footer.astro',
         MarkdownContent: './src/components/MarkdownContent.astro',
       },
-      sidebar: [
-        {
-          label: 'Aloita tästä',
-          translations: { en: 'Start here' },
-          items: ['guides/getting-started', 'faq/general'],
-        },
-        {
-          label: 'Toistimet',
-          translations: { en: 'Repeaters' },
-          items: ['repeaters/name', 'repeaters/placement'],
-        },
-      ],
+      sidebar,
       credits: false,
     }),
     react(),

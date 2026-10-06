@@ -1,0 +1,61 @@
+---
+title: Laitteen valinta toistinkäyttöön
+description: Laitevaihtoehtoja on paljon. Lue täältä, mitä kannattaa tietää ennen valintaa.
+---
+
+import DocLink from '@components/DocLink.astro';
+
+Toistimeksi sopivia laitteita on markkinoilla valmiiksi rakennettuna, mutta usein harrastajat rakentavat toistimet myös itse. Alla mainitut valintaperusteet pätevät molemmissa tapauksissa.
+
+Laitteen valinta aloitetaan toistimen käyttötarkoitus edellä. Nämä asiat kannattaa harkita läpi:
+
+* Tuleeko toistin paikkaan, jossa on käytettävissä kiinteät sähköt, vai toimiiko se akun ja mahdollisesti aurinkopaneelin varassa?
+
+* Halutaanko toistimesta myös <DocLink page="tools/observers">Observer</DocLink> eli meshistä yleiseen jakeluun tietoa keräävä laite? Nämä voi tietyissä tapauksissa yhdistää samaan laitteeseen.
+
+* Tuleeko toistin paikkaan, jossa ohjelmiston päivitys on mahdollista suorittaa USB-kaapelin yli, vai täytyykö päivitykset hoitaa langattomasti?
+
+* Lisäksi on mahdollista käyttää Linux-tietokonetta kuten Raspberry Pi toistimena. Silloin tietokoneeseen liitetään LoRa-radio joko USB tai GPIO-liitännän kautta. Tällöin toistimen ohjelmisto on asennettuna tietokoneeseen ja päivitetään kuten muutkin ohjelmistot. Suosituin ohjelmistopaketti on [OpenHop Repeater](https://github.com/openhop-dev/openhop_repeater).
+
+## Aurinkopaneeli- tai akkutoistin
+
+Kun virrankulutus halutaan pitää kurissa, valinta kohdistuu usein Nordic RF:n nRF52840 -järjestelmäpiirillä toteutettuun malliin. Ne ovat merkittävästi virtapihimpiä kuin yleisin vaihtoehto eli ESP32-piireillä toimivat mallit.
+
+Aurinkopaneelin hyödyntäminen on helpointa, jos laitteessa on valmis aurinkopaneeliliitäntä. Tällöin toistimeen ei ole pakko erillistä latauspiiriä. Tällaisia laitteita löytyy sekä nRF- että ESP32 -leireistä.
+
+:::note
+Aurinkopaneelilla toimivat valmisrakenteiset toistimet on usein mitoitettu keskieuroopan ja tropiikin olosuhteisiin. Suomen talvessa aurinkopaneelin tuottama teho on voi jäädä liian pieneksi ja akku tyhjenee. Tällöin toistin sammuu ja sen uudelleen käynnistyminen voi olla epävarmaa. Lisäämme tietoa aurinkopaneelien mitoituksesta ja akkujen kapasiteetista myöhemmin.
+:::
+
+## Observer-toistin -yhdistelmä
+
+Observer-toiminnallisuus toistimen yhteydessä edellyttää käytänössä virtasyöppöä laitemallia ja Internet-yhteyttä WiFillä. Näin ollen laitteessa täytyy olla kiinteä virransyöttö sekä WiFi-tuki, joka on tarjolla lähinnä ESP32-laitteissa. Laitteelle täytyy myös löytyä tuki [Gessamanin observer](https://observer.gessaman.com/) -ohjelmistolle.
+
+Myös aiemmin mainittu OpenHop Repeater -ohjelmisto tukee Observer-toiminnallisuutta.
+
+## Toistin hankalassa paikassa
+
+Toistimen ohjelmistoa joutuu päivittämään ainakin silloin tällöin, koska MeshCore kehittyy nopeasti. Hankalaan paikkaan asennetun toistimen voi päivittää langattomasti. Tähän kannattaa varautua ennalta mm. asentamalla OTA-bootloader.
+
+* nRF52840-pohjaisilla laitteilla käytettävissä on vain Bluetooth-yhteys, jonka kantama on vaatimaton, mutta ratkaisu on vartavasten suunniteltu 'kenttäolosuhteisiin'. Näihin laitteisiin on oleellista asentaa OTAFIX-bootloader joka parantaa päivitysten luotettavuutta sekä mahdollistaa uudet yritykset epäonnistuneen päivityksen jälkeen.
+
+* ESP32-laitteista osa voidaan päivittää WiFi-yhteyden yli, tällöin laite käynnistää väliaikaisen WiFi tukiaseman jonka yli uusi firmware voidaan ladata.
+
+* Gessamanin Observer-firmistä käyttävät laitteet osaavat päivittää ohjelmistonsa myös itse WiFin yli. Tämä on erittäin kätevää mutta sillä ei voi asentaa custom-firmistä vaan ainoastaan uusimman Gessamanin Observer-firmiksen.
+
+Edelliset koskevat vain ohjelmiston päivitystä – normaali hallintayhteys asetusten työstöön onnistuu MeshCoren yli.
+
+## Säteilyteho saa olla korkeintaan 500 mW ERP
+
+Taajuusalueen säädökset määrittelevät, että yksittäisen laitteen säteilyteho saa olla korkeintaan 500 mW (27 dBm) ERP. Tämä on huomioitava laitetta ja antennia valittaessa.
+
+**Säteilyteho ja lähetysteho ovat kaksi eri asiaa**. Lähetysteho on se teho, jonka laite lähettää antennille. Säteilyteho on se teho, joka lähtee antennista eetteriin. Säteilytehoa laskevat kaapeli- ja liitinhäviöt ja sitä nostavat antennin vahvistus (gain). 
+
+Esimerkki: Laitteessa on 22 dBm (~160 mW) lähetysteho ja antennin vahvistus on 5 dBi. Tällöin säteilyteho on 27dB = 500 mW ERP. Jos antennin vahvistus olisi 6 dBi, säteilyteho olisi 28 dBm = 630 mW ERP, mikä ylittää sallitun rajan. Tällöin laitteen lähetystehoa täytyisi laskea 21 dBm:iin (~125 mW) jotta säteilyteho pysyisi sallituissa rajoissa.
+
+Esimerkissämme oletettiin teoreettinen tapaus ettei kaapeli- ja liitinhäviöitä ole. Jos niitä on merkittävästi, lähetystehoa voidaan nostaa hieman. Ilman mittauksia on kuitenkin vaikea tietää, mikä on todellinen säteilyteho. Siksi on suositeltavaa ottaa varman päälle eikä yrittää optimoida säteilytehoa maksimiin. **868 MHz:n taajuusalueella toistimen sijoituspaikalla on huomattavasti suurempi merkitys kuin säteilytehon viimeisillä dBm:illä**
+
+:::note
+Markkinoilla on muutamia laitteita, joissa on konfiguroitavissa 1 W lähetysteho koska laitteet sisältävät erillisen vahvistinpiirin varsinaisen LoRa radiopiirin lisäksi. Näillä laitteilla on erittäin helppo ylittää 500 mW ERP joten on tarkkaan laskettava ja mielellään mitattava suurin lähetysteho jota voidaan käyttäää ilman että säteilytehon raja ylittyy.
+:::
+

@@ -106,17 +106,20 @@ Lyhyt johdanto.
 Kirjoita ohje tähän.
 ```
 
-The title is rendered automatically; start article headings at `##`. Add the document path to the shared sidebar once, without a language prefix. A new subsection can use this entry in `astro.config.mjs`:
+The title is rendered automatically; start article headings at `##`. Add the document path to the shared sidebar once, without a language prefix. A new subsection can use this entry in `sidebar.config.mjs`, which is imported by `astro.config.mjs`:
 
 ```js
 {
   label: 'Companion-laitteet',
   translations: { en: 'Companion devices' },
-  items: ['companions/channels'],
+  // prettier-ignore
+  items: [
+    'companions/channels',
+  ],
 },
 ```
 
-Add paths after their Finnish documents exist. Titles and descriptions live in each translated article, not in the sidebar configuration.
+Add paths after their Finnish documents exist. Keep each page on its own line; comment out an entry to hide it from the sidebar without removing the page. The `prettier-ignore` comment preserves this layout when formatting. Titles and descriptions live in each translated article, not in the sidebar configuration.
 
 ## Internal links
 
