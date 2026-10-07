@@ -1,0 +1,24 @@
+---
+layout: ../layouts/StarlightMdxPage.astro
+title: Ota yhteyttä noden omistajaan
+description: Yhteydenottolomake noden tai tarran tunnisteella.
+tableOfContents: false
+pagefind: false
+prev: false
+next: false
+---
+
+import NodeContactForm from '../components/NodeContactForm';
+
+Löysitkö MeshCore-noden tai haluatko ottaa yhteyttä sen omistajaan?
+Voit käyttää noden tai tarran tunnistetta yhteydenottoon.
+
+<p id="contact-notice" role="status">
+  Lomake on esikatselu. Viestien lähetys ei ole vielä käytössä.
+</p>
+
+<NodeContactForm
+  client:load
+  greetingHeading="Terveiset toistimen {id} omistajalta"
+  messageHelp="Jätä viestiin yhteystietosi, esimerkiksi puhelinnumero tai sähköpostiosoite, jos haluat omistajan vastaavan sinulle."
+/>

@@ -1,0 +1,47 @@
+.node-contact-form {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 36rem;
+}
+
+.node-contact-form .contact-field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.node-contact-form label {
+  font-weight: 600;
+}
+
+.node-contact-form input:not([type='hidden']),
+.node-contact-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 0.4rem;
+  background: var(--sl-color-bg);
+  color: var(--sl-color-text);
+  font: inherit;
+}
+
+.node-contact-form textarea {
+  resize: vertical;
+}
+
+.node-contact-form input:disabled {
+  background: var(--sl-color-gray-6);
+}
+
+.node-contact-form small {
+  color: var(--sl-color-gray-2);
+}
+
+.node-contact-form button {
+  justify-self: start;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 0.4rem;
+  font: inherit;
+  cursor: not-allowed;
+}

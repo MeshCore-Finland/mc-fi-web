@@ -40,6 +40,8 @@ Cloudflare builds `main` for production and previews pushes to `dev`. Vercel pro
 
 ## Node contact placeholder
 
+Edit page prose in `src/pages/node-contact.mdx`. It embeds `NodeContactForm` with `client:load`; React handles the interactive ID and KV lookup. The greeting heading (with an `{id}` placeholder) and reply-details note are component props editable directly in MDX. The shared `StarlightMdxPage.astro` layout keeps the page in the site shell.
+
 Sticker URLs such as `/n/0FF1C3` use the Cloudflare Pages internal rewrite in `public/_redirects` to serve `/node-contact/` while preserving the sticker URL. The form reads the ID from that path or from `/node-contact/?id=0FF1C3` and disables editing when a valid ID is supplied. Opening `/node-contact/` without a valid ID leaves the required field editable. IDs must contain exactly six hex characters (0–9, A–F); lowercase IDs are normalized to uppercase. Leave reply contact details in the message, such as a phone number or email address. Sending remains disabled.
 
 Astro's local dev/preview servers and Vercel do not apply this Cloudflare-specific rewrite. Use `/node-contact/?id=0FF1C3` to preview the populated form locally; verify `/n/0FF1C3` on a Cloudflare deployment.
