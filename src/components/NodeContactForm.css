@@ -9,6 +9,44 @@
   gap: 0.4rem;
 }
 
+.node-contact-form .contact-node-details {
+  display: grid;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.node-contact-form .contact-node-details > *,
+.node-contact-form .contact-node-info {
+  min-width: 0;
+  margin-top: 0;
+}
+
+.node-contact-form .contact-node-info p {
+  margin-top: 0.4rem;
+}
+
+.node-contact-form #node-id {
+  width: 12ch;
+  max-width: 100%;
+  font-family: var(--sl-font-mono);
+}
+
+.node-contact-form #node-id[aria-invalid='true'] {
+  border-color: var(--sl-color-red);
+  background: var(--sl-color-red-low);
+}
+
+.node-contact-form #node-id[aria-invalid='true']:focus-visible {
+  outline: 2px solid var(--sl-color-red);
+  outline-offset: 2px;
+}
+
+@media (min-width: 40rem) {
+  .node-contact-form .contact-node-details {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+}
+
 .node-contact-form label {
   font-weight: 600;
 }

@@ -13,8 +13,11 @@ export default function NodeContactForm({
   const [value, setValue] = useState('');
   const [locked, setLocked] = useState(false);
   const [invalidLink, setInvalidLink] = useState(false);
+  const [idTouched, setIdTouched] = useState(false);
   const [lookup, setLookup] = useState<Lookup | null>(null);
   const id = normalizeNodeId(value);
+  const invalidId =
+    !locked && !id && (Boolean(value) || idTouched || invalidLink);
 
   useEffect(() => {
     const pathId = window.location.pathname.match(/^\/n\/([^/]+)\/?$/)?.[1];
@@ -49,7 +52,7 @@ export default function NodeContactForm({
         if (response.status === 404) {
           setLookup({
             id: requestedId,
-            status: 'Tälle tunnisteelle ei löytynyt noden tietoja.',
+            status: 'Tälle tunnisteelle ei löytynyt lisätietoja.',
           });
           return;
         }
@@ -98,47 +101,55 @@ export default function NodeContactForm({
         aria-describedby="contact-notice"
         onSubmit={(event) => event.preventDefault()}
       >
-        <div className="contact-field">
-          <label htmlFor="node-id">
-            Noden tai tarran tunniste (pakollinen)
-          </label>
-          <input
-            id="node-id"
-            name="nodeId"
-            type="text"
-            required
-            minLength={6}
-            maxLength={6}
-            pattern="[0-9A-Fa-f]{6}"
-            autoComplete="off"
-            spellCheck={false}
-            placeholder="Esim. 0FF1C3"
-            aria-describedby="node-id-help"
-            value={value}
-            disabled={locked}
-            onChange={(event) => setValue(event.target.value)}
-          />
-          {locked && <input name="nodeId" type="hidden" value={value} />}
-          <small id="node-id-help">
-            {locked
-              ? 'Tunniste on täytetty linkistä eikä sitä voi muokata.'
-              : invalidLink
-                ? 'Linkin tunniste on virheellinen. Kirjoita kuusi merkkiä: 0–9 tai A–F.'
-                : 'Tunnisteessa on kuusi merkkiä: 0–9 tai A–F.'}
-          </small>
+        <div className="contact-node-details">
+          <div className="contact-field">
+            <label htmlFor="node-id">Tunniste (pakollinen)</label>
+            <input
+              id="node-id"
+              name="nodeId"
+              type="text"
+              required
+              minLength={6}
+              maxLength={6}
+              pattern="[0-9A-Fa-f]{6}"
+              autoComplete="off"
+              spellCheck={false}
+              placeholder="0FF1C3"
+              aria-describedby="node-id-help"
+              aria-invalid={invalidId}
+              value={value}
+              disabled={locked}
+              onChange={(event) => {
+                setValue(event.target.value);
+                setIdTouched(true);
+                setInvalidLink(false);
+              }}
+              onBlur={() => setIdTouched(true)}
+            />
+            {locked && <input name="nodeId" type="hidden" value={value} />}
+            <small id="node-id-help">
+              {locked
+                ? 'Tunniste on täytetty linkistä.'
+                : invalidLink
+                  ? 'Linkin tunniste on virheellinen. Kirjoita kuusi merkkiä: 0–9 tai A–F.'
+                  : 'Kuusi merkkiä: 0–9 tai A–F.'}
+            </small>
+          </div>
+          <div className="contact-node-info">
+            <section
+              id="node-greeting"
+              aria-live="polite"
+              aria-atomic="true"
+              hidden={currentLookup?.description === undefined}
+            >
+              <b>{greetingHeading.replace('{id}', id ?? '')}</b>
+              <p>{currentLookup?.description}</p>
+            </section>
+            <p id="node-lookup-status" role="status" hidden={!status}>
+              {status}
+            </p>
+          </div>
         </div>
-        <section
-          id="node-greeting"
-          aria-live="polite"
-          aria-atomic="true"
-          hidden={currentLookup?.description === undefined}
-        >
-          <h2>{greetingHeading.replace('{id}', id ?? '')}</h2>
-          <p>{currentLookup?.description}</p>
-        </section>
-        <p id="node-lookup-status" role="status">
-          {status}
-        </p>
         <div className="contact-field">
           <label htmlFor="contact-name">Nimi</label>
           <input
