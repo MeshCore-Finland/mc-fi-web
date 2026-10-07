@@ -47,7 +47,9 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
       </small>
     </div>
     <section id="node-greeting" aria-live="polite" aria-atomic="true" hidden>
-      <h2>Terveiset noden omistajalta</h2>
+      <h2>
+        Terveiset toistimen <span id="node-greeting-id"></span> omistajalta
+      </h2>
       <p id="node-greeting-text"></p>
     </section>
     <p id="node-lookup-status" role="status"></p>
@@ -84,6 +86,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     document.querySelector<HTMLInputElement>('#linked-node-id');
   const help = document.querySelector<HTMLElement>('#node-id-help');
   const greeting = document.querySelector<HTMLElement>('#node-greeting');
+  const greetingId = document.querySelector<HTMLElement>('#node-greeting-id');
   const greetingText = document.querySelector<HTMLElement>(
     '#node-greeting-text',
   );
@@ -117,7 +120,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
   let lookupController: AbortController | undefined;
   async function lookupNode() {
     lookupController?.abort();
-    if (!nodeId || !greeting || !greetingText || !status) return;
+    if (!nodeId || !greeting || !greetingId || !greetingText || !status) return;
     greeting.hidden = true;
     greetingText.textContent = '';
     const id = normalizeNodeId(nodeId.value);
@@ -145,6 +148,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
       if (typeof data.description !== 'string')
         throw new Error('Invalid response');
       greetingText.textContent = data.description;
+      greetingId.textContent = id;
       greeting.hidden = false;
       status.textContent = '';
     } catch {
