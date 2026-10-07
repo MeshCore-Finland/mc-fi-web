@@ -33,28 +33,27 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
         name="nodeId"
         type="text"
         required
-        maxlength="128"
+        minlength="6"
+        maxlength="6"
+        pattern="[0-9A-Fa-f]{6}"
         autocomplete="off"
         spellcheck="false"
         placeholder="Esim. 0FF1C3"
         aria-describedby="node-id-help"
       />
       <input id="linked-node-id" name="nodeId" type="hidden" disabled />
-      <small id="node-id-help">Kirjoita noden tai tarran tunniste.</small>
+      <small id="node-id-help">
+        Tunnisteessa on kuusi merkkiä: 0–9 tai A–F.
+      </small>
     </div>
+    <section id="node-greeting" aria-live="polite" aria-atomic="true" hidden>
+      <h2>Terveiset noden omistajalta</h2>
+      <p id="node-greeting-text"></p>
+    </section>
+    <p id="node-lookup-status" role="status"></p>
     <div class="contact-field">
       <label for="contact-name">Nimi</label>
       <input id="contact-name" name="name" type="text" autocomplete="name" />
-    </div>
-    <div class="contact-field">
-      <label for="contact-email">Sähköpostiosoite (pakollinen)</label>
-      <input
-        id="contact-email"
-        name="email"
-        type="email"
-        autocomplete="email"
-        required
-      />
     </div>
     <div class="contact-field">
       <label for="contact-message">Viesti (pakollinen)</label>
@@ -63,7 +62,12 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
         name="message"
         rows="6"
         required
+        aria-describedby="contact-message-help"
       ></textarea>
+      <small id="contact-message-help">
+        Jätä viestiin yhteystietosi, esimerkiksi puhelinnumero tai
+        sähköpostiosoite, jos haluat omistajan vastaavan sinulle.
+      </small>
     </div>
     <button type="submit" disabled>
       Lähetys ei vielä käytössä
@@ -72,11 +76,18 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 </StarlightPage>
 
 <script>
+  import { normalizeNodeId } from '../lib/node-contact.mjs';
+
   const form = document.querySelector<HTMLFormElement>('#node-contact-form');
   const nodeId = document.querySelector<HTMLInputElement>('#node-id');
   const linkedNodeId =
     document.querySelector<HTMLInputElement>('#linked-node-id');
   const help = document.querySelector<HTMLElement>('#node-id-help');
+  const greeting = document.querySelector<HTMLElement>('#node-greeting');
+  const greetingText = document.querySelector<HTMLElement>(
+    '#node-greeting-text',
+  );
+  const status = document.querySelector<HTMLElement>('#node-lookup-status');
   const pathId = window.location.pathname.match(/^\/n\/([^/]+)\/?$/)?.[1];
   let suppliedId = '';
 
@@ -90,14 +101,64 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
     // Malformed URL encoding leaves the required field available for manual entry.
   }
 
-  if (suppliedId && nodeId && linkedNodeId && help) {
-    nodeId.value = suppliedId;
+  const normalizedId = normalizeNodeId(suppliedId);
+  if (normalizedId && nodeId && linkedNodeId && help) {
+    nodeId.value = normalizedId;
     nodeId.disabled = true;
     // Disabled controls are omitted from FormData; retain the ID for future submission.
-    linkedNodeId.value = suppliedId;
+    linkedNodeId.value = normalizedId;
     linkedNodeId.disabled = false;
     help.textContent = 'Tunniste on täytetty linkistä eikä sitä voi muokata.';
+  } else if (suppliedId && help) {
+    help.textContent =
+      'Linkin tunniste on virheellinen. Kirjoita kuusi merkkiä: 0–9 tai A–F.';
   }
+
+  let lookupController: AbortController | undefined;
+  async function lookupNode() {
+    lookupController?.abort();
+    if (!nodeId || !greeting || !greetingText || !status) return;
+    greeting.hidden = true;
+    greetingText.textContent = '';
+    const id = normalizeNodeId(nodeId.value);
+    if (!id) {
+      status.textContent = nodeId.value
+        ? 'Kirjoita kuusi merkkiä: 0–9 tai A–F.'
+        : '';
+      return;
+    }
+    const controller = new AbortController();
+    lookupController = controller;
+    status.textContent = 'Haetaan noden tietoja…';
+    try {
+      const response = await fetch(`/api/node-contact/${id}`, {
+        signal: controller.signal,
+      });
+      if (controller.signal.aborted) return;
+      if (response.status === 404) {
+        status.textContent = 'Tälle tunnisteelle ei löytynyt noden tietoja.';
+        return;
+      }
+      if (!response.ok) throw new Error('Lookup failed');
+      const data = await response.json();
+      if (controller.signal.aborted) return;
+      if (typeof data.description !== 'string')
+        throw new Error('Invalid response');
+      greetingText.textContent = data.description;
+      greeting.hidden = false;
+      status.textContent = '';
+    } catch {
+      if (!controller.signal.aborted) {
+        status.textContent =
+          'Noden tietoja ei voitu hakea. Kokeile myöhemmin uudelleen.';
+      }
+    }
+  }
+
+  nodeId?.addEventListener('input', () => {
+    void lookupNode();
+  });
+  void lookupNode();
 
   // Keep personal information out of URL query parameters, including on Enter.
   form?.addEventListener('submit', (event) => event.preventDefault());
