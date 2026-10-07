@@ -1,0 +1,154 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+---
+
+<StarlightPage
+  frontmatter={{
+    title: 'Ota yhteyttä noden omistajaan',
+    description: 'Yhteydenottolomake noden tai tarran tunnisteella.',
+    tableOfContents: false,
+    pagefind: false,
+    prev: false,
+    next: false,
+  }}
+>
+  <p>
+    Löysitkö MeshCore-noden tai haluatko ottaa yhteyttä sen omistajaan? Voit
+    käyttää noden tai tarran tunnistetta yhteydenottoon.
+  </p>
+  <p id="contact-notice" role="status">
+    Lomake on esikatselu. Viestien lähetys ei ole vielä käytössä.
+  </p>
+  <noscript>
+    <p>
+      Ota JavaScript käyttöön, jotta linkin tunniste voidaan täyttää
+      lomakkeeseen.
+    </p>
+  </noscript>
+  <form id="node-contact-form" aria-describedby="contact-notice">
+    <div class="contact-field">
+      <label for="node-id">Noden tai tarran tunniste (pakollinen)</label>
+      <input
+        id="node-id"
+        name="nodeId"
+        type="text"
+        required
+        maxlength="128"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="Esim. 0FF1C3"
+        aria-describedby="node-id-help"
+      />
+      <input id="linked-node-id" name="nodeId" type="hidden" disabled />
+      <small id="node-id-help">Kirjoita noden tai tarran tunniste.</small>
+    </div>
+    <div class="contact-field">
+      <label for="contact-name">Nimi</label>
+      <input id="contact-name" name="name" type="text" autocomplete="name" />
+    </div>
+    <div class="contact-field">
+      <label for="contact-email">Sähköpostiosoite (pakollinen)</label>
+      <input
+        id="contact-email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+      />
+    </div>
+    <div class="contact-field">
+      <label for="contact-message">Viesti (pakollinen)</label>
+      <textarea
+        id="contact-message"
+        name="message"
+        rows="6"
+        required
+      ></textarea>
+    </div>
+    <button type="submit" disabled>
+      Lähetys ei vielä käytössä
+    </button>
+  </form>
+</StarlightPage>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#node-contact-form');
+  const nodeId = document.querySelector<HTMLInputElement>('#node-id');
+  const linkedNodeId =
+    document.querySelector<HTMLInputElement>('#linked-node-id');
+  const help = document.querySelector<HTMLElement>('#node-id-help');
+  const pathId = window.location.pathname.match(/^\/n\/([^/]+)\/?$/)?.[1];
+  let suppliedId = '';
+
+  try {
+    suppliedId = (
+      pathId !== undefined
+        ? decodeURIComponent(pathId)
+        : (new URLSearchParams(window.location.search).get('id') ?? '')
+    ).trim();
+  } catch {
+    // Malformed URL encoding leaves the required field available for manual entry.
+  }
+
+  if (suppliedId && nodeId && linkedNodeId && help) {
+    nodeId.value = suppliedId;
+    nodeId.disabled = true;
+    // Disabled controls are omitted from FormData; retain the ID for future submission.
+    linkedNodeId.value = suppliedId;
+    linkedNodeId.disabled = false;
+    help.textContent = 'Tunniste on täytetty linkistä eikä sitä voi muokata.';
+  }
+
+  // Keep personal information out of URL query parameters, including on Enter.
+  form?.addEventListener('submit', (event) => event.preventDefault());
+</script>
+
+<style>
+  form {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 36rem;
+  }
+
+  .contact-field {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  label {
+    font-weight: 600;
+  }
+
+  input:not([type='hidden']),
+  textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid var(--sl-color-gray-4);
+    border-radius: 0.4rem;
+    background: var(--sl-color-bg);
+    color: var(--sl-color-text);
+    font: inherit;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  input:disabled {
+    background: var(--sl-color-gray-6);
+  }
+
+  small {
+    color: var(--sl-color-gray-2);
+  }
+
+  button {
+    justify-self: start;
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--sl-color-gray-4);
+    border-radius: 0.4rem;
+    font: inherit;
+    cursor: not-allowed;
+  }
+</style>

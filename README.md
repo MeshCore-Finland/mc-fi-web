@@ -38,6 +38,12 @@ Matching document paths associate translations. Starlight handles missing transl
 
 Cloudflare builds `main` for production and previews pushes to `dev`. Vercel provides external pull-request previews.
 
+## Node contact placeholder
+
+Sticker URLs such as `/n/0FF1C3` use the Cloudflare Pages internal rewrite in `public/_redirects` to serve `/node-contact/` while preserving the sticker URL. The form reads the ID from that path or from `/node-contact/?id=0FF1C3` and disables editing when an ID is supplied. Opening `/node-contact/` without an ID leaves the required field editable. Sending is disabled until a backend is added.
+
+Astro's local dev/preview servers and Vercel do not apply this Cloudflare-specific rewrite. Use `/node-contact/?id=0FF1C3` to preview the populated form locally; verify `/n/0FF1C3` on a Cloudflare deployment.
+
 ## Current content and temporary features
 
 The general FAQ was carried over from old `dev` at `faedef5`; Finnish answers were translated and edited. Exact technical claims and app instructions still need editorial review. No review dates have been invented for this material.
