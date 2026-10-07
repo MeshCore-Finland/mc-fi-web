@@ -38,6 +38,32 @@ Matching document paths associate translations. Starlight handles missing transl
 
 Cloudflare builds `main` for production and previews pushes to `dev`. Vercel provides external pull-request previews.
 
+## Node contact placeholder
+
+Edit page prose in `src/pages/node-contact.mdx`. It embeds `NodeContactForm` with `client:load`; React handles the interactive ID and KV lookup. The greeting heading (with an `{id}` placeholder) and reply-details note are component props editable directly in MDX. The shared `StarlightMdxPage.astro` layout keeps the page in the site shell.
+
+Sticker URLs such as `/n/0FF1C3` use the Cloudflare Pages internal rewrite in `public/_redirects` to serve `/node-contact/` while preserving the sticker URL. The form reads the ID from that path or from `/node-contact/?id=0FF1C3` and disables editing when a valid ID is supplied. Opening `/node-contact/` without a valid ID leaves the required field editable. IDs must contain exactly six hex characters (0–9, A–F); lowercase IDs are normalized to uppercase. Leave reply contact details in the message, such as a phone number or email address. Sending remains disabled.
+
+Astro's local dev/preview servers and Vercel do not apply this Cloudflare-specific rewrite. Use `/node-contact/?id=0FF1C3` to preview the populated form locally; verify `/n/0FF1C3` on a Cloudflare deployment.
+
+The form fetches the owner's public greeting from `/api/node-contact/:id`. This Pages Function runs on Workers and reads `sticker:<UPPERCASE_ID>` from the `NODE_CONTACTS` KV binding. It returns only the ID and description, never private destination fields. Missing or disabled entries return 404; unavailable lookup returns 503. `public/_routes.json` restricts Function invocation to the lookup API so sticker rewrites stay static.
+
+The Cloudflare Pages **preview** environment uses namespace `mcfi-node-contacts-preview` (`dfb4f3a1190f494b996476b4825e0a71`). Production needs its own `NODE_CONTACTS` binding before this feature is released. Example data is in `fixtures/node-contacts.json`; seed the preview namespace with:
+
+```sh
+npx wrangler@4 kv bulk put fixtures/node-contacts.json --namespace-id dfb4f3a1190f494b996476b4825e0a71 --remote
+```
+
+To run the static site, rewrite, Function, and KV together locally:
+
+```sh
+npm run build
+npx wrangler@4 kv bulk put fixtures/node-contacts.json --namespace-id NODE_CONTACTS --local
+npx wrangler@4 pages dev dist --kv NODE_CONTACTS --compatibility-date 2026-10-07
+```
+
+Open `/n/0FF1C3` or enter `0FF1C3` at `/node-contact/` on the local URL printed by Wrangler. KV updates can take 60 seconds or more to become visible across Cloudflare locations. This prototype only looks up greetings; message delivery and owner editing are not implemented.
+
 ## Current content and temporary features
 
 The general FAQ was carried over from old `dev` at `faedef5`; Finnish answers were translated and edited. Exact technical claims and app instructions still need editorial review. No review dates have been invented for this material.
