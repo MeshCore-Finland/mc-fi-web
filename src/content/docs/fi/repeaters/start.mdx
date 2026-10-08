@@ -1,19 +1,19 @@
 ---
-title: Rakentamaan Suomen MeshCorea
+title: Rakentamaan MeshCorea
 description: Verkon rakentaminen on vaativaa, mutta palkitsevaa.
 ---
 
 import DocLink from '@components/DocLink.astro';
 
-Näillä sivuilla tutustutaan toistinten rakentamisen ja hallinnointiin. Aihepiirit seuraavat toisiaan sivun alaosan navigaatiossa suurin piirtein siinä järjestyksessä, missä ne tulevat touhutessa vastaan; vasemman laidan valikosta (tai mobiililla yläpalkin hampurilaisvalikosta) voit hyppiä aiheesta toiseen.
+Näillä sivuilla tutustutaan toistinten rakentamiseen ja hallinnointiin. Aihepiirit seuraavat toisiaan sivun alaosan navigaatiossa suurin piirtein siinä järjestyksessä, missä ne tulevat touhutessa vastaan; vasemman laidan valikosta (tai mobiililla yläpalkin hampurilaisvalikosta) voit hyppiä aiheesta toiseen.
 
-## Perusasioita evästykseksi matkalla
+## Perusasioita evästykseksi matkalle
 
 Heti kättelyssä tärkeintä on ymmärtää, että MeshCoren käyttämä **LoRa on hidas radiotekniikka**. Toisin kuin Internetissä, LoRa-radioilla toimittaessa kaistaa on hyvin rajallisesti. Toiveemme on, että yhteisöön liittyvät ymmärtävät tämän perusasian, ja voimme välttää tyypilliset ylilyönnit, joita on nähty mesh-verkkoprojekteissa ympäri maailman.
 
-Suomessa ja muualla Euroopassa toimitaan radioliikenteessä EU:n ([CEPT](https://en.wikipedia.org/wiki/European_Conference_of_Postal_and_Telecommunications_Administrations)) sekä suomalaisten ([Traficom](https://traficom.fi/fi/radioluvat-ja-taajuudet)) määräysten puitteissa. Näitä määräyksiä **on noudatettava** myös MeshCore käytössä.
+Suomessa ja muualla Euroopassa toimitaan radioliikenteessä EU:n ([CEPT](https://en.wikipedia.org/wiki/European_Conference_of_Postal_and_Telecommunications_Administrations)) sekä suomalaisten ([Traficom](https://traficom.fi/fi/radioluvat-ja-taajuudet)) määräysten puitteissa. Näitä määräyksiä **on noudatettava** myös MeshCore-käytössä.
 
-Oleellista on pysytellä luvallisilla taajuusalueilla, sallittujen säteilytehojen puitteissa sekä noudattaa EU-alueelle yhteistä sääntöä, jonka mukaan **yksittäinen laite ei saa olla lähetystilassa kuin 10% ajasta liukuvan tunnin aikaikkunan sisällä**. Kaikki nämä ehdot täyttyvät suositeltuja asetuksia käytettäessä.
+Oleellista on pysytellä luvallisilla taajuusalueilla, sallittujen säteilytehojen puitteissa sekä noudattaa EU-alueelle yhteistä sääntöä, jonka mukaan **yksittäinen laite ei saa olla lähetystilassa kuin 10 % ajasta liukuvan tunnin aikaikkunan sisällä**. Kaikki nämä ehdot täyttyvät suositeltuja asetuksia käytettäessä.
 
 On myös hyvä tietää, että käytettävä 868 MHz:n lupavapaa taajuusalue on luonteeltaan sellainen, etteivät signaalit juurikaan etene jykevien esteiden, kuten maaston tai betoniseinien läpi.
 
@@ -23,14 +23,17 @@ On myös hyvä tietää, että käytettävä 868 MHz:n lupavapaa taajuusalue on 
 
 * Kolmas sivu auttaa, kun laitteessa on ohjelmisto sisällä ja on aika määrittää asetukset. Asetukset voi nopeasti tarkastaa myös <DocLink page="faq/general">UKK-sivuilta</DocLink>.
 
-* Neljäs sivu käsittelee erityisesti ulkokäyttöön tulevan toistimen kotelointia, antaa ideoita rakentamiseen ja käsittelee esimerkiksi aurinkopaneeli- ja akkuasioita.
+* Neljäs sivu käsittelee tärkeätä aluerajaus- eli Region Scope -aihetta. Suomen yhteisöllä on näihin vahvat suositukset, joten tämä osio kannattaa lukea – jos jätät aluerajausaiheen läpikäymättä, saattaa käydä niin, ettei toistintasi toisteta eteenpäin.
 
-* Viides sivu käsittelee tärkeätä aluerajaus- eli Region Scope -aihetta. Suomen yhteisöllä on näihin vahvat suositukset, joten tämä osio kannattaa lukea – jos jätät aluerajausaiheen läpikäymättä, saattaa käydä niin, ettei toistintasi toisteta eteenpäin.
+* Tulossa myöhemmin: Toistimien rakentelua ja verkkosuunnittelua
+
+{/*
+* Viides sivu käsittelee erityisesti ulkokäyttöön tulevan toistimen kotelointia, antaa ideoita rakentamiseen ja käsittelee esimerkiksi aurinkopaneeli- ja akkuasioita.
 
 * Kuudes sivu tarjoaa työkaluja ja käytännön vinkkejä meshin suunnitteluun, eli omien toistinten sijoittamiseen, sijoitusten testaamiseen ennen laitteen paikallevientiä, eri vuodenaikojen vaikutusta radioaaltojen etenemiseen ja muihin suunnitteluun vaikuttaviin aiheisiin.
 
 * Seitsemäs sivu on omistettu Observer-laitteille, CoreScopelle, omien toistinten näkyville tuontiin eri kartoilla, kuuluvuuskartoitukseen osallistumiseen ja muuhun olemassaolevan meshin diagnostiikkaan ja seurantaan.
 
 * Kahdeksas sivu katsoo pidemmälle mesheihin, joissa alkaa olla paljon toistimia ja käyttäjiä, ja taustoittaa hienosäätömahdollisuudet meshin toimintakyvyn terästämiseen.
-
+*/}
 
