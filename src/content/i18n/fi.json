@@ -28,7 +28,7 @@
   "app.home.activity": "Verkon tilanne",
   "app.home.activityText": "Toistimet ovat MeshCore-verkon selkäranka, kuten kännykkäverkon tukiasemat. Liikenteen määrästä verkossa kertoo vuorokautinen pakettien määrä. Voit tarkastella liikennettä yksityiskohtaisemmin CoreScopessa, jossa näet jopa julkiset (salaamattomat) viestit.",
   "app.home.community": "Paikalliset yhteisöt",
-  "app.home.communityText": "Alueellisten kattavuuskarttojen päivittämiseen voit osallistua MeshMapper-sovelluksella. Aktiivien keskusteluun pääset mukaan Discordissa, Matrixissä ja WhatsAppissa – toistinten ylläpitäjien on suositeltavaa liittyä tänne!",
+  "app.home.communityText": "Alueellisten kattavuuskarttojen päivittämiseen voit osallistua MeshMapper-sovelluksella. Aktiivien keskusteluun pääset mukaan Discordissa, Matrixissa ja WhatsAppissa – toistinten ylläpitäjien on suositeltavaa liittyä tänne!",
   "app.home.join": "Liity keskusteluun",
   "app.home.regionMap": "Alueen kartta",
   "app.home.visit": "Yhteisön sivut",
@@ -60,6 +60,6 @@
   "app.stats.unavailable": "Reaaliaikaisia tietoja ei juuri nyt ole saatavilla.",
   "app.review.content": "Sisältö tarkistettu",
   "app.review.translation": "Käännös tarkistettu",
-  "app.map.outline": "Suomen kartta, mukaanlukien Ahvenanmaa.",
+  "app.map.outline": "Suomen kartta, mukaan lukien Ahvenanmaa.",
   "app.map.repeaters": "Suomen MeshCore-toistimien sijainnit. Päivittäin päivittyvä aineisto."
 }

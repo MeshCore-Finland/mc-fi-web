@@ -9,67 +9,68 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Ennen kuin aloitat...
 
-* **Kun laite otetaan ensimmäisen kerran MeshCore käyttöön, sille pitää ajaa ns. erase** eli pyyhkiä laitteen flash-muisti tyhjäksi. Jos esim tuoreeltaan valmistajalta saapuneen tai aiemmin Meshtastic-käytössä olleen laitteen sisään ajaa MeshCore firmwaren ilman flash erase vaihetta niin laite saattaa käyttäytyä arvaamattomasti.
-* Samaten **jos vaihdat laitteen firmiksen toistimen ja kumppanin välillä niin erase**. Saman firmwaren versiopäivitysten yhteydessä ei tarvitse (eikä kannata) pyyhkiä flashiä koska laitteen avaimet, kaikki asetukset ja tietokannat häviävät.
-* Erase-toiminnallisuus on integroitu molempiin täällä esiteltyihin ohjelmointi (flasher) sivustoihin mutta se pitää itse muistaa valita / tehdä.
-* nRF52-pohjaisiin laitteisiin on äärimmäisen suositeltavaa asentaa OTAFIX bootloader koska ilman sitä päivityksiä ei yleensä kannata edes yrittää Bluetoothin yli. Flasher kyllä muistuttaa tästä myös.
+* **Kun laite otetaan ensimmäisen kerran MeshCore-käyttöön, sille pitää ajaa ns. erase** eli pyyhkiä laitteen flash-muisti tyhjäksi. Jos esim. tuoreeltaan valmistajalta saapuneen tai aiemmin Meshtastic-käytössä olleen laitteen sisään ajaa MeshCore-firmwaren ilman flash erase -vaihetta, niin laite saattaa käyttäytyä arvaamattomasti.
+* Samaten **jos vaihdat laitteen firmiksen toistimen ja kumppanin välillä, niin erase**. Saman firmwaren versiopäivitysten yhteydessä ei tarvitse (eikä kannata) pyyhkiä flashiä, koska laitteen avaimet, kaikki asetukset ja tietokannat häviävät.
+* Erase-toiminnallisuus on integroitu molempiin täällä esiteltyihin ohjelmointi- eli flasher-sivustoihin, mutta se pitää itse muistaa valita / tehdä.
+* nRF52-pohjaisiin laitteisiin on äärimmäisen suositeltavaa asentaa OTAFIX-bootloader, koska ilman sitä päivityksiä ei yleensä kannata edes yrittää Bluetoothin yli. Flasher kyllä muistuttaa tästä myös.
 
 ## Firmwaren valinta
 
-* **Viralliset firmwaret** ovat MeshCore tiimin rakentamia ja niitä kutsutaan myös *vanilla* firmwareksi. Nämä ovat turvallinen valinta myös toistinkäyttöön ja lähes kaikki muutkin internetistä löytyvät eksoottiset toistinfirmikset perustuvat niihin.
-* **A. Gessamanin "Observer firmware"** perustuu myös viralliselle toistinkoodille mutta lisää merkittävästi ominaisuuksia joista tärkeimpinä toimiminen <DocLink page="tools/observers">observerina</DocLink>. Se tarjoaa myös erittäin kätevän web-käyttöliittymän asetuksille sekä CLI komennoille. Koska sen toiminnallisuudet vaativat WiFin sekä vanilla firmwarea enemmän muistia sitä ei ole saatavilla kaikille laitteille. Suosittuja alustoja tälle firmwarelle ovat ESP32-pohjaiset laitteet joissa on PSRAM muistia.
+* **Viralliset firmwaret** ovat MeshCore-tiimin rakentamia ja niitä kutsutaan myös *vanilla*-firmwareksi. Nämä ovat turvallinen valinta myös toistinkäyttöön ja lähes kaikki muutkin internetistä löytyvät eksoottiset toistinfirmikset perustuvat niihin.
+* **A. Gessamanin "Observer firmware"** perustuu myös viralliseen toistinkoodiin, mutta lisää merkittävästi ominaisuuksia, joista yksi tärkeimmistä on toimiminen <DocLink page="tools/observers">observerina</DocLink>. Se tarjoaa myös erittäin kätevän web-käyttöliittymän asetuksille sekä CLI-komennoille. Koska sen toiminnallisuudet vaativat WiFin sekä vanilla-firmwarea enemmän muistia, sitä ei ole saatavilla kaikille laitteille. Suosittuja alustoja tälle firmwarelle ovat ESP32-pohjaiset laitteet, joissa on PSRAM-muistia.
 
 ## USB-yhteys + selain
 
 Helpoin tapa ottaa toistin käyttöön on yhdistää se USB-kaapelilla tietokoneeseen ja suorittaa firmwaren kirjoitus ja peruskonfigurointi selaimella. Chrome ja Chromium-johdannaiset selaimet ovat tässä prosessissa tällä hetkellä luotettavimpia.
 
 :::tip
-Toistimen hallinnointi tapahtuu normaalisti meshin yli eli kumppaniradiolla + älypuhelimella voit pitkänkin matkan päästä säätää toistimen asetuksia. Myös CLI komentoihin on täysi pääsy etänä. USB-kaapelin yli tehtävillä perusasetuksilla lähinnä saadaan toistin osaksi meshiä laillisesti ja hyvillä käytöstavoilla.
+Toistimen hallinnointi tapahtuu normaalisti meshin yli eli kumppaniradiolla + älypuhelimella voit pitkänkin matkan päästä säätää toistimen asetuksia. Myös CLI-komentoihin on täysi pääsy etänä. USB-kaapelin yli tehtävillä perusasetuksilla lähinnä saadaan toistin osaksi meshiä laillisesti ja hyvillä käytöstavoilla.
 :::
 
 ## Vihdoin flasheriin
 
-Avaa jompi kumpi flasher riippuen minkä firmwaren haluat asentaa. Molemmilla voi myös asentaa minkä vain custom-firmwaren mutta silloin sinun on itse varmistettava että käyttämäsi firmispaketti soveltuu toistimen raudalle.
+Avaa jompikumpi flasher riippuen siitä, minkä firmwaren haluat asentaa. Molemmilla voi myös asentaa minkä vain custom-firmwaren, mutta silloin sinun on itse varmistettava, että käyttämäsi firmispaketti soveltuu toistimen raudalle.
 
 <LinkButton href="https://flasher.meshcore.io">
     MeshCore Flasher (virallinen)
 </LinkButton>
 <LinkButton href="https://observer.gessaman.com">
-    A.Gessaman Observer Firmware
+    A. Gessaman Observer Firmware
 </LinkButton>
 
 
 :::caution[Muista nämä!]
-* Pyyhi flash-muisti jos laitteessa ei ennestään ole MeshCore toistinta
-* Virallisen firmwaren voi päivittää Gessamanin Observer firmwareen pyyhkimättä flashiä mutta paluu takaisin viralliseen ei välttämättä onnistu pyyhkimättä
-* Ota laitteen private key talteen jotta voit palauttaa toistimelle saman identiteetin jos laite menee vaihtoon tai joudut pyyhkimään flashin jostain syystä
+* Pyyhi flash-muisti, jos laitteessa ei ennestään ole MeshCore-toistinta
+* Virallisen firmwaren voi päivittää Gessamanin Observer firmwareen pyyhkimättä flashiä, mutta paluu takaisin viralliseen ei välttämättä onnistu pyyhkimättä
+* Ota laitteen private key talteen, jotta voit palauttaa toistimelle saman identiteetin, jos laite menee vaihtoon tai joudut pyyhkimään flashin jostain syystä
 :::
 
 ## Flasherin käyttö
 
 ### 1. ruutu - Laite
 
-* **Valitse laitteesi listasta**. Huomaa että monista laitteista on useampia variantteja, esim. Heltev V4 löytyy perusmalli ja R8 malli. Samoin osaa laitteista on tehty useammalla eri radiolla. Kinkkiset tapaukset pyritään vähitellen keräämään FAQ osioon. 
-* Jos olet laittamassa custom firmwarea sisään, tämä valinta on aivan laitelistan lopussa.
+* **Valitse laitteesi listasta**. Huomaa, että monista laitteista on useampia variantteja, esim. Heltec V4 löytyy perusmalli ja R8-malli. Samoin osaa laitteista on tehty useammalla eri radiolla. Kinkkiset tapaukset pyritään vähitellen keräämään FAQ-osioon.
+* Jos olet laittamassa custom-firmwarea sisään, tämä valinta on aivan laitelistan lopussa.
 
 ### 2. ruutu - Rooli
 * Rooliksi **valitse Repeater**.
 
 
 ### 3. ruutu - Versio, pyyhintä ja ohjelmointi
-* Valitse versio. Oletuksena valittu uusin versio on ok ellet tiedä tarvitsevasi toisen version. 
-* Gessamanin flasher tarjoaa myös `-dev` versioita jotka eivät vielä ole kovin pitkälle testattuja. Pysy perusversiossa ellet erityisesti halua elää reunalla ja tarvitse uutta toiminnallisuutta dev versiosta.
-* **Osa laitteista täytyy saada DFU-tilaan** ennen ohjelmointia ja sivu tarjoaa siihen painikkeen `Enter DFU mode`. Aina tämä ei kuitenkaan toimi ja manuaalinen DFU tilaan meneminen voi olla muuutenkin helpompi. Esim nRF52-pohjaiset laitteet saa DFU tilaan nopealla reset-nappulan tuplapainalluksella.
-* Tältä **sivulta löytyy myös flashin pyykiminen**. Joillekin laitteille tämä on vain `Erase device` optio (checkbox) jolloin pyyhkiminen tapahtuu ohjelmoinnin yhteydessä. Toisilla laitteilla on painike `Erase Flash` jolla ohjelmoidaan ensin erityinen Erase-firmware joka käynnistyessään pyyhkii laitteen ja palautuu ohjelmointitilaan. 
-* Download-nappulan takaa saat haettua firmware-paketteja jos päätät käyttää jotain muuta tapaa toistimen ohjelmointiin. Lähes aina ohjelmointi kuitenkin onnistuu näillä selainpohjaisilla työkaluilla etkä tarvitse paketteja omalle koneellesi.
-* Lopulta **paina Flash**. Selaimesi pyytää pääsyä USB-sarjaportille jonka kautta laite näkyy käyttöjärjestelmälle. Kun yhdistät sarjaportiin ohjelmointi alkaa. Loki kertoo onnistuuko ohjelmointi vai ei.
+* Valitse versio. Oletuksena valittu uusin versio on ok, ellet tiedä tarvitsevasi toisen version.
+* Gessamanin flasher tarjoaa myös `-dev`-versioita, jotka eivät vielä ole kovin pitkälle testattuja. Pysy perusversiossa, ellet erityisesti halua elää reunalla ja tarvitse uutta toiminnallisuutta dev-versiosta.
+* **Osa laitteista täytyy saada DFU-tilaan** ennen ohjelmointia ja sivu tarjoaa siihen painikkeen `Enter DFU mode`. Aina tämä ei kuitenkaan toimi ja manuaalinen DFU-tilaan meneminen voi olla muutenkin helpompi. Esim. nRF52-pohjaiset laitteet saa DFU-tilaan nopealla reset-nappulan tuplapainalluksella.
+* Tältä **sivulta löytyy myös flashin pyyhkiminen**. Joillekin laitteille tämä on vain `Erase device` -optio (checkbox), jolloin pyyhkiminen tapahtuu ohjelmoinnin yhteydessä. Toisilla laitteilla on painike `Erase Flash`, jolla ohjelmoidaan ensin erityinen Erase-firmware, joka käynnistyessään pyyhkii laitteen ja palautuu ohjelmointitilaan.
+* Download-nappulan takaa saat haettua firmware-paketteja, jos päätät käyttää jotain muuta tapaa toistimen ohjelmointiin. Lähes aina ohjelmointi kuitenkin onnistuu näillä selainpohjaisilla työkaluilla etkä tarvitse paketteja omalle koneellesi.
+* Lopulta **paina Flash**. Selaimesi pyytää pääsyä USB-sarjaportille, jonka kautta laite näkyy käyttöjärjestelmälle. Kun yhdistät sarjaporttiin, ohjelmointi alkaa. Loki kertoo, onnistuuko ohjelmointi vai ei.
 
 Jos ohjelmointi onnistui, voit siirtyä suoraan seuraavaan osioon eli <DocLink page="repeaters/settings">asetusten kimppuun</DocLink>. Tätä varten valitse ohjelmoinnin lopetusnäytöltä `Configure via USB`.
 
-Aina laite ei ole vastaanottavainen ohjelmoinnille. Tällöin tulee timeout (aikakatkaisu) tai joku muu virhe lokiin. Usein uudelleen yrittäminen auttaa, joskus täytyy tuplaklikkailla resettiä tai pitää jotain nappia pohjassa kun laitteeseen kytkee virran / USB:n. Internetistä löytyy paljon tietoa aiheesta, kokoamme vähitellen FAQ-puolelle neuvoja sitä mukaa kun niitä kysellään.
+Aina laite ei ole vastaanottavainen ohjelmoinnille. Tällöin tulee timeout (aikakatkaisu) tai joku muu virhe lokiin. Usein uudelleen yrittäminen auttaa, joskus täytyy tuplaklikkailla resettiä tai pitää jotain nappia pohjassa, kun laitteeseen kytkee virran / USB:n. Internetistä löytyy paljon tietoa aiheesta, kokoamme vähitellen FAQ-puolelle neuvoja sitä mukaa kun niitä kysellään.
 
-Lisäksi ohjelmoinnin jälkeen usein tulee viimeiseksi ilmoitus että `Hard resetting via RTS pin...` ja ohjelmointisu yrittää "bootata" toistimen. Huomaa kuitenkin että kyseessä on RTS eli sarjaportin Ready To Send eikä mikrokontrollerin RST eli Reset. Tämä sarjaportin RTS kautta resetointi ei tunnu olevan toteutettu kovin monessa laitteessa joten tässä vaiheessa voit vaan painaa reset-nappulaa.
+Lisäksi ohjelmoinnin jälkeen usein tulee viimeiseksi ilmoitus, että `Hard resetting via RTS pin...` ja ohjelmisto yrittää "bootata" toistimen. Huomaa kuitenkin, että kyseessä on RTS eli sarjaportin Ready To Send eikä mikrokontrollerin RST eli Reset. Tämä sarjaportin RTS:n kautta resetointi ei tunnu olevan toteutettu kovin monessa laitteessa, joten tässä vaiheessa voit vaan painaa reset-nappulaa.
 
 :::note
-Ota uuden toistimesi **privaattiavain talteen**, kun olet vielä USB:llä kiinni aja CLI komento `get prv.key` ja kopioi vastauksena saatu heksarimpsu talteen. Tällöin voit myöhemmin asentaa saman avaimen jos toistin pitää korvata toisella tai se sekoaa niin pahasti että flash muisti on pyyhittävä tyhjäksi.
-Yritämme välttää tilannetta jossa kartoille jää vanhoja kummitustoistimia kun niiden avaimet muuttuvat (julkinen avain lasketaan privaattiavaimesta). Lisäksi kuuluvuuskarttojen tiedot happanevat jos toistin yhtäkkiä vaihtaa avainta / ID:tä.
+Ota uuden toistimesi **privaattiavain talteen**, kun olet vielä USB:llä kiinni, aja CLI-komento `get prv.key` ja kopioi vastauksena saatu heksarimpsu talteen. Tällöin voit myöhemmin asentaa saman avaimen, jos toistin pitää korvata toisella tai se sekoaa niin pahasti, että flash-muisti on pyyhittävä tyhjäksi.
+Yritämme välttää tilannetta, jossa kartoille jää vanhoja kummitustoistimia, kun niiden avaimet muuttuvat (julkinen avain lasketaan privaattiavaimesta). Lisäksi kuuluvuuskarttojen tiedot happanevat, jos toistin yhtäkkiä vaihtaa avainta / ID:tä.
+:::
