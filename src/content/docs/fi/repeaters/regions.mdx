@@ -1,19 +1,30 @@
 ---
-title: Toistojen aluerajaukset eli Regionit
+title: Aluerajaukset toistimissa
 description: Opi Region-asetusten merkitys ja Suomen MeshCoren suositukset niiden käyttöön.
 ---
 
 import DocLink from '@components/DocLink.astro';
 
-Aluerajaukset (Region Scopes) ovat toistimiin tehtäviä määrityksiä, joilla rajataan toistettavia viestejä.
+Aluerajaukset (Region Scopes) ovat ennalta sovittuja aluekoodeja jotka konfiguroidaan toistimiin, jotta voidaan rajoittaa viestien epätoivottua leviämistä verkossa. Periaatteet lyhyesti:
 
-LoRa-radioviestintä kantaa nimensä mukaisesti pitkiä matkoja. Maiden rajat eivät viestejä pysäytä. Silloin tällöin ilmakehän ominaisuudet muodostuvat sellaisiksi, että viestit kulkevat erityisen pitkiä matkoja. Ilmiö tunnetaan termillä *tropospheric ducting*, puheissa tämä lyhentyy tyypillisesti *tropoksi*. Kuvassa yhden paketin Itämeren risteily.
+* Aluekoodit tarvitaan jotta verkko toimii jatkossakin, sen kapasiteetti on rajallinen ja turhat paketit täytyy saada pidettyä poissa
+* **Lisää toistimeesi vähintään `fi` aluekoodi** (region) ja varmista että se on `Flood allowed` tilassa. **Aluekoodin lisääminen ei estä mitään liikennettä**.
+* Älä kiellä aluekoodittomia (`*`) paketteja ellet ymmärrä sen vaikutuksia. 
+* Selvitä onko alueellasi käytössä muita aluekoodeja ja lisää niitä tarpeen mukaan.
+* Jos olet kahden alueen rajalla, mieti olisiko toistimestasi hyötyä myös sille toiselle alueelle. Tämä näkyy äärimmäisenä esimerkkinä etelärannikolla jossa annamme naapuriapua Viroon lisäämällä tiettyihin toistimiin `ee` regionin. Liian moneen toistimeen niitä ei kuitenkaan kannata lisätä koska jokainen viesti syö radioaikaa. Muista myös tarkkailla tilannetta, jos naapurissa verkko vahvistuu niin että toistimesi ei enää ole tarpeellinen heidän alueensa tukemiseen niin poista aluekoodi.
+* Harkitse MeshCore Kumppanilaitteessa voisitko käyttää `fi` aluetta tai jotain piempää aluetta joillakin kanavilla tai jopa oletus-alueena. Lisää <DocLink page="users/regions">kumppanien aluerajoitusten sivulta</DocLink>.
+
+## Taustaa
+
+LoRa-radioviestintä kantaa nimensä mukaisesti pitkiä matkoja ja maiden rajat eivät viestejä pysäytä. Normaalisti viestit kulkevat vain suoralla yhteydellä antennien välillä ilman kimpoilua yläilmakehästä tai muuta epäsuoraa etenemistä joita esiintyy alemmilla taajuuksilla. Silloin tällöin ilmakehän ominaisuudet muodostuvat sellaisiksi, että viestit kulkevat erityisen pitkiä matkoja. Ilmiö tunnetaan termillä *tropospheric ducting*, puheissa tämä lyhentyy tyypillisesti *tropoksi*. Kuvassa yhden tropon siivittämän paketin Itämeren risteily.
 
 ![Yhden paketin matka kartalla hyvissä etenemisolosuhteissa](../../../../assets/screenshots/repeaters/en/some-good-propagation.png)
 
-MeshCoren käyttäjille tämä näkyy niin, että ulkomailla sijaitsevien toistinten mainokset kantavat Suomeen asti, ja kuultujen toistinten listalle ilmestyy runsain mitoin uusia tuttavuuksia. Public-kanavalle ilmestyy niinikään vieraskielisiä viestejä. Ulkomailla meshien kartoitusta tekevien MeshMapper-käyttäjien tiheät wardriving-lähetteet kantavat niinikään Suomeen asti.
+MeshCoren käyttäjille tämä näkyy niin, että ulkomailla sijaitsevien toistinten mainostukset (advert) kantavat Suomeen asti, ja kuultujen toistinten listalle ilmestyy runsain mitoin uusia tuttavuuksia. Public-kanava täyttyy vieraskielisistä viesteistä ja ulkomailla meshien kartoitusta tekevien MeshMapper-käyttäjien tiheät wardriving-lähetteet kantavat niinikään Suomeen asti.
 
-Ilmiö on sinällään harrastajan näkökulmasta kiehtova, mutta siinä on varjopuolensa. Toistinten ylläpitäjille vakavin näistä on se, että viestit kuluttavat omien toistinten sallittua radioaikaa (eurooppalainen 10 % *duty cycle*-rajoitus) ja toistimen akkuvirtaa. Rivikäyttäjälle myös kanavien ja toistinlistan täyttyminen saattaa olla ärsyttävää.
+Ilmiö on sinällään harrastajan näkökulmasta kiehtova, mutta siinä on varjopuolensa. Toistinten ylläpitäjille vakavin näistä on se, että viestit kuluttavat omien toistinten sallittua radioaikaa - eurooppalainen 10% toiminta-aika (*duty cycle*) rajoitus - ja toistimen akkuvirtaa. Rivikäyttäjälle myös kanavien ja toistinlistan täyttyminen saattaa olla ärsyttävää.
+
+Kun MeshCore verkko meillä kasvaa ja meshin riekaleet vähitellen yhdistyvät toisiinsa niin nämä nyt kansainväliset ongelmat tullaan kokemaan myös kotimaisina. Kun Turussa jutellaan paikalliskanavalla on aivan turhaa toistaa niitä Pirkanmaalla tai pääkaupunkiseudulla. Tällä hetkellä verkko ei ole ruuhkainen joten lääni/kaupunki-kohtaisia aluekoodeja ei ole juurikaan sovittu mutta tilanne elää. Monessa maassa kuten Ruotsissa on jo käytössä maa-lääni-kunta tyyppinen aluehierarkia
 
 **Varautumisnäkökulmasta** koko ilmiö on haitallinen – kriisiaikana voidaan olettaa mesh-viestinnän volyymin kasvavan kaikkialla, ja paikallisen viestinnän jääminen ulkomaisen viestinnän jalkoihin vie pohjan meshin käytöltä silloin, kun sille on eniten tilausta.
 
@@ -21,20 +32,22 @@ Ilmiö on sinällään harrastajan näkökulmasta kiehtova, mutta siinä on varj
 
 Edellä mainittuihin ongelmiin tartuttiin MeshCoren toistinkoodissa version 1.10 kohdalla marraskuussa 2025. Tänä päivänä ominaisuus on kypsä ja käytössä laajalti.
 
-Toistimen asetuksissa on lista toistettavista aluerajauksista. Ensimmäisenä listassa on asteriskilla (*) merkitty alue, jonka alla on selite 'Packets without region scope'. Jatkona on itse määritellyt alueet.
+Toistimen asetuksissa on lista toistettavista aluerajauksista. Ensimmäisenä listassa on asteriskilla (`*`) merkitty alue, jonka alla on selite `Packets without region scope`. Jatkona on itse määritellyt alueet.
 
 ![Kuvakaappaus region-asetuksista](../../../../assets/screenshots/repeaters/en/regionscopes-app.png)
 
-Asteriski-alue **ei ole jokerimerkki** (wildcard)! Se tarkoittaa selitteen mukaisesti paketteja, joilla ei ole aluerajausta. Ne ovat protokollatasolla erilaisia paketteja kuin aluerajauksen sisältävät paketit – eräänlaisia 'legacy'-paketteja. MeshCoren aluerajaukset eivät siis tue jokerimerkkejä! Jokainen toistettava alue täytyy nimetä erikseen.
+:::caution[Väärinymmärryksen paikka]
+**Asteriski-alue `*` ei ole jokerimerkki** (wildcard)! Se tarkoittaa selitteensä mukaisesti paketteja, joilla ei ole aluerajausta. Ne ovat protokollatasolla erilaisia paketteja kuin aluerajauksen sisältävät paketit – eräänlaisia "legacy"-paketteja. MeshCoren aluerajaukset eivät siis tue jokerimerkkejä! Jokainen toistettava alue täytyy nimetä erikseen. Ei myöskään ole mahdollista kieltää yksittäistä aluekoodia ja sallia kaikki muut. **Internetissä on tästä paljon väärinymmärryksiä ja virheellistä tietoa**.
+::: 
 
-Tarpeettoman kauas vuotavat viestit ovat poikkeuksetta asteriski-merkillä tarkoitettuja 'legacy'-paketteja. Naapureille vuotavien pakettien ongelma ratkeaa jo lähtöpisteessä, kun meshissä otetaan käyttöön oma kansallinen aluerajaus. Tarvittaessa jokainen toistimen ylläpitäjä voi kuitenkin kieltää toistimellaan näiden pakettien toiston. Oletusasetus on, että toisto sallitaan.
+Tarpeettoman kauas vuotavat viestit lähes ovat poikkeuksetta aluekoodittomia paketteja. Naapureille vuotavien pakettien ongelma ratkeaa jo lähtöpisteessä, kun meshissä otetaan käyttöön oma kansallinen aluerajaus, meillä `fi`. Toisessa päässä jokainen toistimen ylläpitäjä voi kuitenkin myös estää toistimellaan näiden paluekoodittomien pakettien toistamisen. **Oletusasetus on, että toisto sallitaan ja meillä ei ole vielä suositusta että se estettäisiin**. 
 
 Asetuksissa aluerajauksille voidaan määritellä, toistetaanko niitä (Flood allowed). Kuvan toistimen asetuksissa on määritetty Suomen MeshCoren suositusten mukaisesti aluerajaus **fi**. Toistin toistaa siis viestit, jotka **käyttäjät lähettävät fi-regionilla**. Käyttäjien kumppaniradiot on Suomen MeshCoressa ohjeistettu käyttämään oletusarvoisesti fi-regionia. Myös paikallinen aluerajaus **meitish** on määritetty toistettavaksi; tässä meshissä lähetetään ilmoituksia paikkakunnan tapahtumista yhteisesti sovitulla paikallisella aluerajauksella.
 
 Kuvan toistin toistaa myös aluerajauksettomia paketteja; asteriskilla merkityn alueen osalta toistot on sallittu ('Flood allowed'). Valinta 'Deny flood' kieltää toistot.
 
 :::tip[Teknisesti...]{icon="seti:json"}
-...aluerajattu viesti hashataan aluerajauksen nimellä. Jokainen toistimeen määritetty alue tarkoittaa yhtä hashin sovitusta lisää. Nämä suoritetaan määritysjärjestyksessä, joten järjestyksellä on merkitystä suorituskyvyn kannalta.
+...aluerajattu viesti hashataan aluerajauksen nimellä. Jokainen toistimeen määritetty alue tarkoittaa yhtä hashin sovitusta lisää jokaiselle flood-viestille. Nämä suoritetaan määritysjärjestyksessä, joten järjestyksellä on pientä merkitystä suorituskyvyn kannalta.
 :::
 
 

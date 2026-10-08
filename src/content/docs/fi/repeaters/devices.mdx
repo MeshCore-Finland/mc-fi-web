@@ -11,7 +11,7 @@ Laitteen valinta aloitetaan toistimen käyttötarkoitus edellä. Nämä asiat ka
 
 * Tuleeko toistin paikkaan, jossa on käytettävissä kiinteät sähköt, vai toimiiko se akun ja mahdollisesti aurinkopaneelin varassa?
 
-* Halutaanko toistimesta myös <DocLink page="tools/observers">Observer</DocLink> eli meshistä yleiseen jakeluun tietoa keräävä laite? Nämä voi tietyissä tapauksissa yhdistää samaan laitteeseen.
+* Halutaanko toistimesta myös Observer eli meshin toiminnasta ja viestinnästä tietoa keräävä laite? Nämä voi tietyissä tapauksissa yhdistää samaan laitteeseen.
 
 * Tuleeko toistin paikkaan, jossa ohjelmiston päivitys on mahdollista suorittaa USB-kaapelin yli, vai täytyykö päivitykset hoitaa langattomasti?
 
@@ -29,7 +29,7 @@ Aurinkopaneelilla toimivat valmisrakenteiset toistimet on usein mitoitettu keski
 
 ## Observer-toistin -yhdistelmä
 
-Observer-toiminnallisuus toistimen yhteydessä edellyttää käytänössä virtasyöppöä laitemallia ja Internet-yhteyttä WiFillä. Näin ollen laitteessa täytyy olla kiinteä virransyöttö sekä WiFi-tuki, joka on tarjolla lähinnä ESP32-laitteissa. Laitteelle täytyy myös löytyä tuki [Gessamanin observer](https://observer.gessaman.com/) -ohjelmistolle.
+<DocLink page="tools/observers">Observer</DocLink>-toiminnallisuus toistimen yhteydessä edellyttää käytänössä virtasyöppöä laitemallia ja Internet-yhteyttä WiFillä. Näin ollen laitteessa täytyy olla kiinteä virransyöttö sekä WiFi-tuki, joka on tarjolla lähinnä ESP32-laitteissa. Laitteelle täytyy myös löytyä tuki [Gessamanin observer](https://observer.gessaman.com/) -ohjelmistolle.
 
 Myös aiemmin mainittu OpenHop Repeater -ohjelmisto tukee Observer-toiminnallisuutta.
 
@@ -49,13 +49,13 @@ Edelliset koskevat vain ohjelmiston päivitystä – normaali hallintayhteys ase
 
 Taajuusalueen säädökset määrittelevät, että yksittäisen laitteen säteilyteho saa olla korkeintaan 500 mW (27 dBm) ERP. Tämä on huomioitava laitetta ja antennia valittaessa.
 
-**Säteilyteho ja lähetysteho ovat kaksi eri asiaa**. Lähetysteho on se teho, jonka laite lähettää antennille. Säteilyteho on se teho, joka lähtee antennista eetteriin. Säteilytehoa laskevat kaapeli- ja liitinhäviöt ja sitä nostavat antennin vahvistus (gain). 
+**Säteilyteho ja lähetysteho ovat kaksi eri asiaa**. Yksinkertaistettuna *lähetysteho* on se teho, jonka laite lähettää antennille. *Säteilyteho* on se teho, joka lähtee antennista eetteriin suurimman vahvistuksen suuntaan. Säteilytehoa laskevat antennin sovitus, kaapeli- ja liitinhäviöt ja sitä nostavat antennin vahvistus (gain). 
 
 Esimerkki: Laitteessa on 22 dBm (~160 mW) lähetysteho ja antennin vahvistus on 5 dBi. Tällöin säteilyteho on 27dB = 500 mW ERP. Jos antennin vahvistus olisi 6 dBi, säteilyteho olisi 28 dBm = 630 mW ERP, mikä ylittää sallitun rajan. Tällöin laitteen lähetystehoa täytyisi laskea 21 dBm:iin (~125 mW) jotta säteilyteho pysyisi sallituissa rajoissa.
 
 Esimerkissämme oletettiin teoreettinen tapaus ettei kaapeli- ja liitinhäviöitä ole. Jos niitä on merkittävästi, lähetystehoa voidaan nostaa hieman. Ilman mittauksia on kuitenkin vaikea tietää, mikä on todellinen säteilyteho. Siksi on suositeltavaa ottaa varman päälle eikä yrittää optimoida säteilytehoa maksimiin. **868 MHz:n taajuusalueella toistimen sijoituspaikalla on huomattavasti suurempi merkitys kuin säteilytehon viimeisillä dBm:illä**
 
 :::note
-Markkinoilla on muutamia laitteita, joissa on konfiguroitavissa 1 W lähetysteho koska laitteet sisältävät erillisen vahvistinpiirin varsinaisen LoRa radiopiirin lisäksi. Näillä laitteilla on erittäin helppo ylittää 500 mW ERP joten on tarkkaan laskettava ja mielellään mitattava suurin lähetysteho jota voidaan käyttäää ilman että säteilytehon raja ylittyy.
+Markkinoilla on muutamia laitteita, joissa on konfiguroitavissa 1 W lähetysteho koska laitteet sisältävät erillisen vahvistinpiirin varsinaisen LoRa radion lisäksi. Näillä laitteilla on erittäin helppo ylittää 500 mW ERP joten on tarkkaan laskettava ja mielellään mitattava suurin lähetysteho jota voidaan käyttäää ilman että säteilytehon raja ylittyy.
 :::
 
