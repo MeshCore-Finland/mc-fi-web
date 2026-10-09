@@ -5,5 +5,29 @@ description: Region-asetukset määräävät, kuinka pitkälle viestisi välitet
 
 import DocLink from '@components/DocLink.astro';
 
-Tämäkin täydentyvä on.
+Kumppaniradion asetuksiin kirjattiin oletusarvoinen aluerajaus (*Default Region Scope*) **fi**. Tarkastellaan tämän merkitystä hieman syvemmin.
+
+LoRa-radioviestintä kantaa nimensä mukaisesti pitkiä matkoja. Maiden rajat eivät viestejä pysäytä. Silloin tällöin ilmakehän ominaisuudet muodostuvat sellaisiksi, että viestit kulkevat erityisen pitkiä matkoja. MeshCoren yleistyessä tästä siunauksesta alkoi muodostua ongelma – vieraskielisiä viestejä, toistinten mainoksia ja muuta viestintää ulkomailta saattoi aika-ajoin tulla jo harmiksi asti.
+
+Toistinverkko kärsi erityisesti, sillä vuodot vieraista kuluttavat virtaa ja määräysten asettamaa tiukkaa radioaikaa. MeshCore-aktiivit painottavat mesh-verkon varautumisnäkökulmaa – se toimii silloinkin, kun kännykkäverkot ja Internet ovat nurin. Kriisiaikana voidaan kuitenkin olettaa, että MeshCore-viestinnän volyymi nousee, ja edellä kuvattu ongelma johtaisi siihen, että se kaikista tärkein, paikallinen viestintä, saattaisi jäädä vuotavan liikenteen jalkoihin.
+
+## Aluerajaus määrää, kuinka pitkälle viestit välitetään
+
+Ongelma ratkaistiin lisäämällä MeshCoreen aluerajaukset (*Region Scopes*). Suomen MeshCoressa on linjattu, että kaikki maamme toistimet toistavat viestejä, joiden aluerajaus on **fi**. Naapurimaiden toistimet eivät näitä toista, eikä meillä toisteta naapurimaita. Näin viestit pysyvät siellä, missä pitääkin.
+
+Aluerajauksia käytetään myös hienojakoisempaan jakelun rajaukseen. Paikalliset mesh-yhteisöt voivat sopia keskenään aluerajauksia käyttötarkoituksiin, joissa on järkevää rajoittaa viestinnän jakelua. Näistä tiedotetaan yhteisön omissa kanavissa, mahdollisesti myös MeshCore Suomen <DocLink page="communities/start">yhteisösivuilla</DocLink>.
+
+Viestejä voi lähettää myös kokonaan ilman aluerajausta, mutta osa toistimista saattaa jättää tällaiset viestit toistamatta, joten niiden jakelu ei ole taattu. Lopuksi muistutetaan, että aluerajaukset vaikuttavat vain toistinten toistoihin; suorat viestit radiokantamalla olevien kumppaniradioiden kesken kulkevat aluerajauksista riippumattomasti.
+
+:::tip[Jos tarkkoja ollaan...]{icon="comment-alt"}
+... eri maiden MeshCore-yhteisöt antavat naapuriapua raja- ja rannikkoseuduilla, eli paikoitellen myös naapurin viestejä toistetaan. Tämän vuoksi jotkin toistimet saattavat tuoda kantamalleen myös 'vierasta' viestintää, erityisesti toistinten mainostusta. On myös toistimia, jotka toistavat ilman aluerajausta lähetetyt viestit. Tämäkin saattaa tuoda eksotiikkaa kumppaniradiosi kuuluville.
+:::
+
+## Aluerajauksen voi asettaa kanavakohtaisesti
+
+Jos lähdet reissuun Euroopassa, kumppaniradiosi on jo valmiiksi oikeilla radioasetuksilla – kuten aiemmin sanottua, koko Euroopan MeshCore toimii samoilla asetuksilla. Muista kuitenkin käyttää paikallista aluerajausta – tai viestiä ilman aluerajausta, jos se on paikallinen käytöntö. Muuten näet kyllä muiden viestit, mutta aivan lähikantamaa pidemmälle eivät omat viestisi kulje.
+
+Kotimaassa paikallisesti sovittujen aluerajausten käyttö edellyttää niinikään fi-oletusarvosta poikkeamista.
+
+Seuraavassa osiossa kerrotaan kanavien käytöstä. Siellä opit myös toimimaan eri aluerajauksilla.
 
