@@ -34,6 +34,7 @@ export default defineConfig({
       description: 'MeshCore Suomessa — yhteisö, verkko ja käytännön oppaat.',
       defaultLocale,
       locales,
+      routeMiddleware: './src/routeData.ts',
       // The dedicated src/pages/404.astro route uses our Starlight layout.
       disable404Route: true,
       social: [
