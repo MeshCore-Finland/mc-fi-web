@@ -8,14 +8,14 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 Ensimmäinen kurkistus mesh-laitteiden tarjontaan hautaa katsojan rönsyilevään vaihtoehtojen viidakkoon. Tämän oppaan avulla onnistut toivottavasti ensimmäisellä yrittämällä valitsemaan käyttökelpoisen ja itselle mieluisen laitteen.
 
-Viidakkoon sukeltaessa auttaa tieto siitä, että **kaikki vaihtoehdot** jakautuvat kahteen leiriin *järjestelmäpiirin* (System-on-Chip, SOC) perusteella:
+Viidakkoon sukeltaessa auttaa tieto siitä, että **kaikki vaihtoehdot** jakautuvat kahteen leiriin *järjestelmäpiirin* (System-on-Chip, SoC) perusteella:
 
 | Järjestelmäpiiri | Luonne | Valmistaja |
 |:-----:|:-------|:------:|
-| **ESP32** | Monipuolinen, sähkönnälkäinen, WiFi-ominaisuudet mukana. | Expressif, Kiina |
+| **ESP32** | Monipuolinen, sähkönnälkäinen, WiFi-ominaisuudet mukana. | Expressif Systems, Kiina |
 | **nRF52** | Yksinkertainen, virtapihi, ei WiFi-ominaisuuksia. | Nordic Semiconductor, Norja |
 
-Toinen mielessä pidettävä asia on, että mikään laite ei ole kaupasta kotiutuessaan käyttövalmis MeshCore-kumppaniradio. Saatat löytää kaupasta tuotteen, johon on valmiiksi asennettu MeshCoren kumppaniradio-ohjelmisto, mutta poikkeuksetta versio on vanha, kehitys on nopeata. Tuonnempana käsiteltävä [flashäys](#ohjelmiston-asennus) on MeshCore-käyttäjän kansalaistaito, joka kannattaa ottaa heti kättelyssä haltuun.
+Toinen mielessä pidettävä asia on, että mikään laite ei ole kaupasta kotiutuessaan käyttövalmis MeshCore-kumppaniradio. Saatat löytää kaupasta tuotteen, johon on valmiiksi asennettu MeshCoren kumppaniradio-ohjelmisto, mutta poikkeuksetta versio on vanha, koska kehitys on nopeata. Tuonnempana käsiteltävä [flashäys](#ohjelmiston-asennus) on MeshCore-käyttäjän kansalaistaito, joka kannattaa ottaa heti kättelyssä haltuun.
 
 Kolmas kinkkinen asianlaita on, ettei näille laitteille ole yhtä vakiintunutta termiä. Verkkokaupoissa seikkaillessa laitteista saatetaan käyttää montaa nimeä:
 
@@ -36,7 +36,7 @@ Kun mieluinen laite on löytynyt, muista varmistaa ennen ostopäätöstä, että
 
 ![Erilaisia laitteita](../../../../assets/nodecollage.png)
 
-Itse tekeminen mahdollistaa yksilöllisen ja erittäin edullisen kumppaniradion toteuttamisen. Yksinkertaisimmillaan riittää 10 ... 30 € sijoitus *development board* -tyyppiseen tuotteeseen, käyttöä kestävä kotelointiratkaisu ja virransyöttö USB-virtapankista. Käytännössä kaikki edellämainitun kaltaiset tuotteet voi kytkeä litiumiakkuun ilman lisähankintoja.
+Itse tekeminen mahdollistaa yksilöllisen ja erittäin edullisen kumppaniradion toteuttamisen. Yksinkertaisimmillaan riittää 10 ... 30 € sijoitus *development board* -tyyppiseen tuotteeseen, käyttöä kestävä kotelointiratkaisu ja virransyöttö USB-virtapankista. Käytännössä kaikki edellämainitun kaltaiset tuotteet voi kytkeä litiumiakkuun ilman lisähankintoja, valmis johto liittimineen seuraa mukana ja laitteet sisältävät akun latauselektroniikan.
 
 Valmiissa laitteissa on tarjontaa luottokortin kokoisista *tracker*-laitteista näppäimistöllä ja näytöllä varustettuihin laitteisiin asti. Valmiit laitteet ovat jonkin verran hintavampia, 100 ... 200 € luokkaa. Yhteisö on tehnyt varsinkin näppäimistölaitteille erinomaisia MeshCore-sovelluksia, mutta näitä täytyy haeskella muualta kuin viralliselta Flasher-sivustolta.
 
@@ -49,6 +49,7 @@ Jos kumppaniradiosi tulee käyttöön mobiili- tai tietokonesovelluksen kanssa, 
 Kumppaniradioiksi virallisesti tuetut laitteet on listattu [MeshCore Flasherissä](https://flasher.meshcore.io). Laitteesi löytyminen listalta tarkoittaa, että se on virallisesti tuettu ja siten varma valinta kumppaniradioksi. Asennus listan laitteisiin tapahtuu suoraan tällä sivustolla ja on pitkälti automaattinen. Asennus onnistuu vain tietokoneen selaimella, mobiililaitteilla selainasennusta ei voi suorittaa. Termi *flashäys* tarkoittaa tässä ohjelmiston asennusta.
 
 :::note[Edellytykset]
+* Laitteeseen **täytyy kytkeä antenni** ennen virran kytkemistä! Jos radio lähettää ilman kytkettyä antennia, antenniin johdettu virta peilautuu takaisin ja saattaa rikkoa laitteen.
 * Selaimella asentaminen edellyttää Web Serial API-tuella varustetun selaimen (Chrome / Chromium, Edge, Opera ja tuoreet Firefox-selaimet).
 * USB-kaapelisi täytyy olla ns. datakaapeli, ei pelkkä latauskaapeli.
 * Linux-käyttäjien täytyy lisätä oma käyttäjänsä ryhmään, jonka hallinnassa USB Serial -portti on (usein *dialout* tai *uucp*) jotta flashäys onnistuisi.
@@ -65,13 +66,15 @@ Aukeava sivu on viimeinen ennen asennuksen käynnistymistä. Sivulla voi valita 
 
 ![ESP32-laitteen flashaystoiminnot](../../../../assets/screenshots/users/en/flasher-choices-esp.png)
 
-Molemmissa tapauksissa ensimmäinen ohjelmiston asennus kannattaa tehdä 'puhtaalta pöydältä', eli käyttää 'Erase flash' / 'Erase device' -toimintoa. Sensijaan jatkossa, kun päivität laitteen uusia ohjelmistoversiota, tätä ei tule käyttää, ettet menetä omia asetuksiasi.
+Molemmissa tapauksissa ensimmäinen ohjelmiston asennus kannattaa tehdä 'puhtaalta pöydältä', eli käyttää *Erase flash* / *Erase device* -toimintoa. Sensijaan jatkossa, kun päivität laitteen uusia ohjelmistoversiota, tätä ei tule käyttää, ettet menetä omia asetuksiasi.
 
-Lopuksi painetaan 'Flash!'. Selain avaa valintaikkunan, josta valitset oman laitteesi omaa päättelykykyä hyödyntäen. 'Muodosta yhteys' vie eteenpäin, ja asennus alkaa. Muista, että asennuksen alettua sitä ei missään nimessä saa keskeyttää! Asennus kestää vain kymmenisen sekuntia.
+Lopuksi painetaan *Flash!*. Selain avaa valintaikkunan, josta valitset oman laitteesi omaa päättelykykyä hyödyntäen. *Muodosta yhteys* vie eteenpäin, ja asennus alkaa. Muista, että asennuksen alettua sitä ei missään nimessä saa keskeyttää! Asennus kestää vain kymmenisen sekuntia.
 
 ![Selaimen WebSerial-laitteen valintaikkuna](../../../../assets/screenshots/users/fi/flasher-webserial-valinta.jpg)
 
 Jos asennus onnistui – onneksi olkoon, kumppaniradiosi on valmis palvelukseen! Jos taas toimitus kompuroi, kannattaa yrittää uudelleen. ESP32-laitteen ollessa kyseessä todennäköinen syy epäonnistumiseen on, että laite täytyy komentaa flash-tilaan jollakin tavalla. Laitteen ohjeista tai Suomen MeshCoren keskusteluryhmästä löytyy varmasti apua.
+
+---
 
 ## Seuraavaksi määritetään asetukset
 
