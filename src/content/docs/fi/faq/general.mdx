@@ -5,6 +5,72 @@ faq: true
 tableOfContents: false
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 ## Missä kysymykset ja vastaukset ovat? [#under-construction]
 
 Vielä työn alla. Kysymyksiä ja vastauksia lisätään tälle sivulle myöhemmin.
+
+## Mitä käytännössä tarkoittaa 'hidas radiotekniikka'? [#lora-is-slow]
+
+Suomen ja Euroopan MeshCoressa käytetään vakioituja radioparametreja. Ne asettavat LoRa-radioyhteydessä tasapainon nopeuden ja viestin kantaman välillä. Käytettävillä asetuksilla (lähetteen kaistanleveys 62,5 kHz, Coding Rate 8 ja Spreading Factor 8) tietoa siirtyy noin 120 tavua sekunnissa.
+
+Muutama esimerkkilähete:
+
+|      | Tavua | Sekuntia |
+|:-----|:-----:|:--------:|
+| Toistinmainos, 'Viherlaakso cegy repeat', kolme toistoa 2-byte -polulla | 137 | 1,127 |
+| Wardriving-viesti, kolme toistoa | 59 | 0,488 |
+| Kanavaviesti, 'Pesonen OH6XYZ: Älkääs sit ihan älyvapaasti ördätkö 💀', kolme toistoa | 83 | 0,685 |
+
+Jokainen toisto lisää lähetteen mittaa kahdella tavulla, kun kirjanpito polusta kasvaa.
+
+Eurooppalaisten radiosääntöjen mukaisesti jokainen toistin voi lähettää liukuvan tunnin aikana vain 360 sekunnin ajan. Toisin sanoen rajoitus sallii yhden sekunnin lähetteen yhdeksän sekunnin välein. Tämän voi suhteuttaa edellisiin esimerkkeihin ja muodostaa näin käsityksen siitä, mitkä ovat käytännön kaistarajat.
+
+## Suomen MeshCore-asetukset [#settings]
+
+Suomen MeshCoressa käytettävät asetukset eri muodoissa.
+
+<Tabs syncKey="interface">
+
+<TabItem label="Kumppaniradioon">
+
+| Asetus | Arvo |
+|:-------|:----:|
+| Radio Preset | EU/UK Narrow |
+| Default Path Hash Size | 2-byte |
+| Default Region Scope | fi |
+
+</TabItem>
+
+<TabItem label="Toistimen CLI-setup">
+
+```
+set name oma_nimi
+set lat oma_sijainti
+set lon oma_sijainti
+
+set radio 869.618,62.5,8,8
+set tx 22
+set dutycycle 10
+
+set path.hash.mode 1
+set advert.interval 0
+set flood.advert.interval 30
+set loop.detect moderate
+
+region put fi
+region default fi
+region save
+
+clock sync
+```
+
+</TabItem>
+
+<TabItem label="Toistimen GUI-setup">
+...
+</TabItem>
+
+</Tabs>
+
