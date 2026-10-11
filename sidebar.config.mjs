@@ -13,6 +13,7 @@ export default [
       'users/channels',
       'users/identity',
       'users/dms',
+      'users/advanced'
     ],
   },
   {

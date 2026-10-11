@@ -29,9 +29,9 @@ Asteriski-alue **ei ole jokerimerkki** (wildcard)! Se tarkoittaa selitteen mukai
 
 Tarpeettoman kauas vuotavat viestit ovat poikkeuksetta asteriski-merkillä tarkoitettuja 'legacy'-paketteja. Naapureille vuotavien pakettien ongelma ratkeaa jo lähtöpisteessä, kun meshissä otetaan käyttöön oma kansallinen aluerajaus. Tarvittaessa jokainen toistimen ylläpitäjä voi kuitenkin kieltää toistimellaan näiden pakettien toiston. Oletusasetus on, että toisto sallitaan.
 
-Asetuksissa aluerajauksille voidaan määritellä, toistetaanko niitä (Flood allowed). Kuvan toistimen asetuksissa on määritetty Suomen MeshCoren suositusten mukaisesti aluerajaus **fi**. Toistin toistaa siis viestit, jotka **käyttäjät lähettävät fi-regionilla**. Käyttäjien kumppaniradiot on Suomen MeshCoressa ohjeistettu käyttämään oletusarvoisesti fi-regionia. Myös paikallinen aluerajaus **meitish** on määritetty toistettavaksi; tässä meshissä lähetetään ilmoituksia paikkakunnan tapahtumista yhteisesti sovitulla paikallisella aluerajauksella.
+Asetuksissa aluerajauksille määritellä, toistetaanko niitä . Kuvan toistimen asetuksissa on määritetty Suomen MeshCoren suositusten mukaisesti aluerajaus **fi** toistettavaksi (*Flood allowed*). Toistin toistaa siis viestit, jotka **käyttäjät lähettävät fi-regionilla**. Käyttäjien kumppaniradiot on Suomen MeshCoressa ohjeistettu käyttämään oletusarvoisesti fi-regionia. Myös paikallinen aluerajaus **meitish** on määritetty toistettavaksi; tässä meshissä lähetetään ilmoituksia paikkakunnan tapahtumista yhteisesti sovitulla paikallisella aluerajauksella. Tämä toistin on verkkovirran varassa, jotein **offgrid** on jätetty pois.
 
-Kuvan toistin toistaa myös aluerajauksettomia paketteja; asteriskilla merkityn alueen osalta toistot on sallittu ('Flood allowed'). Valinta 'Deny flood' kieltää toistot.
+Kuvan toistin toistaa myös aluerajauksettomia paketteja; asteriskilla merkityn alueen osalta toistot on sallittu. Valinta *Deny flood* kieltää toistot.
 
 :::tip[Teknisesti...]{icon="seti:json"}
 ...aluerajattu viesti hashataan aluerajauksen nimellä. Jokainen toistimeen määritetty alue tarkoittaa yhtä hashin sovitusta lisää. Nämä suoritetaan määritysjärjestyksessä, joten järjestyksellä on merkitystä suorituskyvyn kannalta.
