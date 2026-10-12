@@ -1,9 +1,49 @@
 ---
-title: Yksityisviestit
-description: Suorat kahdenkeskeiset viestit ovat aina salattuja ja käyttävät verkon kapasiteettia mahdollisimman vähän.
+title: Polut ja yksityisviestit
+description: Suorat kahdenkeskeiset viestit ovat aina salattuja ja käyttävät verkon kapasiteettia mahdollisimman vähän, koska ne käyttävät polkuja.
 ---
 
 import DocLink from '@components/DocLink.astro';
 
-Sisältöä seuraa...
+*Polkureititys* on MeshCoren paraatiominaisuus, ja rivikäyttäjälle se näyttäytyy erityisesti yksityisviestien toiminnassa.
 
+Edellisessä osassa opimme, että yksityisviestintä edellyttää julkisen avaimen jakamista, jonka myötä kontakti ilmestyy kontaktilistalle ja viestejä voidaan lähettää. Yksityisviestin lähetys käyttäjälle, jonka kanssa et vielä ole viestitellyt, tapahtuu seuraavasti:
+
+![Kontaktilistan suodatus](../../../../assets/screenshots/users/en/dms-filter.png)
+
+Kontaktilistan selaaminen helpottuu, kun käyttää suodatustoimintoa ja ottaa näkyville pelkästään käyttäjät (*Users*). Viestiä ollaan lähettämässä käyttäjälle *nodedog*. Listalla näkyy, että viesti lähtee koko meshin laajuisena (*flood*) viestinä, sillä meillä ei vielä ole tiedossa polkua *nodedogin* luo. Valitaan käyttäjä listasta, ja kirjoitetaan viesti...
+
+Kun viesti lähetetään, alkaa tapahtua. Viesti salataan *nodedogin* julkisella avaimella. MeshCore lähettää viestin, jonka koko paikallinen mesh toistaa, ja odottelee hetken **paluuviestiä** (*acknowledgement / ack*). Jos paluuviestiä ei kuulu, yritetään vielä kaksi kertaa uudelleen.
+
+![Viestin lähetys](../../../../assets/screenshots/users/en/dms-sending.png)
+
+Jos *nodedog* on kumppaniradioineen poissa meshin kuuluvilta, viestin välitys merkitään epäonnistuneeksi; yrittää voi uudelleen pitkällä painalluksella tai oikealla hiirennapilla. Onnistunut välitys sensijaan havaitaan, kun *nodedogin* kumppaniradion lähettämä paluuviesti saapuu.
+
+MeshCoren polkureititys astuu tässä kohtaa kuvioon. Paluuviesti nimittäin sisältää tiedon siitä, mitkä toistimet saivat viestin onnistuneesti perille *nodedogin* kumppaniradioon. Liikenne muuttuu polkureititetyksi jo siinä kohtaa, kun *nodedog* lähettää vastausviestinsä; se kääntää onnistuneen polun järjestyksen, ja lähettää vastausviestin polkua pitkin. Sovelluksessa näkyy nyt, että polku on selvinnyt, ja viestien vaihto käyttää jatkossa tätä polkua.
+
+![Tieto selvitetystä polusta](../../../../assets/screenshots/users/en/dms-path-resolved.png)
+
+Polkua pitkin välitetyt viestit eivät rasita koko meshiä, kuten kanavaviestit. Ne kulkevat myös mahdollisesti nopeammin, jos paikalliset toistimet on asetettu tällä tavoin toimimaan. Polkureititys ohittaa myös aluerajaukset – yksityisviestit ja kulkevat täysin niistä riippumattomasti.
+
+## Polun voi määrittää myös käsin
+
+![Polun määritys käsipelillä](../../../../assets/screenshots/repeaters/en/repeater-path-view.png)
+
+Jos tunnet paikallisen meshin niikseen hyvin, että tiedät millainen polku sopii itsesi ja vastaanottajan välille, voit laatia polun myös etukäteen tai muokata sitä myös jälkeenpäin. Toiminto löytyy viesti-ikkunan oikean yläreunan valikosta sekä kontaktilistasta kontaktirivin päädyn valikosta, ja on nimeltään '*Set Path*'. Käsin määritellyn polun ollessa käytössä ensimmäisen lähetyksen *flood*-viestiä ei lähetä lainkaan.
+
+Polkujen kantavuutta voi testata etukäteen '*Trace Path*' -toiminnolla. Se lähettää koepaketin, joka toistetaan oman määrityksesi mukaisesti toistimelta toiselle. Sovelluksen alkunäkymän oikean yläreunan valikosta löytyvästä *Tools* -valikosta löydät tähän kaksi työkalua: '*Manual*' toimii kuten ylempi polun määritysnäkymä, '*Using Map*' antaa laatia polun karttanäkymässä. Karttaa käyttävä vaihtoehto edellyttää, että oman kumppaniradiosi koordinaatit ovat tiedossa.
+
+Muista komentaa koko polku sinne ja takaisin – helpottava '*Add Return Path*' toiminto löytyy näkymän oikean yläreunan valikosta ja lisää paluureitin samaa tietä puolestasi. Kun kokeilu on ajettu loppuun asti, näet yhteenvedossa myös jokaisen hypyn signaalin voimakkuuden. Koska polkujen testaus on luonnollisestikin polkureititettyä viestintää, se ohittaa aluerajaukset.
+
+## Polut lakkaavat toimimasta, jos kumppaniradiosi siirtyy toiseen paikkaan
+
+On hyvä muistaa, että kotoasi toimiva polku ei enää päde, jos olet muualla kuin kotona. Mukana kulkevan kumppaniradion kanssa toimiessa tämä saattaa unohtuessaan aiheuttaa hämmennystä. Jos yksityisviestin lähetys ei enää onnistu tuttua reittiä pitkin, kumppaniradio lähettää sen lopuksi *flood*-viestinä, ja polun tunnustelu alkaa taas alusta. Kotiin palatessasi tämä uusittu polku ei puolestaan ole enää kelvollinen, ja taas joudutaan turvautumaan koko meshin huhuiluun. Tämän vuoksi ylläoleva käsimääritys on hyvä taito osata.
+
+Jos MeshCore on aktiivisessa käytössä, yksi fiksu käytäntö on asentaa kotiin kiinteästi yksi kumppaniradio, jonka oppimat reitit pitävät aina kutinsa, ja käyttää toista kulkiessa. Tee-se-itse -henkilölle tämä luksus ei ole ainakaan rahasta kiinni.
+
+---
+
+Tähän päättyy Suomen MeshCoren käyttäjän opas. Onneksi olkoon, olet saavuttanut **meshtaruuden**!
+
+Opas jatkaa edistyneitä käyttäjiä ja kehittäjiä koskettavilla aiheilla, ja sen jälkeen lähdetään rakentamaan lisää MeshCorea Suomeen – kuka tahansa voi ottaa osaa Suomen MeshCoren laajentamiseen!
+ 

@@ -10,9 +10,10 @@ export default [
       'users/devices',
       'users/settings',
       'users/regions',
-      'users/identity',
       'users/channels',
+      'users/identity',
       'users/dms',
+      'users/advanced'
     ],
   },
   {
