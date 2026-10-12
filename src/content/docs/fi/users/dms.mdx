@@ -17,23 +17,23 @@ Kun viesti lähetetään, alkaa tapahtua. Viesti salataan *nodedogin* julkisella
 
 ![Viestin lähetys](../../../../assets/screenshots/users/en/dms-sending.png)
 
-Jos *nodedog* on kumppaniradioineen poissa meshin kuuluvilta, viestin välitys merkitään epäonnistuneeksi; yrittää voi uudelleen pitkällä painalluksella tai oikealla hiirennapilla. Onnistunut välitys sensijaan havaitaan, kun *nodedogin* kumppaniradion lähettämä paluuviesti saapuu.
+Jos *nodedog* on kumppaniradioineen poissa meshin kuuluvilta, viestin välitys merkitään epäonnistuneeksi; yrittää voi uudelleen pitkällä painalluksella tai oikealla hiirennapilla. Onnistunut välitys sen sijaan havaitaan, kun *nodedogin* kumppaniradion lähettämä paluuviesti saapuu.
 
 MeshCoren polkureititys astuu tässä kohtaa kuvioon. Paluuviesti nimittäin sisältää tiedon siitä, mitkä toistimet saivat viestin onnistuneesti perille *nodedogin* kumppaniradioon. Liikenne muuttuu polkureititetyksi jo siinä kohtaa, kun *nodedog* lähettää vastausviestinsä; se kääntää onnistuneen polun järjestyksen, ja lähettää vastausviestin polkua pitkin. Sovelluksessa näkyy nyt, että polku on selvinnyt, ja viestien vaihto käyttää jatkossa tätä polkua.
 
 ![Tieto selvitetystä polusta](../../../../assets/screenshots/users/en/dms-path-resolved.png)
 
-Polkua pitkin välitetyt viestit eivät rasita koko meshiä, kuten kanavaviestit. Ne kulkevat myös mahdollisesti nopeammin, jos paikalliset toistimet on asetettu tällä tavoin toimimaan. Polkureititys ohittaa myös aluerajaukset – yksityisviestit ja kulkevat täysin niistä riippumattomasti.
+Polkua pitkin välitetyt viestit eivät rasita koko meshiä, kuten kanavaviestit. Ne kulkevat myös mahdollisesti nopeammin, jos paikalliset toistimet on asetettu tällä tavoin toimimaan. Polkureititys ohittaa myös aluerajaukset – yksityisviestit kulkevat täysin niistä riippumattomasti.
 
 ## Polun voi määrittää myös käsin
 
 ![Polun määritys käsipelillä](../../../../assets/screenshots/repeaters/en/repeater-path-view.png)
 
-Jos tunnet paikallisen meshin niikseen hyvin, että tiedät millainen polku sopii itsesi ja vastaanottajan välille, voit laatia polun myös etukäteen tai muokata sitä myös jälkeenpäin. Toiminto löytyy viesti-ikkunan oikean yläreunan valikosta sekä kontaktilistasta kontaktirivin päädyn valikosta, ja on nimeltään '*Set Path*'. Käsin määritellyn polun ollessa käytössä ensimmäisen lähetyksen *flood*-viestiä ei lähetä lainkaan.
+Jos tunnet paikallisen meshin niikseen hyvin, että tiedät millainen polku sopii itsesi ja vastaanottajan välille, voit laatia polun myös etukäteen tai muokata sitä myös jälkeenpäin. Toiminto löytyy viesti-ikkunan oikean yläreunan valikosta sekä kontaktilistasta kontaktirivin päädyn valikosta, ja on nimeltään '*Set Path*'. Käsin määritellyn polun ollessa käytössä ensimmäisen lähetyksen *flood*-viestiä ei lähetetä lainkaan.
 
 Polkujen kantavuutta voi testata etukäteen '*Trace Path*' -toiminnolla. Se lähettää koepaketin, joka toistetaan oman määrityksesi mukaisesti toistimelta toiselle. Sovelluksen alkunäkymän oikean yläreunan valikosta löytyvästä *Tools* -valikosta löydät tähän kaksi työkalua: '*Manual*' toimii kuten ylempi polun määritysnäkymä, '*Using Map*' antaa laatia polun karttanäkymässä. Karttaa käyttävä vaihtoehto edellyttää, että oman kumppaniradiosi koordinaatit ovat tiedossa.
 
-Muista komentaa koko polku sinne ja takaisin – helpottava '*Add Return Path*' toiminto löytyy näkymän oikean yläreunan valikosta ja lisää paluureitin samaa tietä puolestasi. Kun kokeilu on ajettu loppuun asti, näet yhteenvedossa myös jokaisen hypyn signaalin voimakkuuden. Koska polkujen testaus on luonnollisestikin polkureititettyä viestintää, se ohittaa aluerajaukset.
+Muista komentaa koko polku sinne ja takaisin – helpottava '*Add Return Path*' -toiminto löytyy näkymän oikean yläreunan valikosta ja lisää paluureitin samaa tietä puolestasi. Kun kokeilu on ajettu loppuun asti, näet yhteenvedossa myös jokaisen hypyn signaalin voimakkuuden. Koska polkujen testaus on luonnollisestikin polkureititettyä viestintää, se ohittaa aluerajaukset.
 
 ## Polut lakkaavat toimimasta, jos kumppaniradiosi siirtyy toiseen paikkaan
 
