@@ -1,6 +1,14 @@
 # Contributing content
 
+This guide is for editing the source of [meshcore.fi](https://meshcore.fi/). The public website contains the MeshCore guides, FAQs and community pages; this repository contains the files used to build them.
+
 Use Markdown for ordinary articles and full FAQ pages. Use MDX when you need screenshots, tabs, embedded mini-FAQs or interactive examples. You do not need to edit React components to contribute content.
+
+## License and contribution terms
+
+This project's code and content are licensed under the [MIT License](LICENSE). By submitting a contribution, you agree that it is provided under that same license. This applies to code, documentation, translations, images and other contributed material.
+
+Only submit material that you have the right to license under the MIT License. **Do not contribute if you do not agree to these terms.** Contributors are listed in [AUTHORS](AUTHORS), alphabetically by GitHub username.
 
 ## First-time setup
 
@@ -20,9 +28,9 @@ Node should print `v24.x.x`. You do not need to install Astro globally, set up a
 
 ### Get the working branch
 
-The new site lives on `dev`, which is the repository's default branch. The old live site remains on `main` until the production cutover.
+Start contributions from `dev` and open pull requests against `dev`. The production branch is `main`, which Cloudflare Pages builds for [meshcore.fi](https://meshcore.fi/).
 
-If you have write access to the main repository:
+If you do not have write access, [fork the repository on GitHub](https://github.com/MeshCore-Finland/mc-fi-web/fork) first. With or without a fork, clone the source and create your contribution branch from `dev`:
 
 ```sh
 git clone --branch dev https://github.com/MeshCore-Finland/mc-fi-web.git
@@ -32,17 +40,7 @@ git switch -c docs/your-topic
 
 Replace `docs/your-topic` with a name for your contribution, for example `docs/companion-channels`.
 
-If you do not have write access, [fork the repository on GitHub](https://github.com/MeshCore-Finland/mc-fi-web/fork) first. Replace `YOUR_USERNAME` below with your GitHub username:
-
-```sh
-git clone https://github.com/YOUR_USERNAME/mc-fi-web.git
-cd mc-fi-web
-git remote add upstream https://github.com/MeshCore-Finland/mc-fi-web.git
-git fetch upstream
-git switch -c docs/your-topic upstream/dev
-```
-
-This fetches the new site even if your fork initially contains only the old default branch. In both cases, your contribution branch starts from the prototype; keep the old site out of your changes.
+When submitting, push your branch to this repository if you have write access, or to your fork. The [pull-request instructions](#submit-a-pull-request) include both commands.
 
 ## Live preview while editing
 
@@ -55,7 +53,7 @@ npm run dev
 
 Open the local URL printed in the terminal, normally [http://localhost:4321/fi/](http://localhost:4321/fi/). Use `/en/` for English. Leave the command running while you edit: saving an article updates the browser automatically. Stop the server with **Ctrl+C**.
 
-For a first edit, open `src/content/docs/fi/guides/getting-started.mdx`, change a sentence, and save. The article is at `/fi/guides/getting-started/`. The file path after `fi/`, without `.md` or `.mdx`, becomes its URL path. See the examples below when adding your own page.
+For a first edit, open `src/content/docs/fi/users/start.mdx`, change a sentence, and save. The article is at `/fi/users/start/`. The file path after `fi/`, without `.md` or `.mdx`, becomes its URL path. See the examples below when adding your own page.
 
 The FAQ's local filter works during development. Site-wide search requires a built search index, so check it using the built preview.
 
@@ -272,19 +270,30 @@ Stage the files you intended to change with `git add <file-path>` (replace the p
 
 ```sh
 git commit -m "Document companion channels"
-git push -u origin docs/your-topic
+```
+
+Push to the repository you have write access to. For contributors with access to this repository:
+
+```sh
+git push https://github.com/MeshCore-Finland/mc-fi-web.git docs/your-topic
+```
+
+For fork contributors, replace `YOUR_USERNAME` with your GitHub username:
+
+```sh
+git push https://github.com/YOUR_USERNAME/mc-fi-web.git docs/your-topic
 ```
 
 Use your own commit message and the branch name you chose during setup. The first push may ask you to authenticate with GitHub; use your usual GitHub authentication method.
 
-Open a pull request on GitHub with **base repository `MeshCore-Finland/mc-fi-web` and base branch `dev`**, selecting your contribution branch as the head. Fork contributors select their fork as the head repository. Target this branch while it is the working base; its history is independent from the old site.
+Open a pull request on GitHub with **base repository `MeshCore-Finland/mc-fi-web` and base branch `dev`**, selecting your contribution branch as the head. Fork contributors select their fork as the head repository.
 
 Describe what changed, how you checked it, and any English translation review still needed. Subsequent commits pushed to the same branch update the PR.
 
-Cloudflare previews branches pushed to the main repository; Vercel remains configured for external PR previews. After deployment finishes, use the preview link in the PR's deployment check or bot comment. The shared [dev preview](https://dev.mc-fi-web.pages.dev/fi/) shows the latest dev branch, not your unmerged contribution. Check that CI passes before asking for review. Deployment configuration and the eventual production cutover are maintained separately.
+Cloudflare previews branches pushed to this repository; Vercel provides fork PR previews. After deployment finishes, use the preview link in the PR's deployment check. The shared [dev preview](https://dev.mc-fi-web.pages.dev/fi/) shows the latest dev branch, not your unmerged contribution. Check that CI passes before asking for review. Maintainers publish reviewed changes through `main` to [meshcore.fi](https://meshcore.fi/). See [the CI guide](docs/ci.md) for deployment and validation details.
 
 ## Shared components and UI labels
 
 Site UI text lives in `src/content/i18n/fi.json` and `en.json`. Astro components use Starlight's `Astro.locals.t()`. The schema checks that both dictionaries contain the custom UI keys. Articles supply their own prose; they do not need a translation API.
 
-`CommandBuilder.astro` owns the translation and hydration of the repeater-name example. `NetworkStats.astro` wraps an expendable widget in `src/components/temporary/`; its metrics and endpoints are not a framework API. The homepage map still contains prototype locations until a real feed replaces them.
+`CommandBuilder.astro` and `CommandBuilder.tsx` render interactive command examples. `FinlandMap.astro` loads the daily repeater snapshot through `src/lib/repeater-bundle.ts`; see [the map data guide](src/data/README.md). `NetworkStats.astro` renders homepage statistics, with its API fetch logic and styles in `src/components/temporary/`. Its repeater metric counts filtered results from a request limited to 1,000 nodes and is not a complete network total.

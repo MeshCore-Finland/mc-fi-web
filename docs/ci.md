@@ -2,6 +2,8 @@
 
 This documents the workflows in `.github/workflows/`. Trigger and job conditions apply to the workflow version available to the run; changes on a contribution branch do not replace the workflows on other branches until merged.
 
+The production website is [meshcore.fi](https://meshcore.fi/), built from `main`. Contributions target `dev`.
+
 ## Push builds
 
 Source: [`.github/workflows/push-build.yml`](../.github/workflows/push-build.yml).
@@ -43,13 +45,13 @@ Site checks concurrency is grouped by workflow and PR merge ref. A newer run can
 
 Source: [`.github/workflows/repeater-bundle.yml`](../.github/workflows/repeater-bundle.yml). Hosting, data selection and recovery are documented in [repeater-bundle.md](repeater-bundle.md).
 
-| Event                        | Exact trigger                                                                                       | `test` | `publish`                                                                               |
-| ---------------------------- | --------------------------------------------------------------------------------------------------- | ------ | --------------------------------------------------------------------------------------- |
-| Schedule                     | Daily at 06:00 `Europe/Helsinki`, including summer time; cron `0 6 * * *`                           | Runs   | Runs in the upstream repository on its default branch, after tests pass                 |
-| Manual (`workflow_dispatch`) | **Run workflow** with a selected branch or tag; no inputs                                           | Runs   | Runs only in the upstream repository with its default branch selected, after tests pass |
-| Branch push                  | Any branch, when the changed-file filter below matches                                              | Runs   | Skipped                                                                                 |
-| Tag push                     | Any tag; GitHub does not apply changed-file filters to tag pushes                                   | Runs   | Skipped                                                                                 |
-| Pull request                 | Opened, reopened, or synchronized, targeting any branch, when the changed-file filter below matches | Runs   | Skipped                                                                                 |
+| Event                        | Exact trigger                                                                                       | `test` | `publish`                                                                                    |
+| ---------------------------- | --------------------------------------------------------------------------------------------------- | ------ | -------------------------------------------------------------------------------------------- |
+| Schedule                     | Daily at 06:00 `Europe/Helsinki`, including summer time; cron `0 6 * * *`                           | Runs   | Runs in `MeshCore-Finland/mc-fi-web` on its default branch, after tests pass                 |
+| Manual (`workflow_dispatch`) | **Run workflow** with a selected branch or tag; no inputs                                           | Runs   | Runs only in `MeshCore-Finland/mc-fi-web` with its default branch selected, after tests pass |
+| Branch push                  | Any branch, when the changed-file filter below matches                                              | Runs   | Skipped                                                                                      |
+| Tag push                     | Any tag; GitHub does not apply changed-file filters to tag pushes                                   | Runs   | Skipped                                                                                      |
+| Pull request                 | Opened, reopened, or synchronized, targeting any branch, when the changed-file filter below matches | Runs   | Skipped                                                                                      |
 
 The branch-push and PR filters match changes to any of these exact paths:
 
@@ -59,7 +61,7 @@ The branch-push and PR filters match changes to any of these exact paths:
 
 Ordinary article edits do not trigger this workflow. PR filtering uses the PR's changed-file list, so exporter or workflow changes already present in a PR can keep it eligible on later pushes.
 
-`test` runs the exporter unit tests with Python 3.13. Publication requires all three conditions: repository `MeshCore-Finland/mc-fi-web`, a branch ref matching that repository's current default branch, and a scheduled or manual event. The default branch is currently `dev`; the guard follows a future default-branch change automatically. Forks and manual runs on other refs cannot publish through this workflow.
+`test` runs the exporter unit tests with Python 3.13. Publication requires all three conditions: repository `MeshCore-Finland/mc-fi-web`, a branch ref matching that repository's configured default branch, and a scheduled or manual event. GitHub's default-branch setting controls this workflow independently of the website's `main` production branch. Forks and manual runs on other refs cannot publish through this workflow.
 
 `publish` exports a complete validated snapshot, then uses `WEBSITE_MAP_DATA_UPLOAD_TOKEN` to replace `mcfi-network-data/repeaters/v1.json` in R2. Its time limit is 15 minutes. Test or export failure prevents upload and leaves the existing public snapshot available. Scheduled execution is best-effort, so 06:00 is the requested time rather than a guaranteed completion time.
 
@@ -67,7 +69,7 @@ Runs are grouped by Git ref, with cancellation of an in-progress run disabled. A
 
 ## Preview deployments and local commands
 
-Cloudflare Pages and Vercel deployment checks come from their Git integrations, outside these three Actions workflows. Production is configured to use `main`; Cloudflare provides previews for branches in the upstream repository, and Vercel provides fork previews. Provider settings determine deployment selection and PR notifications. Their site build command is `npm run build`, so broken internal links warn without blocking the preview; the separate Actions link jobs do not gate those builds.
+Cloudflare Pages builds `main` for [meshcore.fi](https://meshcore.fi/). It provides previews for branches in `MeshCore-Finland/mc-fi-web`, including the shared [dev preview](https://dev.mc-fi-web.pages.dev/fi/); Vercel provides fork previews. Their deployment checks come from Git integrations, outside these three Actions workflows. Provider settings determine deployment selection and PR notifications. Their site build command is `npm run build`, so broken internal links warn without blocking the preview; the separate Actions link jobs do not gate those builds.
 
 Local commits, merges and rebases do not trigger Actions until pushed. There are no repository-managed local Git hooks. Run `npm run build` locally, then `npm run check:links` for strict internal validation. None of the workflows listens for `repository_dispatch`, `deployment_status` or `merge_group` events.
 
