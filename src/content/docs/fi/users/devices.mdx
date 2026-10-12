@@ -12,7 +12,7 @@ Viidakkoon sukeltaessa auttaa tieto siitä, että **kaikki vaihtoehdot** jakautu
 
 | Järjestelmäpiiri | Luonne | Valmistaja |
 |:-----:|:-------|:------:|
-| **ESP32** | Monipuolinen, sähkönnälkäinen, WiFi-ominaisuudet mukana. | Expressif Systems, Kiina |
+| **ESP32** | Monipuolinen, sähkönnälkäinen, WiFi-ominaisuudet mukana. | Espressif Systems, Kiina |
 | **nRF52** | Yksinkertainen, virtapihi, ei WiFi-ominaisuuksia. | Nordic Semiconductor, Norja |
 
 Toinen mielessä pidettävä asia on, että mikään laite ei ole kaupasta kotiutuessaan käyttövalmis MeshCore-kumppaniradio. Saatat löytää kaupasta tuotteen, johon on valmiiksi asennettu MeshCoren kumppaniradio-ohjelmisto, mutta poikkeuksetta versio on vanha, koska kehitys on nopeata. Tuonnempana käsiteltävä [flashäys](#ohjelmiston-asennus) on MeshCore-käyttäjän kansalaistaito, joka kannattaa ottaa heti kättelyssä haltuun.
@@ -52,7 +52,7 @@ Kumppaniradioiksi virallisesti tuetut laitteet on listattu [MeshCore Flasheriss�
 * Laitteeseen **täytyy kytkeä antenni** ennen virran kytkemistä! Jos radio lähettää ilman kytkettyä antennia, antenniin johdettu virta peilautuu takaisin ja saattaa rikkoa laitteen.
 * Selaimella asentaminen edellyttää Web Serial API-tuella varustetun selaimen (Chrome / Chromium, Edge, Opera ja tuoreet Firefox-selaimet).
 * USB-kaapelisi täytyy olla ns. datakaapeli, ei pelkkä latauskaapeli.
-* Linux-käyttäjien täytyy lisätä oma käyttäjänsä ryhmään, jonka hallinnassa USB Serial -portti on (usein *dialout* tai *uucp*) jotta flashäys onnistuisi.
+* Linux-käyttäjien täytyy lisätä oma käyttäjänsä ryhmään, jonka hallinnassa USB Serial -portti on (usein *dialout* tai *uucp*), jotta flashäys onnistuisi.
 * Jos ei vaan onnistu, kannattaa kokeilla vaihtaa kaapeli toiseen tai kokeilla muita tietokoneen USB-portteja.
 :::
 
@@ -66,7 +66,7 @@ Aukeava sivu on viimeinen ennen asennuksen käynnistymistä. Sivulla voi valita 
 
 ![ESP32-laitteen flashaystoiminnot](../../../../assets/screenshots/users/en/flasher-choices-esp.png)
 
-Molemmissa tapauksissa ensimmäinen ohjelmiston asennus kannattaa tehdä 'puhtaalta pöydältä', eli käyttää *Erase flash* / *Erase device* -toimintoa. Sensijaan jatkossa, kun päivität laitteen uusia ohjelmistoversiota, tätä ei tule käyttää, ettet menetä omia asetuksiasi.
+Molemmissa tapauksissa ensimmäinen ohjelmiston asennus kannattaa tehdä 'puhtaalta pöydältä', eli käyttää *Erase flash* / *Erase device* -toimintoa. Sensijaan jatkossa, kun päivität laitteen uuteen ohjelmistoversioon, tätä ei tule käyttää, ettet menetä omia asetuksiasi.
 
 Lopuksi painetaan *Flash!*. Selain avaa valintaikkunan, josta valitset oman laitteesi omaa päättelykykyä hyödyntäen. *Muodosta yhteys* vie eteenpäin, ja asennus alkaa. Muista, että asennuksen alettua sitä ei missään nimessä saa keskeyttää! Asennus kestää vain kymmenisen sekuntia.
 
