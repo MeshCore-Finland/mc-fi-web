@@ -4,6 +4,12 @@ This guide is for editing the source of [meshcore.fi](https://meshcore.fi/). The
 
 Use Markdown for ordinary articles and full FAQ pages. Use MDX when you need screenshots, tabs, embedded mini-FAQs or interactive examples. You do not need to edit React components to contribute content.
 
+## License and contribution terms
+
+This project's code and content are licensed under the [MIT License](LICENSE). By submitting a contribution, you agree that it is provided under that same license. This applies to code, documentation, translations, images and other contributed material.
+
+Only submit material that you have the right to license under the MIT License. **Do not contribute if you do not agree to these terms.** Contributors are listed in [AUTHORS](AUTHORS), alphabetically by GitHub username.
+
 ## First-time setup
 
 You need Git, Node.js 24 and a text editor. This setup works on macOS, Linux and Windows; run the commands in Terminal or PowerShell.

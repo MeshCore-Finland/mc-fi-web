@@ -10,6 +10,12 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for installation, local previews, articl
 
 Start contributions from `dev` and submit pull requests to `dev`. Maintainers publish reviewed changes through `main`.
 
+## License and authors
+
+The project's code and content are licensed under the [MIT License](LICENSE). See [AUTHORS](AUTHORS) for contributors.
+
+By submitting a contribution, you agree to license it under the same MIT License. Do not contribute if you do not agree to these terms. See [the contribution terms](CONTRIBUTING.md#license-and-contribution-terms).
+
 ## Development
 
 Use Node 24 (`.node-version`). For installation, cloning the correct branch and submitting your first change, start with [first-time setup in CONTRIBUTING.md](CONTRIBUTING.md#first-time-setup).
