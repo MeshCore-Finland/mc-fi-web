@@ -41,7 +41,7 @@ set dutycycle 10
 
 set path.hash.mode 1
 set advert.interval 0
-set flood.advert.interval 30
+set flood.advert.interval 47
 set loop.detect moderate
 
 region put fi
@@ -58,7 +58,30 @@ clock sync
   </TabItem>
   <TabItem label="Käyttöliittymällä">
 
-Tänne tulee kuvia, paljon. Eryes lupasi.
+| Asetus | Arvo |
+|:-------|:----:|
+| *Name & Location ...* | |
+| ` > `  Name | (nimi) |
+| ` > `  Latitude | (koordinaatti) |
+| ` > `  Longitude | (koordinaatti) |
+| *Access ...* | |
+| ` > `  Admin password | (hallinnan salasana) |
+| *Radio settings ...* | |
+| ` > `  Preset | EU/UK (Narrow) |
+| ` > `  Duty Cycle (%) | 10 |
+| *Advertising ...* | |
+| ` > `  Advert interval (minutes) | 0 |
+| ` > `  Flood advert interval (hours) | 47 |
+| *Regions ...* | |
+| ` > `  Default region | fi |
+| ` > `  Home region | fi |
+| ` > `  Unscoped traffic → Allow Flood | ☑ / ☐ |
+| ... + Add region | |
+| ` > `  Region name | fi |
+| ` > `  fi → Allow Flood | ☑ |
+| ... lisää muut alueet samoin | |
+| *Advanced Settings ...* | |
+| ` > `  Repeat | ☑ |
 
   </TabItem>
 </Tabs>
@@ -70,28 +93,27 @@ Tänne tulee kuvia, paljon. Eryes lupasi.
   *  `fi`, joka on koko Suomen kattava aluekoodi
   *  mahdolliset oman alueen aluekoodit, näitä ei ole vielä juurikaan käytössä, mutta pyritään sopimaan alueellisesti
   * jos olet alueiden rajalla, voi tulla kyseeseen lisätä useamman alueen koodeja
-  * `offgrid`-aluekoodin voi lisätä toistimiin, jotka toimivat ilman jatkuvaa verkkovirtaa eli niissä on joko sisäiset akut tai ulkoinen akkuvarmistus (UPS).
+  * `offgrid`-aluekoodin voi lisätä toistimiin, jotka toimivat ilman jatkuvaa verkkovirtaa eli niissä on joko sisäiset akut tai ulkoinen akkuvarmistus (UPS). Tämä asetetaan, jotta offgrid-meshin suorituskykyä voidaan tarvittaessa testata.
 * Default region -asetus (`set region default`) määrittää vain sen, millä toistimen omat mainostukset (advert) lähetetään. Se ei vaikuta millään tavalla toistettavaan liikenteeseen. Etelä-Suomessa suosittelemme asettamaan sen `fi`-alueeksi, muualla sitä ei tällä hetkellä (lokakuu 2026) tarvitse asettaa.
 * **Regioneiden osalta tärkeintä tässä vaiheessa on, että `fi` on lisättynä**. Lisää aiheesta <DocLink page="repeaters/regions">Aluerajaukset toistimissa</DocLink> -sivulta.
-
 
 ## Mainostamisesta (adverts)
 
 Toistimet mainostavat olemassaoloaan tietyin väliajoin. Mainostuksia on kahta eri tyyppiä ja molemmat voi myös laittaa pois päältä:
-* **Zero-hop advert**, joka leviää naapuritoistimille ja suoraan kuulolla oleville kumppaneille 0-240 minuutin välein. Sitä ei toisteta eteenpäin. Tämä rasittaa vain paikallista radioaikaa sen yhden advert-paketin verran.
+* **Zero-hop advert**, joka leviää naapuritoistimille ja suoraan kuulolla oleville kumppaneille 0-240 minuutin välein. Sitä ei toisteta eteenpäin. Tämä rasittaa vain paikallista radioaikaa sen yhden advert-paketin verran. Kulkuneuvon mukana liikkuvan toistimen tapauksessa suorat mainokset saattavat olla käyttökelpoinen vaihtoehto.
 * **Flood advert**, joka leviää niin pitkälle kuin meshi (aluekoodit huomioon ottaen) yltää. Niitä lähetetään 3-168 tunnin välein (oletusarvo 47 h), ellei niitä ole poistettu käytöstä. Flood advertit näin ollen kuluttavat merkittävästi radioaikaa meshissä. Monissa verkoissa mainostukset muodostavatkin valtaosan meshin liikenteestä ja siksi niitä halutaan suitsia.
 
 :::note[Miksi toistimet mainostavat?]
 Toistimen mainostusviestejä **ei tarvita mihinkään itse verkon toimivuuden kannalta**. Verkko toimii yhtä hyvin tai huonosti riippumatta siitä, mainostaako yksikään toistin itseään vai ei. Ne ovat olemassa vain verkon toiminnan seurantaa ja erilaisia karttapalveluita varten.
 :::
 
-Toisaalta koska keräämme verkosta jatkuvasti tietoa ns. observereilla, niin mainostukset ovat erinomainen tapa nähdä, mikä on tietyn toistimen kuuluvuus. Lisäksi toistimen päätyminen MeshMapper, CoreScope yms. kartoille vaatii, että sijainnin sisältävä mainostus on kuultu observer-verkostossa.
+Toisaalta koska keräämme verkosta jatkuvasti tietoa ns. observereilla, niin mainostukset ovat erinomainen tapa nähdä, mikä on tietyn toistimen kuuluvuus. Lisäksi toistimen päätyminen MeshMapper, CoreScope yms. kartoille vaatii, että sijainnin sisältävä mainostus on kuultu observer-verkostossa. Lisäksi alueella, jolla ei ennestään ole MeshCore-käyttäjiä, pieni mainostaminen radioaalloilla ei ole pahitteeksi, jos joku muu sattuu kokeilemaan kumppanilaitetta.
 
-Lisäksi alueella, jolla ei ennestään ole MeshCore-käyttäjiä, pieni mainostaminen radioaalloilla ei ole pahitteeksi, jos joku muu sattuu kokeilemaan kumppanilaitetta.
+Jos haluat käyttää mainoksia toistimen elonmerkkeinä itsellesi, yksi hyvä ratkaisu on määritellä mainosväliksi jotain väliltä 49 - 71 tuntia. Tällöin mainokset lähtevät aina eri vuorokaudenaikoina – mainostat myös niille, jotka olisivat tasavuorokautisen mainosaikasi aikaan muualla. Oma sovelluksesi näyttää viimeisimmän kuullun mainoksen ajankohdan; jos viimeisimmästä mainoksesta on yli kolme päivää, saattaa olla että jokin on vialla. Jos siitä on yli kuusi päivää, on syytä tarkastaa toistimen tilanne.
 
 ## Paikalliset aluekoodit (rajaukset)
 
-Paikallisesti voidaan sopia esimerkiksi, että perustetaan oma avoin kanava (``#tre-admin``) toistinten ylläpitäjien viestintään, ja määritellään tälle oma aluerajaus (niin ikään ``tre-admin``), jota käytetään kyseisellä kanavalla oletusrajauksena (default scope). Näin viestit eivät turhan tähden rasita koko fi-aluetta. Samaa periaatetta voi soveltaa myös muuhun paikalliseen viestintään.
+Paikallisesti voidaan sopia esimerkiksi, että perustetaan oma avoin kanava (``#tmp-admin``) toistinten ylläpitäjien viestintään, ja käytetään kanavalla oletusrajauksena paikallista aluerajausta (``tmp``). Näin viestit eivät turhan tähden rasita koko fi-aluetta. Samaa periaatetta voi soveltaa myös muuhun paikalliseen viestintään.
 
 Lisää aiheesta <DocLink page="repeaters/regions">Aluerajaukset toistimissa</DocLink> -sivulta.
 
@@ -102,3 +124,19 @@ Jokaisella toistimella on uniikki julkinen avain, joka on 64 tavua (128 heksamer
 Kartoissa ja analyysityökaluissa 1 tavun polut aiheuttavat suurta päänvaivaa, koska sillä on vain 254 mahdollista arvoa (`00` ja `FF` ovat kiellettyjä) eli on väistämätöntä, että maailmalla, Suomessa ja jossain kohtaa samassa kylässäkin on kaksi toistinta, jotka sattuvat omaamaan saman ensimmäisen tavun. Tällöin reittien arviointi ja esim. kuuluvuuskarttojen tekeminen menee hankalaksi, kun toistimen ID ei ole yksiselitteinen.
 
 `path.hash.mode`-asetus määrittää tämän käytetyn ID:n pituuden. Se on historiallisista syistä edelleen vakiona 1 tavu (asetus `0`), mutta suosittelemme *erittäin vahvasti*, että käytetään 2 tavun (4 heksan) ID:tä, jolloin asetus on `1`. Tämä sallii jo yli 64 tuhatta eri uniikkia prefixiä. Toistimen omistaja voi myös halutessaan laittaa suoraan asetukseksi `2`, jolloin ID on kolmitavuinen (6 heksaa).
+
+## Toistimen etähallinnasta meshin yli
+
+Asennuspaikalla olevan toistimen asetusten hallinnointi onnistuu meshin yli, mutta varminta ja meshin kannalta säästeliäintä on hakeutua radiokantaman päähän laitteesta ja komentaa sitä suoralla yhteydellä.
+
+Toistimen hallinta aloitetaan valitsemalla toistin kontaktilistalta ja painamalla *Manage*-hammasrataskuvaketta. Kirjautuminen tapahtuu salasanalla.
+
+Meshin yli toimiessa fiksuinta on määritellä aluksi **polku** jota pitkin paketit kulkevat edestakaisesti. Jos et määrittele polkua käsin, kirjautumisviestisi kulkeutuu koko meshiin ennen kuin kumppaniradio saa vastauksen ja ottaa käyttöön vastauspolun.
+
+Polku määritellään alla esitellyssä näkymässä. + -painikkeella lisätään toistimia polkuun. Voit myös itse kirjoittaa kenttään julkisen avaimen ensimmäiset tavuparit pilkuilla eroteltuna. Polku määritetään vain 'menosuuntaan'.
+
+![Polun määritys valikossa](../../../../assets/screenshots/repeaters/en/repeater-set-path.png)
+
+![Polun määritys -näkymä](../../../../assets/screenshots/repeaters/en/repeater-path-view.png)
+
+Lähietäisyydelle hakeutuminen hallinnointia varten paljastaa virallisen sovelluksen puutteen: yhteydenmuodostus lähettää väkisin floodattavan paketin, mutta kun toistimen vastaus tulee suorana, toiminta muuttuu suoraksi (polun kohdalla lukee *Direct*.) Tällöin voit olla varma, ettei asetusten työstö aiheuta ylimääräistä kuormaa meshille.
