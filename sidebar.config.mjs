@@ -42,6 +42,7 @@ export default [
 //      'tools/corescope',
 //      'tools/meshmapper',
       'tools/observers',
+      'tools/mqtt',
     ],
   },
   {
