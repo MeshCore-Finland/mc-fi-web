@@ -16,4 +16,4 @@ Prefer PNG for crisp interface text, crop unnecessary margins, and retain enough
 
 Use the `Screenshot` component with descriptive alt text and a localized caption. Its default display width is 360px for phone screens; use `width={720}` for desktop UI. Image dimensions preserve layout space, loading is lazy, and clicking the image or caption link opens the original.
 
-See the authoring example in the root README. Git LFS is deliberately not required for this prototype; reconsider storage only if the image history becomes a practical problem.
+See the [screenshot authoring example](../../../CONTRIBUTING.md#screenshots). Git LFS is not required; reconsider storage only if the image history becomes a practical problem.

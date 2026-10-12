@@ -1,6 +1,6 @@
 # Daily Finland repeater bundle
 
-A standalone exporter reads mc-shark's public native node catalog and publishes a compact snapshot for the MeshCore Finland homepage and future maps. It runs independently of website builds. No changes to the backend API or ClickHouse schema are required.
+A standalone exporter reads mc-shark's public native node catalog and publishes a compact snapshot for maps on [meshcore.fi](https://meshcore.fi/). It runs independently of website builds.
 
 ## Export locally
 
@@ -14,7 +14,7 @@ gzip -dc /tmp/repeaters-v1.json.gz
 
 Default source: `https://shark-api.meshcore.fi/api/v1/nodes?includeActivity=false&limit=25000`. Override with `--api-base`. Follow all `next_cursor` pages. Omit `scope`: the combined catalog includes locally heard nodes and imports; `scope=catalog` excludes locally heard identities. Include `role=repeater` with `origin_country_code` FI or AX (Åland), finite valid coordinates, and a full public key. Other roles, unknown countries and missing/invalid coordinates are excluded. The backend owns coordinate-country classification and identity precedence. Names fall back to the first 12 public-key characters if absent. No observation-age cutoff is applied, and inclusion does not imply a node is online.
 
-The contract is version 1 with UTC `generatedAt` and `nodes: [{id, name, lat, lon}]`. `id` is the normalized full public key. Nodes are sorted by ID. The browser contract and loader live in `src/lib/repeater-bundle.ts` on `dev`.
+The contract is version 1 with UTC `generatedAt` and `nodes: [{id, name, lat, lon}]`. `id` is the normalized full public key. Nodes are sorted by ID. The browser contract and loader live in `src/lib/repeater-bundle.ts`.
 
 ## Hosting and publication
 
@@ -45,7 +45,7 @@ Create a Cloudflare Cache Rule matching the hostname and `/repeaters/` path: mak
 
 See [CI workflows and triggers](ci.md#publish-finland-repeater-bundle) for the exact events, changed-file filters and publication conditions.
 
-The **Publish Finland repeater bundle** workflow runs daily at 06:00 **Europe/Helsinki**, including summer time, from the repository's default branch (currently `dev`). Use its **Run workflow** button with that branch selected for an immediate refresh. Publication follows the configured default branch automatically; it does not depend on Cloudflare's production branch. Pushes/PRs run exporter tests only; they never publish. Forks and manual runs on other branches cannot publish through this workflow. Keep the workflow on the default branch when changing the branch structure.
+The **Publish Finland repeater bundle** workflow runs daily at 06:00 **Europe/Helsinki**, including summer time, from the repository's configured default branch. Use its **Run workflow** button with that branch selected for an immediate refresh. This GitHub setting is independent of Cloudflare's `main` production branch. Pushes/PRs run exporter tests only; they never publish. Forks and manual runs on other branches cannot publish through this workflow. The workflow must be present on the default branch for scheduled execution.
 
 GitHub schedules are best-effort and public repositories disable them after 60 days without repository activity. A quiet repository needs its scheduled workflow re-enabled; do not generate artificial commits to bypass that behavior.
 

@@ -1,8 +1,14 @@
-# MeshCore Finland — Starlight base
+# MeshCore Finland website
 
-Astro + Starlight + MDX with a custom homepage, documentation sidebar and symmetric `/fi/` and `/en/` URLs. Finnish is the default content language; `/` redirects to `/fi/`.
+**Looking for MeshCore guides, FAQs or local communities? Visit [meshcore.fi](https://meshcore.fi/).**
 
-Work is on the independent-history branch `dev`, published to `upstream`. Production builds from `main`, which contains the old live site until the one-time replacement. Content contributions target `dev`.
+This is the source repository for the MeshCore Finland website. It contains the site's Markdown/MDX content, components and build automation. The site uses Astro and Starlight, with Finnish and English URLs under `/fi/` and `/en/`. Finnish is the default content language; `/` redirects to `/fi/`.
+
+## Contributing
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for installation, local previews, article and FAQ conventions, workflow tabs, screenshots, translation review and pull requests. Content authors can work in Markdown/MDX without editing React components.
+
+Start contributions from `dev` and submit pull requests to `dev`. Maintainers publish reviewed changes through `main`.
 
 ## Development
 
@@ -26,28 +32,20 @@ PRs targeting `dev` or `main` also run an advisory `external-links` check on the
 
 See [CI workflows and triggers](docs/ci.md) for the exact events, branch and file filters, job conditions, required checks, and explanations of duplicate or skipped checks.
 
-## Contributing
+## Branches and deployments
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) for copyable article, subsection, FAQ, workflow-tab and screenshot examples, optional review dates, and PR instructions. Authors work in Markdown/MDX; React editing is not required.
+- **`main`** is the production branch. Cloudflare Pages builds it for [meshcore.fi](https://meshcore.fi/).
+- **`dev`** is the integration branch for contributions. Its shared previews are [Finnish](https://dev.mc-fi-web.pages.dev/fi/) and [English](https://dev.mc-fi-web.pages.dev/en/).
 
-Matching document paths associate translations. Starlight handles missing translations, UI dictionaries, language navigation and synchronized tabs. `DocLink` is a thin MDX convenience over Astro's native locale-aware URL helper. `Screenshot` uses Astro's image processing. Custom UI labels live in the Starlight i18n collection.
+Cloudflare provides previews for branches in this repository. Vercel provides fork pull-request previews. Use a contribution's deployment link to review its changes; the shared `dev` preview shows changes already integrated into `dev`.
 
-## Preview
+## Repository layout
 
-[Finnish preview](https://dev.mc-fi-web.pages.dev/fi/) · [English preview](https://dev.mc-fi-web.pages.dev/en/)
+- `src/content/docs/fi/` and `src/content/docs/en/`: website articles and FAQs. Matching paths associate translations; missing English pages use Finnish fallback content.
+- `src/content/i18n/`: translated interface labels.
+- `sidebar.config.mjs`: shared navigation groups and page order, imported by `astro.config.mjs`.
+- `src/components/`: homepage, article components and interactive features.
+- `src/assets/screenshots/`: screenshots stored with the content; see the [image conventions](src/assets/screenshots/README.md).
+- `src/data/` and `scripts/export_repeaters.py`: map geometry and the daily repeater snapshot; see the [map data guide](src/data/README.md) and [exporter and hosting guide](docs/repeater-bundle.md).
 
-Cloudflare builds `main` for production and previews pushes to `dev`. Vercel provides external pull-request previews.
-
-## Current content and temporary features
-
-The general FAQ was carried over from old `dev` at `faedef5`; Finnish answers were translated and edited. Exact technical claims and app instructions still need editorial review. No review dates have been invented for this material.
-
-The repeater-name guide demonstrates native synchronized Web / Mobile / CLI tabs and a command builder. Switching language may reset the tab selection. JavaScript is required for interactive features. Full FAQ pages use `faq: true` and ordinary `##` question headings, with optional stable anchors such as `[#contacts]`. They work in Markdown or MDX and each category gets its own local filter; Pagefind searches all categories. The explicit `FAQ` and `Question` components remain available for mini-FAQs embedded in ordinary MDX articles.
-
-The Finland silhouette includes Åland and is hidden on mobile. Its repeater dots load in the browser from the daily mc-shark bundle hosted in R2, independently of site builds. See [the map data description](src/data/README.md).
-
-`NetworkStats.astro` and `src/components/temporary/` contain the disposable stats widget, including its fetch logic and styles. It retains the previous API endpoints, geographical bounds and 1,000-node limit; its repeater metric is not a complete network total. Replace the wrapper and temporary directory during the planned overhaul.
-
-## Production replacement
-
-When the new site is ready, preserve the old `main` tip as `legacy_v1`, then replace `main` with the accepted `dev` history. Production remains configured to build from `main`. The histories are independent, so this is a deliberate branch replacement rather than a normal merge. Use a lease when replacing the remote branch so intervening updates cannot be overwritten accidentally. The site is replaced in one go; no legacy hash-route compatibility layer is included.
+Full FAQ pages use `faq: true` and ordinary `##` question headings. Each page gets a local text filter, and site-wide search indexes its questions and answers. The `FAQ` and `Question` components support mini-FAQs inside other MDX pages. Screenshots, synchronized workflow tabs and interactive components can be embedded in MDX; examples are in [CONTRIBUTING.md](CONTRIBUTING.md).
