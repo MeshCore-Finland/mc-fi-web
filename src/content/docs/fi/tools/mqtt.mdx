@@ -1,0 +1,28 @@
+---
+title: MQTT ja työkalujen ekosysteemi
+description: MQTT-brokeri – mitä se tekee ja minne tieto kulkee
+---
+
+import DocLink from '@components/DocLink.astro';
+
+Suomessa on julkinen MQTT-brokeri, johon toivomme tarkkailijoiden syöttävän havaintojaan. Tarkkailijoista lisää <DocLink page="tools/observers">niiden omassa osiossa </DocLink>.
+
+Tarkkailijoita varten ajamme paranneltua versiota MeshCore MQTT-brokerista. Muutoksia ovat mm.:
+* IATA-filtteröinti
+* Estolistat
+
+Pääbrokeri on Mosquitto, jonka kautta paketit päätyvät seuraaviin työkaluihin / palveluihin:
+* [CoreScope](https://corescope.meshcore.fi) - Pakettien selailu ja haku, kartta, analyysityökaluja moneen lähtöön
+* [MeshMapper](https://meshmapper.net/) - MeshCoren maailmanlaajuinen kuuluvuuskartta
+* [Beacon](https://analyzer.meshmapper.net/) - MeshMapperin pakettianalysaattori
+
+Lisäämme lähitulevaisuudessa ainakin MeshMapperille oman osion.
+
+## Miten lähetän paketteja brokerille?
+
+Ohjeet löydät <DocLink page="tools/observers">Tarkkailijat-osiosta</DocLink>.
+
+## Saanko pääsyn MQTT-paketteihin omaa työkaluani varten?
+
+Kyllä, kunhan työkalusi tulevat myös julkisesti saataville. Kysy lisää *Vaizki*:lta Discordissa tai Matrixissa.
+
