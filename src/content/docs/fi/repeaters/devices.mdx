@@ -11,7 +11,7 @@ Laitteen valinta aloitetaan toistimen käyttötarkoitus edellä. Nämä asiat ka
 
 * Tuleeko toistin paikkaan, jossa on käytettävissä kiinteät sähköt, vai toimiiko se akun ja mahdollisesti aurinkopaneelin varassa?
 
-* Halutaanko toistimesta myös Observer eli meshin toiminnasta ja viestinnästä tietoa keräävä laite? Nämä voi tietyissä tapauksissa yhdistää samaan laitteeseen.
+* Halutaanko toistimesta myös **tarkkailija** (*Observer*) eli meshin toiminnasta ja viestinnästä tietoa keräävä laite? Nämä voi tietyissä tapauksissa yhdistää samaan laitteeseen.
 
 * Tuleeko toistin paikkaan, jossa ohjelmiston päivitys on mahdollista suorittaa USB-kaapelin yli, vai täytyykö päivitykset hoitaa langattomasti?
 
@@ -27,15 +27,15 @@ Aurinkopaneelin hyödyntäminen on helpointa, jos laitteessa on valmis aurinkopa
 Aurinkopaneelilla toimivat valmisrakenteiset toistimet on usein mitoitettu Keski-Euroopan ja tropiikin olosuhteisiin. Suomen talvessa aurinkopaneelin tuottama teho voi jäädä liian pieneksi ja akku tyhjenee. Tällöin toistin sammuu ja sen uudelleenkäynnistyminen voi olla epävarmaa. Lisäämme tietoa aurinkopaneelien mitoituksesta ja akkujen kapasiteetista myöhemmin.
 :::
 
-## Observer-toistin -yhdistelmä
+## Tarkkailija-toistin -yhdistelmä
 
-<DocLink page="tools/observers">Observer</DocLink>-toiminnallisuus toistimen yhteydessä edellyttää käytännössä virtasyöppöä laitemallia ja Internet-yhteyttä WiFillä. Näin ollen laitteessa täytyy olla kiinteä virransyöttö sekä WiFi-tuki, joka on tarjolla lähinnä ESP32-laitteissa. Laitteelle täytyy myös löytyä tuki [Gessamanin observer](https://observer.gessaman.com/) -ohjelmistolle.
+<DocLink page="tools/observers">Tarkkailija</DocLink>-toiminnallisuus toistimen yhteydessä edellyttää käytännössä virtasyöppöä laitemallia ja Internet-yhteyttä WiFillä. Näin ollen laitteessa täytyy olla kiinteä virransyöttö sekä WiFi-tuki, joka on tarjolla lähinnä ESP32-laitteissa. Laitteelle täytyy myös löytyä tuki [Gessamanin observer](https://observer.gessaman.com/) -ohjelmistolle.
 
-Myös aiemmin mainittu OpenHop Repeater -ohjelmisto tukee Observer-toiminnallisuutta.
+Myös aiemmin mainittu OpenHop Repeater -ohjelmisto osaa toimia tarkkailijana.
 
 ## Toistin hankalassa paikassa
 
-Toistimen ohjelmistoa joutuu päivittämään ainakin silloin tällöin, koska MeshCore kehittyy nopeasti. Hankalaan paikkaan asennetun toistimen voi päivittää langattomasti. Tähän kannattaa varautua ennalta mm. asentamalla OTA-bootloader.
+Toistimen ohjelmistoa joutuu päivittämään ainakin silloin tällöin, koska MeshCore kehittyy nopeasti. Hankalaan paikkaan asennetun toistimen voi päivittää langattomasti. Tähän kannattaa varautua ennalta mm. asentamalla OTAFIX-bootloader.
 
 * nRF52840-pohjaisilla laitteilla käytettävissä on vain Bluetooth-yhteys, jonka kantama on vaatimaton, mutta ratkaisu on varta vasten suunniteltu 'kenttäolosuhteisiin'. Näihin laitteisiin on oleellista asentaa OTAFIX-bootloader, joka parantaa päivitysten luotettavuutta sekä mahdollistaa uudet yritykset epäonnistuneen päivityksen jälkeen.
 
