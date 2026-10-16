@@ -43,6 +43,11 @@ export default defineConfig({
           label: 'Mesh Finland Discord',
           href: 'https://discord.com/invite/GHnaVAjqed',
         },
+        {
+          icon: 'matrix',
+          label: 'Meshcore Finland Matrix',
+          href: 'https://matrix.to/#/#meshcore-finland:hacklab.fi',
+        },
       ],
       customCss: ['./src/styles/site.css'],
       components: {
