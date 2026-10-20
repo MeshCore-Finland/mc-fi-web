@@ -54,7 +54,7 @@
   "app.command.copied": "Kopioitu",
   "app.command.copyFailed": "Valitse ja kopioi yllä olevat komennot.",
   "app.stats.repeaters": "Havaittuja toistimia",
-  "app.stats.packets": "Paketteja / 24 tuntia",
+  "app.stats.packets": "Paketteja",
   "app.stats.loading": "Haetaan verkon tilannetta…",
   "app.stats.updated": "Päivitetty",
   "app.stats.unavailable": "Reaaliaikaisia tietoja ei juuri nyt ole saatavilla.",

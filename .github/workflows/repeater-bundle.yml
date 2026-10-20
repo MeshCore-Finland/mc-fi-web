@@ -2,7 +2,7 @@ name: Publish Finland repeater bundle
 
 on:
   schedule:
-    - cron: '0 6 * * *'
+    - cron: '5 0 * * *'
       timezone: Europe/Helsinki
   workflow_dispatch:
 

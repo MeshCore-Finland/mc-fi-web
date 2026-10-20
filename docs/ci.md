@@ -47,14 +47,14 @@ Source: [`.github/workflows/repeater-bundle.yml`](../.github/workflows/repeater-
 
 | Event                        | Exact trigger                                                             | `test` | `publish`                                                                                    |
 | ---------------------------- | ------------------------------------------------------------------------- | ------ | -------------------------------------------------------------------------------------------- |
-| Schedule                     | Daily at 06:00 `Europe/Helsinki`, including summer time; cron `0 6 * * *` | Runs   | Runs in `MeshCore-Finland/mc-fi-web` on its default branch, after tests pass                 |
+| Schedule                     | Daily at 00:05 `Europe/Helsinki`, including summer time; cron `5 0 * * *` | Runs   | Runs in `MeshCore-Finland/mc-fi-web` on its default branch, after tests pass                 |
 | Manual (`workflow_dispatch`) | **Run workflow** with a selected branch or tag; no inputs                 | Runs   | Runs only in `MeshCore-Finland/mc-fi-web` with its default branch selected, after tests pass |
 
 Pushes and pull requests never trigger this publisher workflow. Exporter changes are tested by Site checks on PRs into `dev` or `main`.
 
 `test` runs the exporter unit tests with Python 3.13. Publication requires all three conditions: repository `MeshCore-Finland/mc-fi-web`, a branch ref matching that repository's configured default branch, and a scheduled or manual event. GitHub's default-branch setting controls this workflow independently of the website's `main` production branch. Forks and manual runs on other refs cannot publish through this workflow.
 
-`publish` exports a complete validated snapshot, then uses `WEBSITE_MAP_DATA_UPLOAD_TOKEN` to replace `mcfi-network-data/repeaters/v1.json` in R2. Its time limit is 15 minutes. Test or export failure prevents upload and leaves the existing public snapshot available. Scheduled execution is best-effort, so 06:00 is the requested time rather than a guaranteed completion time.
+`publish` exports a complete validated snapshot of eligible repeaters and the previous Finnish calendar day's hourly packet activity, then uses `WEBSITE_MAP_DATA_UPLOAD_TOKEN` to replace `mcfi-network-data/repeaters/v1.json` in R2. Its time limit is 15 minutes. Test or export failure prevents upload and leaves the existing public snapshot available. Scheduled execution is best-effort, so 00:05 is the requested time rather than a guaranteed completion time.
 
 Runs are grouped by Git ref, with cancellation of an in-progress run disabled. A manual run on a non-default branch runs `test` and skips `publish`.
 

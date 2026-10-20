@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Export a compact Finland repeater catalog using the Python standard library."""
 import argparse
-from datetime import datetime, timezone
+from datetime import datetime, time as day_time, timedelta, timezone
 import gzip
 import json
 import math
@@ -13,8 +13,11 @@ import time
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode, urlsplit
 from urllib.request import Request, urlopen
+from zoneinfo import ZoneInfo
 
 DEFAULT_API = "https://shark-api.meshcore.fi"
+DEFAULT_PACKET_API = "https://corescope.meshcore.fi"
+ACTIVITY_TIME_ZONE = "Europe/Helsinki"
 PUBLIC_KEY = re.compile(r"[0-9A-Fa-f]{64}\Z")
 
 
@@ -84,6 +87,9 @@ def make_bundle(nodes, generated_at=None):
         # AX is the backend's coordinate-derived country code for Åland.
         if node.get("role") != "repeater" or node.get("origin_country_code") not in ("FI", "AX"):
             continue
+        # Imported-only entries cannot currently be aged reliably by the API.
+        if node.get("freshness") in ("offline", "catalog_only") or node.get("catalog_only") is True:
+            continue
         lat, lon = node.get("lat"), node.get("lon")
         if not valid_coordinate(lat, -90, 90) or not valid_coordinate(lon, -180, 180) or (lat == 0 and lon == 0):
             continue
@@ -96,6 +102,47 @@ def make_bundle(nodes, generated_at=None):
         raise ValueError("Refusing to publish an empty repeater bundle")
     repeaters.sort(key=lambda node: node["id"])
     return {"version": 1, "generatedAt": generated_at or datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"), "nodes": repeaters}
+
+
+def utc_timestamp(value):
+    return value.astimezone(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+
+
+def previous_day_window(now):
+    local_zone = ZoneInfo(ACTIVITY_TIME_ZONE)
+    today = now.astimezone(local_zone).date()
+    start = datetime.combine(today - timedelta(days=1), day_time.min, local_zone)
+    end = datetime.combine(today, day_time.min, local_zone)
+    return start.astimezone(timezone.utc), end.astimezone(timezone.utc)
+
+
+def packet_activity(api_base, now, fetch=fetch_page):
+    start, end = previous_day_window(now)
+    query = urlencode({"from": utc_timestamp(start), "to": utc_timestamp(end)})
+    data = fetch(f"{api_base.rstrip('/')}/api/analytics/rf?{query}")
+    if not isinstance(data, dict) or not isinstance(data.get("packetsPerHour"), list):
+        raise ValueError("Invalid hourly packet activity")
+    counts = {}
+    for row in data["packetsPerHour"]:
+        if not isinstance(row, dict) or not isinstance(row.get("hour"), str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}", row["hour"]):
+            raise ValueError("Invalid packet activity hour")
+        hour = datetime.strptime(row["hour"], "%Y-%m-%dT%H").replace(tzinfo=timezone.utc)
+        count = row.get("count")
+        if not isinstance(count, int) or isinstance(count, bool) or count < 0 or hour in counts:
+            raise ValueError("Invalid packet activity count")
+        counts[hour] = count
+    hourly = []
+    hour = start
+    while hour < end:
+        hourly.append({"start": utc_timestamp(hour), "count": counts.get(hour, 0)})
+        hour += timedelta(hours=1)
+    return {
+        "date": start.astimezone(ZoneInfo(ACTIVITY_TIME_ZONE)).date().isoformat(),
+        "timeZone": ACTIVITY_TIME_ZONE,
+        "from": utc_timestamp(start),
+        "to": utc_timestamp(end),
+        "hourly": hourly,
+    }
 
 
 def write_bundle(bundle, output):
@@ -118,9 +165,12 @@ def write_bundle(bundle, output):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--api-base", default=DEFAULT_API)
+    parser.add_argument("--packet-api-base", default=DEFAULT_PACKET_API)
     parser.add_argument("--output", default="/tmp/repeaters-v1.json.gz")
     args = parser.parse_args()
-    bundle = make_bundle(catalog_nodes(args.api_base))
+    now = datetime.now(timezone.utc)
+    bundle = make_bundle(catalog_nodes(args.api_base), utc_timestamp(now))
+    bundle["packetActivity"] = packet_activity(args.packet_api_base, now)
     data = write_bundle(bundle, args.output)
     print(f"Exported {len(bundle['nodes'])} repeaters, {len(data)} gzip bytes, generated {bundle['generatedAt']}")
 

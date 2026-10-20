@@ -54,7 +54,7 @@
   "app.command.copied": "Copied",
   "app.command.copyFailed": "Select and copy the commands above.",
   "app.stats.repeaters": "Observed repeaters",
-  "app.stats.packets": "Packets / 24 hours",
+  "app.stats.packets": "Packets",
   "app.stats.loading": "Loading network activity…",
   "app.stats.updated": "Updated",
   "app.stats.unavailable": "Live data is temporarily unavailable.",
