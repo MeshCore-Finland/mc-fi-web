@@ -5,16 +5,6 @@ on:
     - cron: '0 6 * * *'
       timezone: Europe/Helsinki
   workflow_dispatch:
-  push:
-    paths:
-      - scripts/export_repeaters.py
-      - scripts/test_export_repeaters.py
-      - .github/workflows/repeater-bundle.yml
-  pull_request:
-    paths:
-      - scripts/export_repeaters.py
-      - scripts/test_export_repeaters.py
-      - .github/workflows/repeater-bundle.yml
 
 permissions:
   contents: read
