@@ -2,6 +2,9 @@
 // Temporary widget. Its endpoints, metric logic and styles live in temporary/.
 // Replace this wrapper and that directory together during the stats overhaul.
 import Widget from './temporary/NetworkStats';
+import { DEFAULT_REPEATER_BUNDLE_URL } from '../lib/repeater-bundle';
+const bundleUrl =
+  import.meta.env.PUBLIC_REPEATER_BUNDLE_URL || DEFAULT_REPEATER_BUNDLE_URL;
 const t = Astro.locals.t;
 const labels = {
   repeaters: t('app.stats.repeaters'),
@@ -12,4 +15,9 @@ const labels = {
 };
 ---
 
-<Widget labels={labels} locale={Astro.currentLocale!} client:visible />
+<Widget
+  labels={labels}
+  locale={Astro.currentLocale!}
+  bundleUrl={bundleUrl}
+  client:visible
+/>
