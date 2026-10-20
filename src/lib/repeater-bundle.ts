@@ -1,4 +1,7 @@
-/** Shared wire contract and loader for the homepage and future maps. */
+/** Shared wire contract and loader for repeater maps and statistics. */
+export const DEFAULT_REPEATER_BUNDLE_URL =
+  'https://data.meshcore.fi/repeaters/v1.json';
+
 export interface RepeaterLocation {
   id: string;
   name: string;
@@ -9,11 +12,61 @@ export interface RepeaterBundle {
   version: 1;
   generatedAt: string;
   nodes: RepeaterLocation[];
+  packetActivity?: PacketActivity;
+}
+export interface PacketActivity {
+  date: string;
+  timeZone: 'Europe/Helsinki';
+  from: string;
+  to: string;
+  hourly: { start: string; count: number }[];
 }
 
 const bundles = new Map<string, Promise<RepeaterBundle>>();
 function record(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function parsePacketActivity(value: unknown): PacketActivity {
+  if (
+    !record(value) ||
+    typeof value.date !== 'string' ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(value.date) ||
+    !Number.isFinite(Date.parse(value.date)) ||
+    new Date(value.date).toISOString().slice(0, 10) !== value.date ||
+    value.timeZone !== 'Europe/Helsinki' ||
+    typeof value.from !== 'string' ||
+    typeof value.to !== 'string' ||
+    !/^\d{4}-\d{2}-\d{2}T\d{2}:00:00Z$/.test(value.from) ||
+    !/^\d{4}-\d{2}-\d{2}T\d{2}:00:00Z$/.test(value.to) ||
+    !Array.isArray(value.hourly)
+  )
+    throw new Error('Invalid packet activity');
+  const start = Date.parse(value.from);
+  const hours = (Date.parse(value.to) - start) / 3_600_000;
+  if (![23, 24, 25].includes(hours) || value.hourly.length !== hours)
+    throw new Error('Invalid packet activity period');
+  const hourly = value.hourly.map((hour: unknown, index: number) => {
+    const expected = new Date(start + index * 3_600_000)
+      .toISOString()
+      .replace('.000Z', 'Z');
+    if (
+      !record(hour) ||
+      hour.start !== expected ||
+      typeof hour.count !== 'number' ||
+      !Number.isSafeInteger(hour.count) ||
+      hour.count < 0
+    )
+      throw new Error('Invalid packet activity hour');
+    return { start: expected, count: hour.count };
+  });
+  return {
+    date: value.date,
+    timeZone: value.timeZone,
+    from: value.from,
+    to: value.to,
+    hourly,
+  };
 }
 
 export function parseRepeaterBundle(value: unknown): RepeaterBundle {
@@ -50,10 +103,17 @@ export function parseRepeaterBundle(value: unknown): RepeaterBundle {
     ids.add(node.id);
     return { id: node.id, name: node.name, lat: node.lat, lon: node.lon };
   });
-  return { version: 1, generatedAt: value.generatedAt, nodes };
+  const bundle: RepeaterBundle = {
+    version: 1,
+    generatedAt: value.generatedAt,
+    nodes,
+  };
+  if (value.packetActivity !== undefined)
+    bundle.packetActivity = parsePacketActivity(value.packetActivity);
+  return bundle;
 }
 
-/** Concurrent maps share one request. A failed request may be retried later. */
+/** Consumers share one request. A failed request may be retried later. */
 export function loadRepeaterBundle(url: string): Promise<RepeaterBundle> {
   const existing = bundles.get(url);
   if (existing) return existing;
