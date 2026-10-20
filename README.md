@@ -32,7 +32,7 @@ npm run build
 npm run preview
 ```
 
-The build checks types, runs tests, builds Pagefind search and reports warnings for broken internal links, anchors and duplicate IDs. GitHub Actions, Cloudflare and Vercel use the same build command, so link warnings do not block PR previews. For PRs targeting `dev` or `main`, GitHub Actions runs a separate strict `links` check; requiring it in a branch ruleset blocks merging until issues are fixed. Pushes run the build without separate link jobs. Run `npm run check:links` after building to check strictly yourself. Search is available after a production build; use `preview` to evaluate it locally.
+The build checks types, runs tests, builds Pagefind search and reports warnings for broken internal links, anchors and duplicate IDs. GitHub Actions, Cloudflare and Vercel use the same build command, so link warnings do not block PR previews. For PRs targeting `dev` or `main`, GitHub Actions also runs Python exporter tests and a separate strict `links` check; requiring `build` and `links` in a branch ruleset blocks merging until issues are fixed. Only pushes to `dev` or `main` run a separate push build, without link jobs. Run `npm run check:links` after building to check strictly yourself. Search is available after a production build; use `preview` to evaluate it locally.
 
 PRs targeting `dev` or `main` also run an advisory `external-links` check on the generated site. External HTTP failures appear in its job summary and downloadable `external-link-report` artifact, with the affected URLs and source pages. Keep this check optional in branch rulesets: the merge approver decides whether a failure needs fixing or is temporary. It runs separately from preview builds.
 
