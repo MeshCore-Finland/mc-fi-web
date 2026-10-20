@@ -244,6 +244,49 @@ import settings from '@screenshots/mobile-app/en/repeater-settings.png';
 
 Add the referenced image first. The component generates responsive images and a link to the original. Default width is 360px; use `width={720}` for desktop screenshots. Localize alt text and captions. See `src/assets/screenshots/README.md` for file conventions.
 
+## Regional maps
+
+Use `RegionMap` inside any MDX article or section:
+
+```mdx
+import RegionMap from '@components/RegionMap.astro';
+
+<RegionMap region="paakaupunkiseutu" />
+```
+
+Available presets are `paakaupunkiseutu`, `vihti-lohja`,
+`hyvinkaa-riihimaki-loppi`, `kotka`, `turku` and `pirkanmaa`. Add new presets
+in `src/lib/region-maps.ts`, with a name and geographic bounds. Bounds only set
+the initial viewport and reset position. Every map includes all repeaters from
+the shared snapshot, so neighbouring repeaters stay available when panning.
+The repeater count and name list follow the visible viewport.
+Optionally set `meshmapper` to the region's MeshMapper subdomain to enable the
+coverage tab. For border areas, use an array such as `['tmp', 'finland']` to
+offer a source selector; the first entry is the default. All sources start at
+the same viewport, and each iframe loads only when first selected. Single-source
+maps have no selector. No API key is needed.
+
+Pass an optional `coverageNote` in MDX to explain local coverage limitations:
+
+```mdx
+<RegionMap
+  region="hyvinkaa-riihimaki-loppi"
+  coverageNote="Alueen mittaukset jakautuvat kahteen karttalähteeseen. Tarkista sekä TMP että FINLAND saadaksesi kattavamman kuvan."
+/>
+```
+
+The note appears only in the coverage view. Keep it in the article's language.
+Both views and each coverage source keep their state when switching.
+The reset button restores only the active view or selected source to the
+region's initial position; MeshMapper embeds reload with repeater markers hidden.
+The full-map link follows the selected source.
+
+Repeater locations reuse the homepage's daily snapshot and shared request.
+Set `PUBLIC_REPEATER_BUNDLE_URL`, or pass `bundleUrl` to the component, to test
+another endpoint. Multiple components can appear independently on one page.
+The OpenStreetMap basemap loads only when the component becomes visible.
+Keep its attribution visible and respect the [tile usage policy](https://operations.osmfoundation.org/policies/tiles/).
+
 ## Review dates and translation freshness
 
 Finnish is the source of truth. These fields record completed checks, not file edits. Quote dates in `YYYY-MM-DD` format. On Finnish articles, the optional validity date is:
