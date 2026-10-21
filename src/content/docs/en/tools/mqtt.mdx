@@ -1,0 +1,31 @@
+---
+title: MQTT and the tools ecosystem
+description: What the MQTT broker does and where the data goes.
+translationChecked: '2026-10-21'
+translationSourceHash: sha256:8aeec710a35b9ccfb9f728c5995a7b6e7cacca9844bab91dcdda9b7658183977
+---
+
+import DocLink from '@components/DocLink.astro';
+
+Finland has a public MQTT broker, and we encourage observers to send their observations to it. Read more about observers in <DocLink page="tools/observers">their own section</DocLink>.
+
+We run an enhanced version of the MeshCore MQTT broker for observers. Its changes include:
+
+- IATA filtering
+- Blocklists
+
+The main broker is Mosquitto, which distributes packets to these tools and services:
+
+- [CoreScope](https://corescope.meshcore.fi) – packet browsing and search, a map and a wide range of analysis tools.
+- [MeshMapper](https://meshmapper.net/) – worldwide MeshCore coverage mapping.
+- [Beacon](https://analyzer.meshmapper.net/) – MeshMapper's packet analyser.
+
+We plan to add a dedicated MeshMapper section in the near future.
+
+## How do I send packets to the broker?
+
+See the <DocLink page="tools/observers">observer instructions</DocLink>.
+
+## Can I access MQTT packets for my own tool?
+
+Yes, provided your tools will also be publicly available. Ask _Vaizki_ on Discord or Matrix for more information.

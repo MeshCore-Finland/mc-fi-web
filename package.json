@@ -8,6 +8,7 @@
     "check": "astro check",
     "test": "node --test tests/*.test.mjs",
     "check:links": "node scripts/check-links.mjs",
+    "check:translations": "node scripts/check-translations.mjs",
     "format": "prettier --write ."
   },
   "license": "MIT",
@@ -17,6 +18,7 @@
     "@astrojs/react": "^7.0.0",
     "@astrojs/starlight": "^0.42.5",
     "astro": "^7.3.5",
+    "leaflet": "^1.9.4",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },
@@ -24,13 +26,15 @@
   "type": "module",
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@types/leaflet": "^1.9.22",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "parse5": "^8.0.1",
     "prettier": "^3.9.9",
     "prettier-plugin-astro": "^1.1.0",
     "satteri": "^0.10.5",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "yaml": "^2.9.1"
   },
   "engines": {
     "node": ">=24"

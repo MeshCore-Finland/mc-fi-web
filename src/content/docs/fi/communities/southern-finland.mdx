@@ -4,6 +4,7 @@ description: Etelä-Suomen MeshCore-yhteisön yhteystiedot ja keskustelukanavat.
 ---
 
 import DocLink from '@components/DocLink.astro';
+import RegionMap from '@components/RegionMap.astro';
 
 
 :::note
@@ -21,17 +22,30 @@ Etelä-Suomen harrastajilla ei ole vielä omaa juttutupaa, vaan meidät löydät
 
 Pääkaupunkiseudun (Helsinki, Espoo, Vantaa ja Kauniainen) yhteisö on aktiivinen, mutta verkko vielä hieman "repaleinen". Uusia toistimia tulee, jos ei päivittäin niin ainakin viikoittain. Yhteys Viroon on pääkaupunkiseudulta hyvä, useampi toistin molemmin puolin lahtea osallistuu siihen. Tämän vuoksi PKS on eturintamassa ottamassa käyttöön `fi`-aluekoodin (region scope) toistimissa ja kanavilla.
 
+<RegionMap region="paakaupunkiseutu" />
+
 ## Vihti ja Lohja
 
 Monta harrastajaa ja toistimia hyvillä paikoilla. Yhteyttä Espooseen ei kuitenkaan ole suoraan, mutta usein liikenne kulkee Viron rannikon kautta varsinkin Vihdin ja pääkaupunkiseudun välillä.
+
+<RegionMap region="vihti-lohja" />
 
 ## Hyvinkää, Riihimäki ja Loppi
 
 Erittäin aktiivinen yhteisö rakentaa täällä verkkoa. Eivät ole vielä yhteydessä Vantaalle tai Hämeenlinnan kautta Pirkanmaalle, mutta tämä on vain ajan kysymys.
 
+<RegionMap
+  region="hyvinkaa-riihimaki-loppi"
+  coverageNote="Alueen mittaukset jakautuvat kahteen karttalähteeseen. Tarkista sekä TMP että FINLAND saadaksesi kattavamman kuvan."
+/>
+
 ## Kotka
 
 Ensimmäinen toistin Kotkassa kartalla.. siitä se lähtee. Ei vielä yhteyksiä muuhun meshiin.
+
+{/* Re-enable when Kotka has repeater locations in the shared snapshot.
+<RegionMap region="kotka" />
+*/}
 
 ## Yhteydet muualle
 

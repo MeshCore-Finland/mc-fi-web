@@ -1,5 +1,6 @@
 export const resources = {
   discord: 'https://discord.com/invite/GHnaVAjqed',
+  whatsapp: 'https://chat.whatsapp.com/LQjpxReGmkuBX1Yz36lzDE',
   // CoreScope-linkki osoittaa nyt live-karttaan
   map: 'https://corescope.meshcore.fi/#/live', // forcegit!
   flasher: 'https://flasher.meshcore.io',

@@ -244,18 +244,70 @@ import settings from '@screenshots/mobile-app/en/repeater-settings.png';
 
 Add the referenced image first. The component generates responsive images and a link to the original. Default width is 360px; use `width={720}` for desktop screenshots. Localize alt text and captions. See `src/assets/screenshots/README.md` for file conventions.
 
+## Regional maps
+
+Use `RegionMap` inside any MDX article or section:
+
+```mdx
+import RegionMap from '@components/RegionMap.astro';
+
+<RegionMap region="paakaupunkiseutu" />
+```
+
+Available presets are `paakaupunkiseutu`, `vihti-lohja`,
+`hyvinkaa-riihimaki-loppi`, `kotka`, `turku` and `pirkanmaa`. Add new presets
+in `src/lib/region-maps.ts`, with a name and geographic bounds. Bounds only set
+the initial viewport and reset position. Every map includes all repeaters from
+the shared snapshot, so neighbouring repeaters stay available when panning.
+The repeater count and name list follow the visible viewport.
+Optionally set `meshmapper` to the region's MeshMapper subdomain to enable the
+coverage tab. For border areas, use an array such as `['tmp', 'finland']` to
+offer a source selector; the first entry is the default. All sources start at
+the same viewport, and each iframe loads only when first selected. Single-source
+maps have no selector. No API key is needed.
+
+Pass an optional `coverageNote` in MDX to explain local coverage limitations:
+
+```mdx
+<RegionMap
+  region="hyvinkaa-riihimaki-loppi"
+  coverageNote="Alueen mittaukset jakautuvat kahteen karttalähteeseen. Tarkista sekä TMP että FINLAND saadaksesi kattavamman kuvan."
+/>
+```
+
+The note appears only in the coverage view. Keep it in the article's language.
+Both views and each coverage source keep their state when switching.
+The reset button restores only the active view or selected source to the
+region's initial position; MeshMapper embeds reload with repeater markers hidden.
+The full-map link follows the selected source.
+
+Repeater locations reuse the homepage's daily snapshot and shared request.
+Set `PUBLIC_REPEATER_BUNDLE_URL`, or pass `bundleUrl` to the component, to test
+another endpoint. Multiple components can appear independently on one page.
+The OpenStreetMap basemap loads only when the component becomes visible.
+Keep its attribution visible and respect the [tile usage policy](https://operations.osmfoundation.org/policies/tiles/).
+
 ## Review dates and translation freshness
 
-These optional fields record actual human checks. Quote dates in `YYYY-MM-DD` format:
+Finnish is the source of truth. These fields record completed checks, not file edits. Quote dates in `YYYY-MM-DD` format. On Finnish articles, the optional validity date is:
 
 ```yaml
 lastReviewed: '2026-10-02'
-translationChecked: '2026-10-02'
 ```
 
-`lastReviewed` means the technical instructions were checked. `translationChecked` belongs on translated articles and means someone compared the translation with its Finnish source. Dates appear below the article when present. Omit them until a check has actually happened; saving a file is not a review.
+On English articles, record a full comparison with Finnish using:
 
-When changing Finnish content, update the English equivalent or flag translation review in the PR description. A translation can remain unchanged after comparison; update its review date when appropriate. Dates are evidence of review, not an automatic claim that content is current. There is no age-based warning or publishing block.
+```sh
+npm run check:translations -- --stamp users/start --date 2026-10-21
+```
+
+Use the actual page path and comparison date. The command writes `translationChecked` and a generated `translationSourceHash` fingerprint.
+
+`lastReviewed` means a reviewer checked that the technical instructions remain valid. `translationChecked` records the last full comparison with Finnish; assisted checks count, and it does not imply human approval or technical validity. Dates appear below the article when present. Do not copy or advance the Finnish validity date during translation.
+
+Run `npm run check:translations` to find missing, unchecked, changed-source or orphaned English pages. The report is advisory; add `-- --strict` for a failing exit status when work remains. The fingerprint detects Finnish changes without being affected by review-date changes. It does not certify translation quality or track shared UI text.
+
+When changing Finnish, update English or flag remaining translation work in the PR description. Preserve contributors' improvements when updating English. Wording-only PRs keep the comparison date and fingerprint; advance both only after a full comparison, even if no edits were needed. Factual corrections should update Finnish too. There is no age-based warning or publishing block. See [the translation workflow and glossary](docs/translations.md) for complete rules, report states and shared UI checks.
 
 ## Submit a pull request
 
