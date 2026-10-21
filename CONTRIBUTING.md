@@ -28,12 +28,12 @@ Node should print `v24.x.x`. You do not need to install Astro globally, set up a
 
 ### Get the working branch
 
-Start contributions from `dev` and open pull requests against `dev`. The production branch is `main`, which Cloudflare Pages builds for [meshcore.fi](https://meshcore.fi/).
+Start contributions from `main` and open pull requests against `main`. It is the only permanent branch and the GitHub default. The production branch is `main`, which Cloudflare Pages builds for [meshcore.fi](https://meshcore.fi/).
 
-If you do not have write access, [fork the repository on GitHub](https://github.com/MeshCore-Finland/mc-fi-web/fork) first. With or without a fork, clone the source and create your contribution branch from `dev`:
+If you do not have write access, [fork the repository on GitHub](https://github.com/MeshCore-Finland/mc-fi-web/fork) first. With or without a fork, clone the source and create your contribution branch from `main`:
 
 ```sh
-git clone --branch dev https://github.com/MeshCore-Finland/mc-fi-web.git
+git clone --branch main https://github.com/MeshCore-Finland/mc-fi-web.git
 cd mc-fi-web
 git switch -c docs/your-topic
 ```
@@ -66,15 +66,15 @@ npm run build
 npm run preview
 ```
 
-Open the URL printed by `preview`. This serves the generated static site and includes site-wide search. **It does not update when you edit files**: stop it, rebuild and restart it to see later changes. Use `dev` for everyday editing.
+Open the URL printed by `preview`. This serves the generated static site and includes site-wide search. **It does not update when you edit files**: stop it, rebuild and restart it to see later changes. Use `npm run dev` for everyday editing.
 
 The build checks types, runs tests, generates the search index and reports warnings for broken internal document links, section anchors and duplicate IDs. These warnings do not fail local builds or PR previews. GitHub Actions displays them as warning annotations on pushes and pull requests.
 
-For pull requests targeting `dev` or `main`, CI also runs the Python exporter unit tests as part of `build`, plus a separate strict `links` check against the generated site. The link check fails if any issues remain, while the preview build can still succeed with warnings. Making `build` and `links` required in the target branch's ruleset blocks merging until those issues are fixed. Only pushes to `dev` or `main` run a separate push build; the separate link jobs run on PRs. Before merging, run `npm run check:links` after building to check strictly yourself. Rebasing locally does not trigger CI; pushing updates to an open PR triggers its checks. Python is needed locally only when working on the exporter; see [its guide](docs/repeater-bundle.md).
+For pull requests targeting any branch, CI also runs the Python exporter unit tests as part of `build`, plus a separate strict `links` check against the generated site. The link check fails if any issues remain, while the preview build can still succeed with warnings. Rulesets require `build` and `links` on `main` and `integration/*`, blocking merges until those issues are fixed. Only pushes to `main` run a separate push build; the separate link jobs run on PRs. Before merging, run `npm run check:links` after building to check strictly yourself. Rebasing locally does not trigger CI; pushing updates to an open PR triggers its checks. Python is needed locally only when working on the exporter; see [its guide](docs/repeater-bundle.md).
 
-On PRs targeting `dev` or `main`, the separate `external-links` check visits external HTTP/HTTPS URLs from the built pages, follows redirects and retries transient failures. It checks responses, not anchors on external sites, and skips private network addresses. Open the check's job summary or download its `external-link-report` artifact for failed URLs, source pages and HTTP/network errors. This check is **not required for merging** and does not affect preview builds; the merge approver should review failures for broken destinations, temporary outages or sites that block automated requests. Only `build` and `links` belong in the required checks.
+On PRs targeting any branch, the separate `external-links` check visits external HTTP/HTTPS URLs from the built pages, follows redirects and retries transient failures. It checks responses, not anchors on external sites, and skips private network addresses. Open the check's job summary or download its `external-link-report` artifact for failed URLs, source pages and HTTP/network errors. This check is **not required for merging** and does not affect preview builds; the merge approver should review failures for broken destinations, temporary outages or sites that block automated requests. Only `build` and `links` belong in the required checks.
 
-The [CI workflow reference](docs/ci.md) lists exact triggers and conditions for every workflow, including release PR checks and the separate scheduled bundle publisher.
+The [CI workflow reference](docs/ci.md) lists exact triggers and conditions for every workflow, including PRs into temporary integration branches and the separate scheduled bundle publisher.
 
 Optional formatting: `npm run format` formats the repository. Check `git diff` afterward and include only changes relevant to your contribution. If dependencies change after you pull updates, run `npm ci` again.
 
@@ -338,11 +338,22 @@ git push https://github.com/YOUR_USERNAME/mc-fi-web.git docs/your-topic
 
 Use your own commit message and the branch name you chose during setup. The first push may ask you to authenticate with GitHub; use your usual GitHub authentication method.
 
-Open a pull request on GitHub with **base repository `MeshCore-Finland/mc-fi-web` and base branch `dev`**, selecting your contribution branch as the head. Fork contributors select their fork as the head repository.
+Open a pull request on GitHub with **base repository `MeshCore-Finland/mc-fi-web` and base branch `main`**, selecting your contribution branch as the head. Fork contributors select their fork as the head repository.
 
 Describe what changed, how you checked it, and any English translation review still needed. Subsequent commits pushed to the same branch update the PR.
 
-Cloudflare previews branches pushed to this repository; Vercel provides fork PR previews. After deployment finishes, use the preview link in the PR's deployment check. The shared [dev preview](https://dev.mc-fi-web.pages.dev/fi/) shows the latest dev branch, not your unmerged contribution. Check that CI passes before asking for review. Maintainers publish reviewed changes through `main` to [meshcore.fi](https://meshcore.fi/). See [the CI guide](docs/ci.md) for deployment and validation details.
+Cloudflare previews branches pushed to this repository; Vercel provides fork PR previews. After deployment finishes, use the preview link in the PR's deployment check. Check that CI passes before asking for review. Maintainers squash merge reviewed PRs into `main`, which publishes [meshcore.fi](https://meshcore.fi/), and delete the contribution branch afterward. See [the CI guide](docs/ci.md) for deployment and validation details.
+
+### Larger updates with a temporary integration branch
+
+For work that needs several PRs before publication, a maintainer creates `integration/<topic>` from the latest `main` and opens a draft PR from it into `main`. Use a single topic segment, for example `integration/navigation`.
+
+1. Create each contribution branch from the integration branch and target its PR at that branch. The normal build, exporter tests, link checks and branch previews run for these PRs too.
+2. Squash merge the smaller PRs into the integration branch. Review the combined result using its preview deployment. Keep the final PR into `main` in draft until the update is ready to publish.
+3. If `main` advances, open a PR from `main` into the integration branch and use **Create a merge commit** to bring its history up to date. This avoids rewriting the shared integration branch and lets the final PR satisfy the up-to-date requirement. Merge commits are allowed on integration branches for this purpose.
+4. Once the final PR passes its required checks, squash merge it into `main`. Close or retarget any remaining dependent PRs, then delete the integration branch if GitHub has not already done so. Start future work from `main` again.
+
+`main` and `integration/*` require pull requests, up-to-date `build` and `links` checks, and block force pushes. `main` additionally requires squash merges and linear history, and blocks deletion. Integration branches allow deletion after use; they are temporary and should not be reused for later releases. The repository has no permanent `dev` branch or separate release-merge step.
 
 ## Shared components and UI labels
 
