@@ -4,6 +4,7 @@ import react from '@astrojs/react';
 import { satteri } from '@astrojs/markdown-satteri';
 import faqPages from './src/lib/faq-pages.mjs';
 import { defaultLocale, locales } from './src/lib/locales';
+import { resources } from './src/lib/site';
 import sidebar from './sidebar.config.mjs';
 
 export default defineConfig({
@@ -34,13 +35,14 @@ export default defineConfig({
       description: 'MeshCore Suomessa — yhteisö, verkko ja käytännön oppaat.',
       defaultLocale,
       locales,
+      routeMiddleware: './src/routeData.ts',
       // The dedicated src/pages/404.astro route uses our Starlight layout.
       disable404Route: true,
       social: [
         {
           icon: 'discord',
           label: 'Mesh Finland Discord',
-          href: 'https://discord.com/invite/GHnaVAjqed',
+          href: resources.discord,
         },
       ],
       customCss: ['./src/styles/site.css'],

@@ -1,9 +1,45 @@
 ---
-title: Use of Region Scopes
-description: Region scopes set limits to how far messages travel in the mesh. They are a crucial to understand.
+title: Understanding region scopes
+description: Region scopes determine how far your messages are forwarded.
+  Understanding them matters.
+translationChecked: '2026-10-21'
+translationSourceHash: sha256:1dfa986ec170634ffd4c0974c497234b75f18e23be53d9a45dd3b1fc4477d745
 ---
 
 import DocLink from '@components/DocLink.astro';
 
-Tämäkin täydentyvä on.
+In the companion radio settings, we set **fi** as the _Default Region Scope_. Let's take a closer look at what that means.
 
+LoRa radio communication travels long distances, as its name suggests. National borders do not stop messages. Occasionally, atmospheric conditions let them travel particularly far. As MeshCore grew in popularity, this blessing began to become a problem: foreign-language messages, repeater adverts and other traffic from abroad could sometimes become a nuisance.
+
+The repeater network suffered in particular, since incoming traffic consumes power and the strictly limited airtime allowed by regulations. MeshCore enthusiasts value the network's role in preparedness: it works even when mobile networks and the Internet are down. In a crisis, however, we can expect MeshCore traffic to increase. The problem described above could then leave the most important local communication buried under traffic from elsewhere.
+
+## Region scopes determine how far messages are forwarded
+
+MeshCore introduced _Region Scopes_ to address this. Finland's MeshCore community has agreed that all repeaters in the country should forward messages scoped to **fi**. Neighbouring countries' repeaters do not forward these messages, and ours do not forward theirs. This keeps messages where they belong.
+
+Scopes also allow finer control of distribution. Local mesh communities can agree on scopes for uses where limiting the area makes sense. They announce these through their own channels and possibly on MeshCore Finland's <DocLink page="communities/start">community pages</DocLink>.
+
+Messages can also be sent without any region scope, but some repeaters may decline to forward them, so delivery is not guaranteed. Remember that scopes affect **only repeater forwarding**: direct messages exchanged between companion radios within radio range are unaffected. Private messages are also outside region scoping.
+
+:::tip[To be precise...]{icon="comment-alt"}
+...MeshCore communities in neighbouring countries help one another along borders and coasts, so some repeaters do forward neighbours' messages. As a result, certain repeaters may bring foreign traffic into your area. Repeaters forwarding unscoped messages can also bring something more exotic within range of your companion radio.
+:::
+
+## Set region scopes per channel
+
+If you travel in Europe, your companion radio already has the correct radio settings: as mentioned earlier, MeshCore uses the same settings throughout Europe. Remember to use the local region scope, or send unscoped messages if that is the local practice. Otherwise, you will see other people's messages, but yours will travel no further than direct radio range.
+
+Using locally agreed scopes in Finland also means overriding the fi default. The section on channels explains how to set a scope for an individual channel.
+
+## Discover region scopes over the mesh
+
+The app's _Tools_ menu includes _Discover Regions_. It queries repeaters within your companion radio's range for their configured scopes and displays the results. When visiting an unfamiliar mesh, this is a useful way to find the scopes used locally. The same function is conveniently available in the menu on a channel's _Set Region Scope_ screen.
+
+The list does not explain what each scope is for. Abroad, however, it is a useful way to identify the national scope, which is often at the top of the list. References to a city or region may suggest that local scopes are also in use.
+
+One final tip: in the app's _Message Settings_, enable _Show Channel Message Region Scopes_. The scope name then appears below channel messages, letting you use the same scope as other users.
+
+---
+
+The next section covers channels, including how to use different region scopes.

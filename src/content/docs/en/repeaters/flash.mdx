@@ -1,9 +1,80 @@
 ---
-title: Flashays eli toistinfirmwaren asennus
-description: Oleellista tietoa, joka on hyvä tietää ennen laitteen flashaystä.
+title: Flashing the firmware
+description: Essential information to read before flashing your device.
+translationChecked: '2026-10-21'
+translationSourceHash: sha256:5660d75063f240f1205010e5e207ca16aeaff6fac1b000ea01cc7d9ad68c139b
 ---
 
 import DocLink from '@components/DocLink.astro';
+import { LinkButton } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-Sivu saa sisältöä kunhan kerkee.
+## Before you start...
 
+- **When first setting up a device for MeshCore, erase its flash memory.** Installing MeshCore firmware on a device fresh from the manufacturer, or previously used for Meshtastic, without erasing first can cause unpredictable behaviour.
+- Also **erase when switching between repeater and companion firmware**. You do not need to, and should not, erase for version updates of the same firmware: erasing deletes the device's keys, settings and databases.
+- Both flasher websites introduced here include an erase function, but you must remember to select or run it yourself.
+- Installing the OTAFIX bootloader is strongly recommended on nRF52 devices. Without it, attempting Bluetooth updates is generally not worthwhile. The flasher reminds you about this too.
+
+## Choosing firmware
+
+- **Official firmware** is built by the MeshCore team and is also called _vanilla_ firmware. It is a dependable choice for repeaters too, and almost all other unusual repeater firmware found online is based on it.
+- **A. Gessaman's “Observer firmware”** also builds on the official repeater code, adding many features, including operation as an <DocLink page="tools/observers">observer</DocLink>. It also provides a convenient web interface for settings and CLI commands. Its WiFi and memory requirements mean it is not available for every device. ESP32 devices with PSRAM are popular platforms for it.
+
+## USB connection and a browser
+
+The easiest way to set up a repeater is to connect it to a computer by USB and use a browser to flash and configure it. Chrome and Chromium-based browsers are currently the most reliable for this process.
+
+:::tip
+Normal repeater management happens over the mesh. With a companion radio and smartphone, you can configure a repeater from a considerable distance, including full CLI access. Initial USB configuration mainly gets the repeater onto the mesh legally and with settings that are considerate of other users.
+:::
+
+## Open the flasher
+
+Choose a flasher according to the firmware you want to install. Both can also install custom firmware, but you must check that the package matches your hardware.
+
+<LinkButton href="https://flasher.meshcore.io">
+  MeshCore Flasher (official)
+</LinkButton>
+<LinkButton href="https://observer.gessaman.com">
+  A. Gessaman Observer Firmware
+</LinkButton>
+
+:::caution[Remember!]
+
+- Erase flash if the device is not already running a MeshCore repeater.
+- You can update official firmware to Gessaman's Observer firmware without erasing, but returning to official firmware may require an erase.
+- Back up the private key so you can restore the repeater's identity if you replace the device or need to erase it.
+  :::
+
+## Using the flasher
+
+### Screen 1: Device
+
+- **Select your device from the list.** Many devices have several variants: Heltec V4, for example, has a standard model and an R8 model. Some also come with different radios. We will gradually collect advice for tricky cases in the FAQ.
+- The custom firmware option is at the very end of the device list.
+
+### Screen 2: Role
+
+- **Select Repeater** as the role.
+
+### Screen 3: Version, erase and flash
+
+- Choose a version. The latest, selected by default, is fine unless you know you need another.
+- Gessaman's flasher also offers `-dev` versions, which have not been tested as thoroughly. Stick with the standard release unless you specifically want to try a development version and need one of its new features.
+- **Some devices must enter DFU mode** before flashing. The page provides an `Enter DFU mode` button, but it does not always work, and entering DFU manually may be easier anyway. For example, nRF52 devices can enter DFU with a quick double-press of the reset button.
+- **Flash erasing is also on this page.** Some devices offer an `Erase device` checkbox, which erases during flashing. Others have an `Erase Flash` button that first installs special erase firmware. On startup, that firmware wipes the device and returns it to flashing mode.
+- The Download button provides firmware packages if you choose another flashing method. These browser tools almost always work, so you usually do not need to download packages to your computer.
+- Finally, **press Flash**. Your browser requests access to the USB serial port through which the operating system sees the device. Once connected, flashing begins. The log reports success or failure.
+
+If flashing succeeds, continue straight to <DocLink page="repeaters/settings">configuration</DocLink>. Select `Configure via USB` on the completion screen.
+
+A device is not always ready to accept flashing. The log may show a timeout or another error. Retrying often helps; sometimes you need to double-click reset or hold a button while connecting power or USB. There is plenty of advice online, and we will gradually add answers to the FAQ as questions arise.
+
+After flashing, you may see `Hard resetting via RTS pin...` as the software tries to reboot the repeater. Note that RTS means the serial port's Ready To Send, not the microcontroller's RST (Reset). Resetting through serial RTS does not seem to be implemented on many devices, so at this point you can simply press reset yourself.
+
+:::note
+**Back up your new repeater's private key** while still connected over USB. Run `get prv.key` in the CLI and save the returned hexadecimal string. You can then restore the same key if you replace the repeater or need to erase its flash after a serious problem.
+
+We want to avoid ghost repeaters remaining on maps when keys change: the public key is derived from the private key. Coverage map information also becomes outdated if a repeater suddenly changes its key or ID.
+:::

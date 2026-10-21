@@ -11,6 +11,80 @@ const bundle = () => ({
   nodes: [{ id: 'A'.repeat(64), name: 'Åland toistin', lat: 60.1, lon: 19.9 }],
 });
 
+const activity = (
+  from = '2026-10-18T21:00:00Z',
+  hours = 24,
+  date = '2026-10-19',
+) => ({
+  date,
+  timeZone: 'Europe/Helsinki',
+  from,
+  to: new Date(Date.parse(from) + hours * 3_600_000)
+    .toISOString()
+    .replace('.000Z', 'Z'),
+  hourly: Array.from({ length: hours }, (_, index) => ({
+    start: new Date(Date.parse(from) + index * 3_600_000)
+      .toISOString()
+      .replace('.000Z', 'Z'),
+    count: index,
+  })),
+});
+
+test('preserves complete daily packet series including short and long DST days', () => {
+  for (const value of [
+    activity(),
+    activity('2026-03-28T22:00:00Z', 23, '2026-03-29'),
+    activity('2026-10-24T21:00:00Z', 25, '2026-10-25'),
+  ]) {
+    assert.deepEqual(
+      parseRepeaterBundle({ ...bundle(), packetActivity: value })
+        .packetActivity,
+      value,
+    );
+  }
+  const empty = activity();
+  empty.hourly.forEach((hour) => {
+    hour.count = 0;
+  });
+  assert.equal(
+    parseRepeaterBundle({
+      ...bundle(),
+      packetActivity: empty,
+    }).packetActivity.hourly.reduce((sum, hour) => sum + hour.count, 0),
+    0,
+  );
+});
+
+test('rejects incomplete, unordered or malformed packet activity', () => {
+  const value = activity();
+  const changes = [
+    null,
+    { ...value, date: '2026-02-30' },
+    { ...value, timeZone: 'UTC' },
+    { ...value, to: value.from },
+    { ...value, hourly: value.hourly.slice(1) },
+    { ...value, hourly: [...value.hourly].reverse() },
+  ];
+  for (const count of [
+    -1,
+    NaN,
+    Infinity,
+    1.5,
+    '1',
+    Number.MAX_SAFE_INTEGER + 1,
+  ]) {
+    changes.push({
+      ...value,
+      hourly: [{ ...value.hourly[0], count }, ...value.hourly.slice(1)],
+    });
+  }
+  for (const packetActivity of changes)
+    assert.throws(
+      () => parseRepeaterBundle({ ...bundle(), packetActivity }),
+      /Invalid packet activity/,
+    );
+});
+
 test('preserves Unicode names and snapshot timestamp', () => {
   assert.deepEqual(parseRepeaterBundle(bundle()), bundle());
 });

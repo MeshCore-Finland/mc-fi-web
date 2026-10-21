@@ -1,6 +1,14 @@
 # Contributing content
 
+This guide is for editing the source of [meshcore.fi](https://meshcore.fi/). The public website contains the MeshCore guides, FAQs and community pages; this repository contains the files used to build them.
+
 Use Markdown for ordinary articles and full FAQ pages. Use MDX when you need screenshots, tabs, embedded mini-FAQs or interactive examples. You do not need to edit React components to contribute content.
+
+## License and contribution terms
+
+This project's code and content are licensed under the [MIT License](LICENSE). By submitting a contribution, you agree that it is provided under that same license. This applies to code, documentation, translations, images and other contributed material.
+
+Only submit material that you have the right to license under the MIT License. **Do not contribute if you do not agree to these terms.** Contributors are listed in [AUTHORS](AUTHORS), alphabetically by GitHub username.
 
 ## First-time setup
 
@@ -20,29 +28,19 @@ Node should print `v24.x.x`. You do not need to install Astro globally, set up a
 
 ### Get the working branch
 
-The new site lives on `dev`, which is the repository's default branch. The old live site remains on `main` until the production cutover.
+Start contributions from `main` and open pull requests against `main`. It is the only permanent branch and the GitHub default. The production branch is `main`, which Cloudflare Pages builds for [meshcore.fi](https://meshcore.fi/).
 
-If you have write access to the main repository:
+If you do not have write access, [fork the repository on GitHub](https://github.com/MeshCore-Finland/mc-fi-web/fork) first. With or without a fork, clone the source and create your contribution branch from `main`:
 
 ```sh
-git clone --branch dev https://github.com/MeshCore-Finland/mc-fi-web.git
+git clone --branch main https://github.com/MeshCore-Finland/mc-fi-web.git
 cd mc-fi-web
 git switch -c docs/your-topic
 ```
 
 Replace `docs/your-topic` with a name for your contribution, for example `docs/companion-channels`.
 
-If you do not have write access, [fork the repository on GitHub](https://github.com/MeshCore-Finland/mc-fi-web/fork) first. Replace `YOUR_USERNAME` below with your GitHub username:
-
-```sh
-git clone https://github.com/YOUR_USERNAME/mc-fi-web.git
-cd mc-fi-web
-git remote add upstream https://github.com/MeshCore-Finland/mc-fi-web.git
-git fetch upstream
-git switch -c docs/your-topic upstream/dev
-```
-
-This fetches the new site even if your fork initially contains only the old default branch. In both cases, your contribution branch starts from the prototype; keep the old site out of your changes.
+When submitting, push your branch to this repository if you have write access, or to your fork. The [pull-request instructions](#submit-a-pull-request) include both commands.
 
 ## Live preview while editing
 
@@ -55,7 +53,7 @@ npm run dev
 
 Open the local URL printed in the terminal, normally [http://localhost:4321/fi/](http://localhost:4321/fi/). Use `/en/` for English. Leave the command running while you edit: saving an article updates the browser automatically. Stop the server with **Ctrl+C**.
 
-For a first edit, open `src/content/docs/fi/guides/getting-started.mdx`, change a sentence, and save. The article is at `/fi/guides/getting-started/`. The file path after `fi/`, without `.md` or `.mdx`, becomes its URL path. See the examples below when adding your own page.
+For a first edit, open `src/content/docs/fi/users/start.mdx`, change a sentence, and save. The article is at `/fi/users/start/`. The file path after `fi/`, without `.md` or `.mdx`, becomes its URL path. See the examples below when adding your own page.
 
 The FAQ's local filter works during development. Site-wide search requires a built search index, so check it using the built preview.
 
@@ -68,15 +66,15 @@ npm run build
 npm run preview
 ```
 
-Open the URL printed by `preview`. This serves the generated static site and includes site-wide search. **It does not update when you edit files**: stop it, rebuild and restart it to see later changes. Use `dev` for everyday editing.
+Open the URL printed by `preview`. This serves the generated static site and includes site-wide search. **It does not update when you edit files**: stop it, rebuild and restart it to see later changes. Use `npm run dev` for everyday editing.
 
 The build checks types, runs tests, generates the search index and reports warnings for broken internal document links, section anchors and duplicate IDs. These warnings do not fail local builds or PR previews. GitHub Actions displays them as warning annotations on pushes and pull requests.
 
-For pull requests targeting `dev` or `main`, CI runs a separate strict `links` check against the generated site. It fails if any issues remain, while the preview build can still succeed with warnings. Making `links` a required check in the target branch's ruleset blocks merging until those issues are fixed. Push runs only build the site; the separate link jobs run on PRs. Before merging, run `npm run check:links` after building to check strictly yourself. Rebasing locally does not trigger CI; pushing updates to an open PR triggers its checks.
+For pull requests targeting any branch, CI also runs the Python exporter unit tests as part of `build`, plus a separate strict `links` check against the generated site. The link check fails if any issues remain, while the preview build can still succeed with warnings. Rulesets require `build` and `links` on `main` and `integration/*`, blocking merges until those issues are fixed. Only pushes to `main` run a separate push build; the separate link jobs run on PRs. Before merging, run `npm run check:links` after building to check strictly yourself. Rebasing locally does not trigger CI; pushing updates to an open PR triggers its checks. Python is needed locally only when working on the exporter; see [its guide](docs/repeater-bundle.md).
 
-On PRs targeting `dev` or `main`, the separate `external-links` check visits external HTTP/HTTPS URLs from the built pages, follows redirects and retries transient failures. It checks responses, not anchors on external sites, and skips private network addresses. Open the check's job summary or download its `external-link-report` artifact for failed URLs, source pages and HTTP/network errors. This check is **not required for merging** and does not affect preview builds; the merge approver should review failures for broken destinations, temporary outages or sites that block automated requests. Only `build` and `links` belong in the required checks.
+On PRs targeting any branch, the separate `external-links` check visits external HTTP/HTTPS URLs from the built pages, follows redirects and retries transient failures. It checks responses, not anchors on external sites, and skips private network addresses. Open the check's job summary or download its `external-link-report` artifact for failed URLs, source pages and HTTP/network errors. This check is **not required for merging** and does not affect preview builds; the merge approver should review failures for broken destinations, temporary outages or sites that block automated requests. Only `build` and `links` belong in the required checks.
 
-The [CI workflow reference](docs/ci.md) lists exact triggers and filters for every workflow, including why a PR can show both push and PR checks or skipped jobs.
+The [CI workflow reference](docs/ci.md) lists exact triggers and conditions for every workflow, including PRs into temporary integration branches and the separate scheduled bundle publisher.
 
 Optional formatting: `npm run format` formats the repository. Check `git diff` afterward and include only changes relevant to your contribution. If dependencies change after you pull updates, run `npm ci` again.
 
@@ -246,18 +244,70 @@ import settings from '@screenshots/mobile-app/en/repeater-settings.png';
 
 Add the referenced image first. The component generates responsive images and a link to the original. Default width is 360px; use `width={720}` for desktop screenshots. Localize alt text and captions. See `src/assets/screenshots/README.md` for file conventions.
 
+## Regional maps
+
+Use `RegionMap` inside any MDX article or section:
+
+```mdx
+import RegionMap from '@components/RegionMap.astro';
+
+<RegionMap region="paakaupunkiseutu" />
+```
+
+Available presets are `paakaupunkiseutu`, `vihti-lohja`,
+`hyvinkaa-riihimaki-loppi`, `kotka`, `turku` and `pirkanmaa`. Add new presets
+in `src/lib/region-maps.ts`, with a name and geographic bounds. Bounds only set
+the initial viewport and reset position. Every map includes all repeaters from
+the shared snapshot, so neighbouring repeaters stay available when panning.
+The repeater count and name list follow the visible viewport.
+Optionally set `meshmapper` to the region's MeshMapper subdomain to enable the
+coverage tab. For border areas, use an array such as `['tmp', 'finland']` to
+offer a source selector; the first entry is the default. All sources start at
+the same viewport, and each iframe loads only when first selected. Single-source
+maps have no selector. No API key is needed.
+
+Pass an optional `coverageNote` in MDX to explain local coverage limitations:
+
+```mdx
+<RegionMap
+  region="hyvinkaa-riihimaki-loppi"
+  coverageNote="Alueen mittaukset jakautuvat kahteen karttalähteeseen. Tarkista sekä TMP että FINLAND saadaksesi kattavamman kuvan."
+/>
+```
+
+The note appears only in the coverage view. Keep it in the article's language.
+Both views and each coverage source keep their state when switching.
+The reset button restores only the active view or selected source to the
+region's initial position; MeshMapper embeds reload with repeater markers hidden.
+The full-map link follows the selected source.
+
+Repeater locations reuse the homepage's daily snapshot and shared request.
+Set `PUBLIC_REPEATER_BUNDLE_URL`, or pass `bundleUrl` to the component, to test
+another endpoint. Multiple components can appear independently on one page.
+The OpenStreetMap basemap loads only when the component becomes visible.
+Keep its attribution visible and respect the [tile usage policy](https://operations.osmfoundation.org/policies/tiles/).
+
 ## Review dates and translation freshness
 
-These optional fields record actual human checks. Quote dates in `YYYY-MM-DD` format:
+Finnish is the source of truth. These fields record completed checks, not file edits. Quote dates in `YYYY-MM-DD` format. On Finnish articles, the optional validity date is:
 
 ```yaml
 lastReviewed: '2026-10-02'
-translationChecked: '2026-10-02'
 ```
 
-`lastReviewed` means the technical instructions were checked. `translationChecked` belongs on translated articles and means someone compared the translation with its Finnish source. Dates appear below the article when present. Omit them until a check has actually happened; saving a file is not a review.
+On English articles, record a full comparison with Finnish using:
 
-When changing Finnish content, update the English equivalent or flag translation review in the PR description. A translation can remain unchanged after comparison; update its review date when appropriate. Dates are evidence of review, not an automatic claim that content is current. There is no age-based warning or publishing block.
+```sh
+npm run check:translations -- --stamp users/start --date 2026-10-21
+```
+
+Use the actual page path and comparison date. The command writes `translationChecked` and a generated `translationSourceHash` fingerprint.
+
+`lastReviewed` means a reviewer checked that the technical instructions remain valid. `translationChecked` records the last full comparison with Finnish; assisted checks count, and it does not imply human approval or technical validity. Dates appear below the article when present. Do not copy or advance the Finnish validity date during translation.
+
+Run `npm run check:translations` to find missing, unchecked, changed-source or orphaned English pages. The report is advisory; add `-- --strict` for a failing exit status when work remains. The fingerprint detects Finnish changes without being affected by review-date changes. It does not certify translation quality or track shared UI text.
+
+When changing Finnish, update English or flag remaining translation work in the PR description. Preserve contributors' improvements when updating English. Wording-only PRs keep the comparison date and fingerprint; advance both only after a full comparison, even if no edits were needed. Factual corrections should update Finnish too. There is no age-based warning or publishing block. See [the translation workflow and glossary](docs/translations.md) for complete rules, report states and shared UI checks.
 
 ## Submit a pull request
 
@@ -272,19 +322,41 @@ Stage the files you intended to change with `git add <file-path>` (replace the p
 
 ```sh
 git commit -m "Document companion channels"
-git push -u origin docs/your-topic
+```
+
+Push to the repository you have write access to. For contributors with access to this repository:
+
+```sh
+git push https://github.com/MeshCore-Finland/mc-fi-web.git docs/your-topic
+```
+
+For fork contributors, replace `YOUR_USERNAME` with your GitHub username:
+
+```sh
+git push https://github.com/YOUR_USERNAME/mc-fi-web.git docs/your-topic
 ```
 
 Use your own commit message and the branch name you chose during setup. The first push may ask you to authenticate with GitHub; use your usual GitHub authentication method.
 
-Open a pull request on GitHub with **base repository `MeshCore-Finland/mc-fi-web` and base branch `dev`**, selecting your contribution branch as the head. Fork contributors select their fork as the head repository. Target this branch while it is the working base; its history is independent from the old site.
+Open a pull request on GitHub with **base repository `MeshCore-Finland/mc-fi-web` and base branch `main`**, selecting your contribution branch as the head. Fork contributors select their fork as the head repository.
 
 Describe what changed, how you checked it, and any English translation review still needed. Subsequent commits pushed to the same branch update the PR.
 
-Cloudflare previews branches pushed to the main repository; Vercel remains configured for external PR previews. After deployment finishes, use the preview link in the PR's deployment check or bot comment. The shared [dev preview](https://dev.mc-fi-web.pages.dev/fi/) shows the latest dev branch, not your unmerged contribution. Check that CI passes before asking for review. Deployment configuration and the eventual production cutover are maintained separately.
+Cloudflare previews branches pushed to this repository; Vercel provides fork PR previews. After deployment finishes, use the preview link in the PR's deployment check. Check that CI passes before asking for review. Maintainers squash merge reviewed PRs into `main`, which publishes [meshcore.fi](https://meshcore.fi/), and delete the contribution branch afterward. See [the CI guide](docs/ci.md) for deployment and validation details.
+
+### Larger updates with a temporary integration branch
+
+For work that needs several PRs before publication, a maintainer creates `integration/<topic>` from the latest `main` and opens a draft PR from it into `main`. Use a single topic segment, for example `integration/navigation`.
+
+1. Create each contribution branch from the integration branch and target its PR at that branch. The normal build, exporter tests, link checks and branch previews run for these PRs too.
+2. Squash merge the smaller PRs into the integration branch. Review the combined result using its preview deployment. Keep the final PR into `main` in draft until the update is ready to publish.
+3. If `main` advances, open a PR from `main` into the integration branch and use **Create a merge commit** to bring its history up to date. This avoids rewriting the shared integration branch and lets the final PR satisfy the up-to-date requirement. Merge commits are allowed on integration branches for this purpose.
+4. Once the final PR passes its required checks, squash merge it into `main`. Close or retarget any remaining dependent PRs, then delete the integration branch if GitHub has not already done so. Start future work from `main` again.
+
+`main` and `integration/*` require pull requests, up-to-date `build` and `links` checks, and block force pushes. `main` additionally requires squash merges and linear history, and blocks deletion. Integration branches allow deletion after use; they are temporary and should not be reused for later releases. The repository has no permanent `dev` branch or separate release-merge step.
 
 ## Shared components and UI labels
 
 Site UI text lives in `src/content/i18n/fi.json` and `en.json`. Astro components use Starlight's `Astro.locals.t()`. The schema checks that both dictionaries contain the custom UI keys. Articles supply their own prose; they do not need a translation API.
 
-`CommandBuilder.astro` owns the translation and hydration of the repeater-name example. `NetworkStats.astro` wraps an expendable widget in `src/components/temporary/`; its metrics and endpoints are not a framework API. The homepage map still contains prototype locations until a real feed replaces them.
+`CommandBuilder.astro` and `CommandBuilder.tsx` render interactive command examples. `FinlandMap.astro` loads the daily snapshot through `src/lib/repeater-bundle.ts`; see [the map data guide](src/data/README.md). `NetworkStats.astro` renders homepage statistics, with its fetch logic and styles in `src/components/temporary/`. Both counters read that same snapshot without live API polling. It excludes offline and imported-only repeaters; packet activity is collected from CoreScope for the previous Finnish calendar day and displayed with its date. The repeater count represents observed locations in the snapshot, not how many devices are currently online.

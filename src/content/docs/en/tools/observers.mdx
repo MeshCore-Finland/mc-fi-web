@@ -1,6 +1,126 @@
 ---
-title: Observers - providing visibility into the mesh and its health
-description: Learn how observers work, why they exist and how to set one up.
+title: Observers
+description: Observers are essential for monitoring and optimising the MeshCore network.
+translationChecked: '2026-10-21'
+translationSourceHash: sha256:e946fda3afe9125a9c949d25262c030c571dba1259c1ccf82c3ee50d48c271fe
 ---
 
-Work in progress...
+import DocLink from '@components/DocLink.astro';
+
+## About observers
+
+Observers forward the MeshCore packets they hear over MQTT to one or more brokers, which distribute them to tools such as:
+
+- Analysis tools that show how packets, especially flood packets, move through the network, helping assess link reliability and possible coverage gaps.
+- Mapping services showing repeater locations and coverage.
+
+Finland provides a <DocLink page="tools/mqtt">public MQTT broker</DocLink> for all observer operators. That page explains where packets are distributed.
+
+:::caution[Common misconceptions about observers]
+
+- Although observers use MQTT, traffic is **one-way, from the radio network to the MQTT broker**. Unlike Meshtastic, for example, **we never bridge Internet traffic into the radio network**.
+- Not everyone needs an observer. If your mesh already has observers, you may not need your own.
+  :::
+
+## Choosing an observer
+
+There are many ways to build an observer. The most common approaches in Finland are listed below and explained further on:
+
+- **Dedicated Repeater + Observer firmware** – repeaters with WiFi, usually ESP32 devices, can also act as observers. This is by far the most common and convenient option.
+- **MeshCore Packet Capture** – flashing a debug build of MeshCore firmware lets a repeater or companion device also act as an observer.
+- **OpenHop Repeater** – a repeater implemented in Python, running for example on a Raspberry Pi with a LoRa HAT.
+
+A. Gessaman provides a [comprehensive overview with links to observer options](https://observer.gessaman.com/observer-options).
+
+## IATA codes
+
+The observer system developed around the now-obsolete LetsMesh service and the popular MeshMapper service. For that reason, every observer must be assigned an operating area using an IATA code.
+
+**The code depends on location, but is not necessarily that of your nearest airport: it specifically identifies a MeshMapper region.** Check the regions on [MeshMapper](https://meshmapper.net).
+
+Finland currently has these MeshMapper regions and corresponding IATA codes:
+
+- **HEL** – Southern Finland
+- **JYV** – Central Finland
+- **KOK** – Ostrobothnia
+- **OUL** – Oulu Province
+- **SJY** – South Ostrobothnia
+- **TKU** – Southwest Finland
+- **TMP** – Greater Pirkanmaa
+
+Some codes have no MeshMapper region yet but can still be used by observers:
+
+- **JOE** – Eastern Finland
+- **RVN** – Lapland
+
+If your observer does not fit any of these areas, do not choose a random code. Ask the MQTT administrators to add a new area code. The broker only accepts codes that have been configured on it.
+
+## Observer Firmware
+
+- No separate observer device is needed if you already have a suitable repeater.
+- Continuous power is recommended because of WiFi power consumption.
+
+**Quick start:**
+
+- Flash your repeater using the [Repeater Observer website](https://observer.gessaman.com/).
+- The device creates a WiFi network. Join it to access the straightforward web administration interface.
+- Configure the <DocLink page="repeaters/settings">basic repeater settings</DocLink>.
+- Set your IATA code.
+- Add `meshcore-fi` as the MQTT preset: this is our public broker.
+
+## MeshCore Packet Capture (MCPC)
+
+- Works with almost any device; WiFi is not required.
+- The device must remain connected to a computer.
+- Requires a Python program running specifically for this observer function.
+
+Installation instructions are on the [MeshCore Packet Capture GitHub page](https://github.com/agessaman/meshcore-packet-capture).
+
+**MCPC settings:**
+
+:::caution[Should work, but...]
+The settings below should be correct, but the author has not tested MeshCore Packet Capture for some time.
+:::
+
+Connection and authentication settings for Finland's public MQTT server:
+
+| Variable                           | Value                     |
+| ---------------------------------- | ------------------------- |
+| PACKETCAPTURE_MQTT1_SERVER         | mc-mqtt.meshcore.fi       |
+| PACKETCAPTURE_MQTT1_PORT           | 443                       |
+| PACKETCAPTURE_MQTT1_USE_AUTH_TOKEN | true                      |
+| PACKETCAPTURE_MQTT1_TOKEN_AUDIENCE | mc-mqtt.meshcore.fi       |
+| PACKETCAPTURE_PRIVATE_KEY_FILE     | /path/to/private_key_file |
+
+MeshCore Packet Capture needs your device's _private_ key to sign the MQTT connection password. We recommend storing the private key in a file rather than an environment variable.
+
+## OpenHop Repeater
+
+- A complete MeshCore repeater running on your computer.
+- Supports hardware such as Raspberry Pi LoRa HATs containing a radio without a microcontroller.
+- Can also work with standard devices, for example through KISS firmware.
+
+:::caution[Should work, but...]
+The preset below should work, but the author has not tested it personally.
+:::
+
+For OpenHop Repeater, add a new `meshcore-fi.yaml` file under `presets/`:
+
+```txt
+display_name: MeshCore Finland
+website: https://meshcore.fi/
+brokers:
+  - name: meshcore-fi
+    enabled: true
+    host: mc-mqtt.meshcore.fi
+    port: 443
+    transport: websockets
+    audience: mc-mqtt.meshcore.fi
+    use_jwt_auth: true
+    format: letsmesh
+    retain_status: false
+    neighbors: true
+    tls:
+      enabled: true
+      insecure: false
+```

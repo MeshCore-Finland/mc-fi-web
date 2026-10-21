@@ -1,9 +1,57 @@
 ---
-title: Laitteen valinta toistinkäyttöön
-description: Laitevaihtoehtoja on paljon. Lue täältä, mitä kannattaa tietää ennen valintaa.
+title: Choosing repeater hardware
+description: There are many hardware options. Here is what to consider before choosing.
+translationChecked: '2026-10-21'
+translationSourceHash: sha256:1ada0d8b4b986e52777ee04de3ab51b848b00d2a75620f56740186ece718ca16
 ---
 
 import DocLink from '@components/DocLink.astro';
 
-Sivu saa sisältöä kunhan kerkee.
+You can buy ready-made repeater devices, but many enthusiasts build their own. The selection criteria below apply in either case.
 
+Start with the repeater's intended use. Consider these questions:
+
+- Will mains power be available, or will it run on a battery and possibly a solar panel?
+- Should it also act as an **observer**, collecting information about mesh operation and traffic? In some cases, both roles can share one device.
+- Can you reach the installation to update firmware over USB, or will updates need to be wireless?
+- You can also use a Linux computer, such as a Raspberry Pi, as a repeater. Connect a LoRa radio over USB or GPIO; the repeater software runs on the computer and is updated like other software. The most popular package is [OpenHop Repeater](https://github.com/openhop-dev/openhop_repeater).
+
+## Solar-powered or battery-powered repeaters
+
+When power consumption matters, a device based on Nordic's nRF52840 SoC is often the choice. These are significantly more efficient than the common ESP32 alternatives.
+
+Using solar power is simplest when the device has a built-in solar panel connection, avoiding the need for a separate charging circuit. Such devices are available in both the nRF and ESP32 camps.
+
+:::note
+Ready-made solar repeaters are often designed for Central European or tropical conditions. In a Finnish winter, the panel may not generate enough power and the battery can run flat. The repeater then shuts down, and restarting may be unreliable. We will add information about solar panel sizing and battery capacity later.
+:::
+
+## Combining a repeater and observer
+
+Adding <DocLink page="tools/observers">observer</DocLink> functionality to a repeater generally requires a more power-hungry device and Internet access over WiFi. This means a continuous power supply and WiFi support, available mainly on ESP32 devices. The hardware must also support [Gessaman's observer firmware](https://observer.gessaman.com/).
+
+OpenHop Repeater, mentioned above, can also act as an observer.
+
+## Repeaters in hard-to-reach places
+
+MeshCore develops quickly, so you will need to update repeater firmware occasionally. A repeater in a difficult location can be updated wirelessly. Prepare for this beforehand, for example by installing the OTAFIX bootloader.
+
+- nRF52840 devices support only Bluetooth for this purpose. Its range is modest, but the solution is specifically designed for field use. Installing the OTAFIX bootloader is essential: it improves reliability and allows another attempt after a failed update.
+- Some ESP32 devices can be updated over WiFi by starting a temporary access point through which new firmware is uploaded.
+- Devices running Gessaman's Observer firmware can also update themselves over WiFi. This is very convenient, but only installs the latest Gessaman Observer firmware, not custom firmware.
+
+These points concern firmware updates only. Normal management and configuration are available over MeshCore.
+
+## Radiated power must not exceed 500 mW ERP
+
+The regulations for this band limit each device's radiated power to 500 mW (27 dBm) ERP. Consider this when choosing hardware and an antenna.
+
+**Radiated power and transmit power are different things**. In simple terms, _transmit power_ is what the device delivers to the antenna. _Radiated power_ is what the antenna sends into the air in the direction of maximum gain. Antenna mismatch, cables and connectors introduce losses, while antenna gain increases radiated power.
+
+For example, take a device transmitting at 22 dBm (~160 mW) with a 5 dBi antenna. The resulting radiated power is 27 dBm = 500 mW ERP. A 6 dBi antenna would give 28 dBm = 630 mW ERP, exceeding the limit. You would then need to lower transmit power to 21 dBm (~125 mW) to stay within the permitted radiated power.
+
+This example assumes the theoretical case of no cable or connector losses. Significant losses may allow a slightly higher transmit power. Without measurements, however, actual radiated power is difficult to establish. Play it safe rather than trying to reach the absolute maximum. **At 868 MHz, repeater placement matters far more than the last few dBm of radiated power.**
+
+:::note
+Some devices on the market have a configurable 1 W transmit power thanks to an additional amplifier alongside the LoRa radio. It is very easy to exceed 500 mW ERP with these devices. Carefully calculate, and preferably measure, the maximum transmit power you can use without exceeding the radiated power limit.
+:::

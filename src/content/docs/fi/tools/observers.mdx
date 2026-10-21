@@ -1,8 +1,124 @@
 ---
-title: Observerit eli meshin liittäminen CoreScopeen
-description: Suomen MeshCore -yhteisö suosittelee liittymistä yhteiseen CoreScopeen. Siitä on hyötyä myös meshin ylläpidossa ja kehittämisessä.
+title: Tarkkailijat eli observerit
+description: Tarkkailijat ovat oleellinen osa MeshCore-verkon toiminnan seuraamista ja optimointia.
 ---
 
 import DocLink from '@components/DocLink.astro';
 
-Sivu saa sisältöä kunhan kerkee.
+## Yleistä tarkkailijoista
+
+Tarkkailijat (observers) lähettävät kuulemansa MeshCore-paketit edelleen MQTT-protokollalla yhteen tai useampaan "brokeriin", jonka kautta ne välittyvät erilaisiin työkaluihin:
+
+* Analyysityökalut, joista voit nähdä, miten varsinkin flood-paketit kulkevat verkossa ja arvioida linkkien luotettavuutta sekä mahdollisia katveita
+* Karttapalvelut, joista näet toistimien sijainnit ja kuuluvuuden
+
+Suomessa tarjoamme <DocLink page="tools/mqtt">julkisen MQTT-brokerin</DocLink> kaikille tarkkailijoiden ylläpitäjille, katso, minne kaikkialle paketit sieltä jaetaan.
+
+:::caution[Väärinkäsityksiä tarkkailijoista]
+* Vaikka tarkkailija käyttää MQTT-protokollaa, liikenne on **yksisuuntaista verkosta MQTT-brokerille**. Toisin kuin esim. Meshtasticissä, **emme ikinä siltaa liikennettä Internetistä radioverkkoon päin**.
+* Jokainen ei tarvitse omaa tarkkailijaa. Jos olet yhteydessä meshiin, jossa on jo tarkkailijoita, et välttämättä tarvitse omaa.
+:::
+
+
+## Tarkkailijan valinta
+
+On monia tapoja toteuttaa tarkkailija, mutta yleisimmin Suomessa käytössä olevat tarkkailijamallit ovat (selitykset listan jälkeen):
+
+* **Erityinen Repeater + Observer -firmware** - toistimet, joissa on WiFi-yhteys (yleensä ESP32), voivat toistamisen lomassa myös toimia tarkkailijana; ylivoimaisesti yleisin ja kätevin
+* **MeshCore Packet Capture** - Flashäämällä debug-version MeshCore-firmwaresta laitteesi (repeater tai companion) toimii myös tarkkailijana
+* **OpenHop Repeater** - toistin toteutettuna Pythonilla; ajetaan esim. Raspberry Pi:ssä, jossa on esim. LoRa-hattu.
+
+A. Gessamanilla on [kattava yhteenveto ja linkit eri tapoihin toteuttaa tarkkailija](https://observer.gessaman.com/observer-options) (englanniksi).
+
+## IATA-koodi
+
+Tarkkailijajärjestelmä on syntynyt jo vanhentuneen LetsMesh-palvelun sekä suositun MeshMapperin yhteydessä, ja tästä syystä kaikille tarkkailijoille on asetettava alue, jossa ne toimivat, käyttäen IATA-koodia.
+
+**IATA-koodi määräytyy sijainnin perusteella, mutta se ei vastaa välttämättä lähimmän lentokenttäsi koodia vaan viittaa nimenomaan MeshMapper-alueeseen**. Katso alueet [MeshMapper](https://meshmapper.net) -palvelusta.
+
+Tällä hetkellä Suomessa on käytössä seuraavat MeshMapper-alueet ja niitä vastaavat IATA-koodit:
+- **HEL** - Etelä-Suomi
+- **JYV** - Keski-Suomi
+- **KOK** - Pohjanmaa
+- **OUL** - Oulun lääni
+- **SJY** - Etelä-Pohjanmaa
+- **TKU** - Varsinais-Suomi
+- **TMP** - Suur-Pirkanmaa
+
+Lisäksi on muutamia IATA-koodeja, joilla ei ole vielä MeshMapper-aluetta mutta joita voi käyttää tarkkailijassa:
+- **JOE** - Itä-Suomi
+- **RVN** - Lappi
+
+Jos tarkkailijasi ei ole mielestäsi millään näistä alueista, älä käytä jotain satunnaista koodia. Pyydä MQTT-ylläpitäjiltä, että avataan uusi aluekoodi. MQTT-brokeri hyväksyy vain sinne lisätyt IATA-koodit.
+
+## Observer Firmware
+
+- Et tarvitse erillistä laitetta tarkkailijalle, jos sinulla on jo sopiva toistin
+- Suositellaan jatkuvaa virransyöttöä WiFi-kulutuksen vuoksi
+
+**Pikaohje:**
+- Flashää repeater [Repeater Observer -sivuilla](https://observer.gessaman.com/).
+- Laite luo nyt uuden WiFi-verkon, johon liittymällä voit kirjautua helppokäyttöiseen web-hallintaan
+- Pistä <DocLink page="repeaters/settings">toistimen perusasetukset</DocLink> kuntoon
+- Aseta IATA-koodisi
+- Lisää MQTT-presetiksi `meshcore-fi`, joka on julkinen MQTT-brokerimme
+
+
+## MeshCore Packet Capture (MCPC)
+
+- Voit käyttää melkein mitä tahansa laitetta, et tarvitse WiFi-yhteyttä
+- Laitteen on oltava jatkuvasti kiinni tietokoneessa
+- Vaatii Python-ohjelman ajamista vain tätä tarkkailijatoimintaa varten
+
+[MeshCore Packet Capturen GitHub-sivulta](https://github.com/agessaman/meshcore-packet-capture) löydät asennusohjeet.
+
+**MCPC-asetukset:**
+
+:::caution[Pitäisi toimia, mutta...]
+Alla olevien asetusten pitäisi olla kunnossa, mutta kirjoittaja ei ole MeshCore Packet Capturea testannut pitkään aikaan.
+:::
+
+Alla yhteys- ja autentikointiasetukset Suomen julkiselle MQTT-palvelimelle:
+
+| Muuttuja | Arvo |
+|----------|------|
+| PACKETCAPTURE_MQTT1_SERVER | mc-mqtt.meshcore.fi |
+| PACKETCAPTURE_MQTT1_PORT | 443 |
+| PACKETCAPTURE_MQTT1_USE_AUTH_TOKEN | true |
+| PACKETCAPTURE_MQTT1_TOKEN_AUDIENCE | mc-mqtt.meshcore.fi |
+| PACKETCAPTURE_PRIVATE_KEY_FILE | /path/to/private_key_file |
+
+MeshCore Packet Capture siis tarvitsee laitteesi *yksityisen* avaimen, jotta se voi allekirjoittaa MQTT-yhteyden salasanan. Suosittelemme yksityisen avaimen säilyttämistä tiedostossa ympäristömuuttujan sijaan.
+
+
+## OpenHop Repeater
+
+- Täydellinen MeshCore-toistin pyörii tietokoneellasi
+- Tukee mm. Raspberry Pi -LoRa-hattuja, joissa on pelkkä radio, ei mikrokontrolleria
+- Käytettävissä myös peruslaitteiden kanssa mm. KISS-firmwaren kautta
+
+
+:::caution[Pitäisi toimia, mutta...]
+Alla oleva presetti pitäisi olla toimiva, mutta kirjoittaja ei ole sitä itse testannut.
+:::
+
+OpenHop Repeateriin voit lisätä uuden `meshcore-fi.yaml`-tiedoston `presets/`-hakemistoon:
+
+```txt
+display_name: MeshCore Finland
+website: https://meshcore.fi/
+brokers:
+  - name: meshcore-fi
+    enabled: true
+    host: mc-mqtt.meshcore.fi
+    port: 443
+    transport: websockets
+    audience: mc-mqtt.meshcore.fi
+    use_jwt_auth: true
+    format: letsmesh
+    retain_status: false
+    neighbors: true
+    tls:
+      enabled: true
+      insecure: false
+```

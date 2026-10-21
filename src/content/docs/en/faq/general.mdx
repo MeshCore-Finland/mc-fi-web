@@ -1,10 +1,77 @@
 ---
 title: Frequently asked questions
-description: Practical answers about MeshCore and the Finnish mesh network.
+description: Answers about using MeshCore and Finland's network.
 faq: true
 tableOfContents: false
+translationChecked: '2026-10-21'
+translationSourceHash: sha256:519c2a4118bc83ebbaa25675ea976b832d67b2129dc5db06d87341a38d25820e
 ---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Where are the questions and answers? [#under-construction]
 
-Still under construction. Questions and answers will be added to this page later.
+Still under construction. More questions and answers will be added here later.
+
+## What does “slow radio technology” mean in practice? [#lora-is-slow]
+
+MeshCore in Finland and Europe uses standardised radio parameters. They balance speed and range on a LoRa link. With the settings in use (62.5 kHz bandwidth, Coding Rate 8 and Spreading Factor 8), the data rate is about 120 bytes per second.
+
+Some example transmissions:
+
+|                                                                                       | Bytes | Seconds |
+| :------------------------------------------------------------------------------------ | :---: | :-----: |
+| Repeater advert, 'Viherlaakso cegy repeat', three hops with a 2-byte path             |  137  |  1.127  |
+| Wardriving message, three hops                                                        |  59   |  0.488  |
+| Channel message, 'Pesonen OH6XYZ: Älkääs sit ihan älyvapaasti ördätkö 💀', three hops |  83   |  0.685  |
+
+The channel example is kept in Finnish because its exact text determines the byte count. Each hop adds two bytes to the transmission as the path record grows.
+
+European radio regulations allow each repeater to transmit for only 360 seconds in any rolling hour. In other words, the limit permits a one-second transmission followed by nine seconds without transmitting. Compare this with the examples above to get a sense of the practical bandwidth limits.
+
+## Finnish MeshCore settings [#settings]
+
+Settings used in Finland's MeshCore network, in several formats.
+
+<Tabs syncKey="interface">
+
+<TabItem label="Companion radio">
+
+| Setting                |    Value     |
+| :--------------------- | :----------: |
+| Radio Preset           | EU/UK Narrow |
+| Default Path Hash Size |    2-byte    |
+| Default Region Scope   |      fi      |
+
+</TabItem>
+
+<TabItem label="Command line">
+
+Replace `oma_nimi` with your repeater's name and each `oma_sijainti` with the appropriate latitude or longitude.
+
+```
+set name oma_nimi
+set lat oma_sijainti
+set lon oma_sijainti
+
+set radio 869.618,62.5,8,8
+set tx 22
+set dutycycle 10
+
+set path.hash.mode 1
+set advert.interval 0
+set flood.advert.interval 30
+set loop.detect moderate
+
+region put fi
+region default fi
+region save
+
+clock sync
+```
+
+</TabItem>
+
+<TabItem label="Mobile app">...</TabItem>
+
+</Tabs>

@@ -10,9 +10,10 @@ export default [
       'users/devices',
       'users/settings',
       'users/regions',
-      'users/identity',
       'users/channels',
+      'users/identity',
       'users/dms',
+      'users/advanced'
     ],
   },
   {
@@ -41,6 +42,18 @@ export default [
 //      'tools/corescope',
 //      'tools/meshmapper',
       'tools/observers',
+      'tools/mqtt',
+    ],
+  },
+  {
+    label: 'Yhteisöt',
+    translations: { en: 'Communities' },
+    // prettier-ignore
+    items: [
+      'communities/start',
+      'communities/southern-finland',
+      'communities/southwest-finland',
+      'communities/pirkanmaa',
     ],
   },
 
