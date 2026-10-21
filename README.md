@@ -10,7 +10,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for installation, local previews, articl
 
 See [the translation workflow](docs/translations.md) for review metadata, terminology and maintaining contributor improvements. Run `npm run check:translations` to find English pages needing comparison with Finnish.
 
-Start contributions from `dev` and submit pull requests to `dev`. Maintainers publish reviewed changes through `main`.
+Start contributions from `main` and submit pull requests to `main`. Maintainers squash merge reviewed changes; each merge publishes the production site.
 
 ## License and authors
 
@@ -34,18 +34,19 @@ npm run build
 npm run preview
 ```
 
-The build checks types, runs tests, builds Pagefind search and reports warnings for broken internal links, anchors and duplicate IDs. GitHub Actions, Cloudflare and Vercel use the same build command, so link warnings do not block PR previews. For PRs targeting `dev` or `main`, GitHub Actions also runs Python exporter tests and a separate strict `links` check; requiring `build` and `links` in a branch ruleset blocks merging until issues are fixed. Only pushes to `dev` or `main` run a separate push build, without link jobs. Run `npm run check:links` after building to check strictly yourself. Search is available after a production build; use `preview` to evaluate it locally.
+The build checks types, runs tests, builds Pagefind search and reports warnings for broken internal links, anchors and duplicate IDs. GitHub Actions, Cloudflare and Vercel use the same build command, so link warnings do not block PR previews. PRs targeting any branch also run Python exporter tests and a separate strict `links` check. Branch rules require `build` and `links` for `main` and `integration/*`. Only pushes to `main` run a separate push build, without link jobs. Run `npm run check:links` after building to check strictly yourself. Search is available after a production build; use `preview` to evaluate it locally.
 
-PRs targeting `dev` or `main` also run an advisory `external-links` check on the generated site. External HTTP failures appear in its job summary and downloadable `external-link-report` artifact, with the affected URLs and source pages. Keep this check optional in branch rulesets: the merge approver decides whether a failure needs fixing or is temporary. It runs separately from preview builds.
+PRs targeting any branch also run an advisory `external-links` check on the generated site. External HTTP failures appear in its job summary and downloadable `external-link-report` artifact, with the affected URLs and source pages. Keep this check optional in branch rulesets: the merge approver decides whether a failure needs fixing or is temporary. It runs separately from preview builds.
 
 See [CI workflows and triggers](docs/ci.md) for the exact events, branch and file filters, job conditions, required checks, and explanations of duplicate or skipped checks.
 
 ## Branches and deployments
 
-- **`main`** is the production branch. Cloudflare Pages builds it for [meshcore.fi](https://meshcore.fi/).
-- **`dev`** is the integration branch for contributions. Its shared previews are [Finnish](https://dev.mc-fi-web.pages.dev/fi/) and [English](https://dev.mc-fi-web.pages.dev/en/).
+- **`main`** is the only permanent branch, the GitHub default and the production source for [meshcore.fi](https://meshcore.fi/).
+- Short-lived feature branches start from `main` and return through squash-merged PRs. Merged branches are deleted automatically when GitHub permits it.
+- For larger coordinated changes, use a temporary **`integration/<topic>`** branch and PR smaller contributions into it. Squash merge the completed integration PR into `main`, then delete the temporary branch. See [the integration workflow](CONTRIBUTING.md#larger-updates-with-a-temporary-integration-branch).
 
-Cloudflare provides previews for branches in this repository. Vercel provides fork pull-request previews. Use a contribution's deployment link to review its changes; the shared `dev` preview shows changes already integrated into `dev`.
+Cloudflare provides previews for branches in this repository. Vercel provides fork pull-request previews. Use each PR's deployment link to review its changes before merging into `main`.
 
 ## Repository layout
 
