@@ -47,6 +47,11 @@ export const regionMaps = {
     bounds: { south: 61.15, west: 22.7, north: 62.15, east: 24.8 },
     meshmapper: 'tmp',
   },
+  pohjanmaat: {
+    name: 'Pohjanmaan maakunnat',
+    bounds: { south: 62.05, west: 20.9, north: 64.2, east: 24.8 },
+    meshmapper: 'finland',
+  },
 } satisfies Record<string, RegionMapConfig>;
 
 export type RegionMapId = keyof typeof regionMaps;

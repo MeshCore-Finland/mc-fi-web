@@ -257,7 +257,7 @@ import RegionMap from '@components/RegionMap.astro';
 ```
 
 Available presets are `paakaupunkiseutu`, `vihti-lohja`,
-`hyvinkaa-riihimaki-loppi`, `kotka`, `turku` and `pirkanmaa`. Add new presets
+`hyvinkaa-riihimaki-loppi`, `kotka`, `turku`, `pirkanmaa` and `pohjanmaat`. Add new presets
 in `src/lib/region-maps.ts`, with a name and geographic bounds. Bounds only set
 the initial viewport and reset position. Every map includes all repeaters from
 the shared snapshot, so neighbouring repeaters stay available when panning.
