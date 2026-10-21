@@ -246,16 +246,25 @@ Add the referenced image first. The component generates responsive images and a 
 
 ## Review dates and translation freshness
 
-These optional fields record actual human checks. Quote dates in `YYYY-MM-DD` format:
+Finnish is the source of truth. These fields record completed checks, not file edits. Quote dates in `YYYY-MM-DD` format. On Finnish articles, the optional validity date is:
 
 ```yaml
 lastReviewed: '2026-10-02'
-translationChecked: '2026-10-02'
 ```
 
-`lastReviewed` means the technical instructions were checked. `translationChecked` belongs on translated articles and means someone compared the translation with its Finnish source. Dates appear below the article when present. Omit them until a check has actually happened; saving a file is not a review.
+On English articles, record a full comparison with Finnish using:
 
-When changing Finnish content, update the English equivalent or flag translation review in the PR description. A translation can remain unchanged after comparison; update its review date when appropriate. Dates are evidence of review, not an automatic claim that content is current. There is no age-based warning or publishing block.
+```sh
+npm run check:translations -- --stamp users/start --date 2026-10-21
+```
+
+Use the actual page path and comparison date. The command writes `translationChecked` and a generated `translationSourceHash` fingerprint.
+
+`lastReviewed` means a reviewer checked that the technical instructions remain valid. `translationChecked` records the last full comparison with Finnish; assisted checks count, and it does not imply human approval or technical validity. Dates appear below the article when present. Do not copy or advance the Finnish validity date during translation.
+
+Run `npm run check:translations` to find missing, unchecked, changed-source or orphaned English pages. The report is advisory; add `-- --strict` for a failing exit status when work remains. The fingerprint detects Finnish changes without being affected by review-date changes. It does not certify translation quality or track shared UI text.
+
+When changing Finnish, update English or flag remaining translation work in the PR description. Preserve contributors' improvements when updating English. Wording-only PRs keep the comparison date and fingerprint; advance both only after a full comparison, even if no edits were needed. Factual corrections should update Finnish too. There is no age-based warning or publishing block. See [the translation workflow and glossary](docs/translations.md) for complete rules, report states and shared UI checks.
 
 ## Submit a pull request
 

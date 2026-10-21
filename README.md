@@ -8,6 +8,8 @@ This is the source repository for the MeshCore Finland website. It contains the 
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) for installation, local previews, article and FAQ conventions, workflow tabs, screenshots, translation review and pull requests. Content authors can work in Markdown/MDX without editing React components.
 
+See [the translation workflow](docs/translations.md) for review metadata, terminology and maintaining contributor improvements. Run `npm run check:translations` to find English pages needing comparison with Finnish.
+
 Start contributions from `dev` and submit pull requests to `dev`. Maintainers publish reviewed changes through `main`.
 
 ## License and authors

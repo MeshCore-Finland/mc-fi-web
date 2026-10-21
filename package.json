@@ -8,6 +8,7 @@
     "check": "astro check",
     "test": "node --test tests/*.test.mjs",
     "check:links": "node scripts/check-links.mjs",
+    "check:translations": "node scripts/check-translations.mjs",
     "format": "prettier --write ."
   },
   "license": "MIT",
@@ -30,7 +31,8 @@
     "prettier": "^3.9.9",
     "prettier-plugin-astro": "^1.1.0",
     "satteri": "^0.10.5",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "yaml": "^2.9.1"
   },
   "engines": {
     "node": ">=24"
