@@ -2,6 +2,7 @@ name: Site checks
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, edited]
 
 permissions:
   contents: read
@@ -23,9 +24,12 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Test repeater exporter
+        run: python -m unittest discover -s scripts -p 'test_export_repeaters.py' -v
       - name: Save generated site for link validation
-        if: >-
-          github.base_ref == 'dev' || github.base_ref == 'main'
         uses: actions/upload-artifact@v7
         with:
           name: generated-site
@@ -36,8 +40,6 @@ jobs:
 
   links:
     needs: build
-    if: >-
-      github.base_ref == 'dev' || github.base_ref == 'main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -57,8 +59,6 @@ jobs:
   # Advisory: keep this out of the required checks in branch rulesets.
   external-links:
     needs: build
-    if: >-
-      github.base_ref == 'dev' || github.base_ref == 'main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

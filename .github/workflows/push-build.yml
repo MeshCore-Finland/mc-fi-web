@@ -2,6 +2,7 @@ name: Push builds
 
 on:
   push:
+    branches: [main]
 
 permissions:
   contents: read

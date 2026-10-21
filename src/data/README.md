@@ -8,7 +8,7 @@
 
 ## Repeater bundle
 
-The homepage map on [meshcore.fi](https://meshcore.fi/) uses the versioned snapshot from `https://data.meshcore.fi/repeaters/v1.json`. It is generated daily at 06:00 Europe/Helsinki by `scripts/export_repeaters.py` in this repository and published to R2. See [the exporter and hosting guide](../../docs/repeater-bundle.md).
+The homepage map and counters on [meshcore.fi](https://meshcore.fi/) use the versioned snapshot from `https://data.meshcore.fi/repeaters/v1.json`. It is generated daily at 00:05 Europe/Helsinki by `scripts/export_repeaters.py` in this repository and published to R2. See [the exporter and hosting guide](../../docs/repeater-bundle.md).
 
 ```json
 {
@@ -25,8 +25,10 @@ The homepage map on [meshcore.fi](https://meshcore.fi/) uses the versioned snaps
 }
 ```
 
-The public endpoint uses gzip HTTP encoding; consumers use ordinary JSON fetching. The snapshot includes known repeaters in Finland and Åland with valid coordinates. Inclusion does not imply a repeater is online; dots do not infer radio coverage or connections.
+The public endpoint uses gzip HTTP encoding; consumers use ordinary JSON fetching. The snapshot includes repeaters in Finland and Åland with valid coordinates, excluding `offline` and imported-only (`catalog_only`) entries. Inclusion does not imply a repeater is online; dots do not infer radio coverage or connections.
 
-`src/lib/repeater-bundle.ts` owns the wire types, validation and shared browser request. Map components call `loadRepeaterBundle(url)` and use `generatedAt` when displaying snapshot age. `FinlandMap.astro` renders the outline statically, loads repeater dots in the browser and exposes the successful timestamp as `data-generated-at`. Repeater names appear in SVG titles. If fetching fails, the outline remains without fabricated points. The homepage map is hidden on mobile.
+New snapshots also contain `packetActivity` with the previous Finnish calendar day's `date`, `timeZone`, UTC `from`/`to` and `hourly: [{start, count}]`. The packet counter sums those buckets and displays their date. Counts come from CoreScope's hourly packet-hash aggregate, not RF observation totals. The hourly series supports a future graph and has 23, 24 or 25 entries depending on daylight-saving transitions. Older snapshots without this optional field still work for the map and repeater counter.
+
+`src/lib/repeater-bundle.ts` owns the wire types, validation and shared browser request. Map components call `loadRepeaterBundle(url)` and use `generatedAt` when displaying snapshot age. The homepage repeater counter uses that same loader and counts the snapshot's nodes, sharing the map's request and configured endpoint. `FinlandMap.astro` renders the outline statically, loads repeater dots in the browser and exposes the successful timestamp as `data-generated-at`. Repeater names appear in SVG titles. If fetching fails, the outline remains without fabricated points. The homepage map is hidden on mobile.
 
 Set `PUBLIC_REPEATER_BUNDLE_URL` in `.env` to test against another JSON endpoint; restart the dev server when changing it. Alternatively, pass `bundleUrl` to `FinlandMap`. Neither content authors nor site builds need access to mc-shark or R2 credentials.

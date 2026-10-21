@@ -1,9 +1,38 @@
 ---
-draft: true
-title: Welcome aboard Finnish MeshCore
-description: First things first and a little bit about what this guide has in store.
+title: Welcome to MeshCore
+description: The essentials and an overview of this guide.
+translationChecked: '2026-10-21'
+translationSourceHash: sha256:26d1477ea133c6ccd1a9d9f2fd2ab014f39236f6ba2dd191eb2da6065e279aa1
 ---
 
 import DocLink from '@components/DocLink.astro';
 
-Sisältöä luvassa myöhemmin.
+As a MeshCore user, you join a messaging network that keeps going when infrastructure fails.
+
+The first step is to get a _companion radio_ and install its firmware. Once ready, your companion radio continuously listens on the agreed frequency and collects MeshCore messages. Messages you send reach every companion radio within range, and vice versa. MeshCore communities in Finland and around the world are also building repeater networks that carry messages beyond direct radio range.
+
+Depending on your device, you use MeshCore through a phone or computer app that works much like familiar Internet messaging apps, or directly on the device if you choose a companion radio with a screen and keyboard.
+
+This guide helps you at every stage. The topics linked at the bottom of each page follow roughly the order in which you will need them. Use the menu on the left, or the hamburger menu in the top bar on mobile, to jump between topics.
+
+## MeshCore, LoRa and regulations
+
+The most important thing to understand from the outset is that **LoRa, the radio technology used by MeshCore, is slow**. Unlike the Internet, LoRa radios have very limited bandwidth. We hope everyone joining the community understands this basic constraint so we can avoid the excesses seen in mesh network projects around the world. <DocLink page="faq/general" anchor="lora-is-slow">Read the detailed explanation.</DocLink>
+
+Radio communications in Finland must comply with European ([CEPT](https://en.wikipedia.org/wiki/European_Conference_of_Postal_and_Telecommunications_Administrations)) and Finnish ([Traficom](https://traficom.fi/fi/radioluvat-ja-taajuudet)) regulations. These rules **must also be followed** when using MeshCore.
+
+The essentials are to stay within permitted frequency bands and radiated power limits, and to follow the EU-wide rule that **a single device may transmit for no more than 10% of any rolling one-hour period**. Using the recommended settings meets all these requirements.
+
+It is also useful to know that signals in the licence-free 868 MHz band do not readily pass through substantial obstacles such as terrain or concrete walls.
+
+## What this guide covers
+
+- The first page helps you choose and set up a device. A device fresh from the shop invariably needs to be _flashed_: have its firmware installed.
+- The second page covers the settings your device needs to work on the Finnish (and European) MeshCore network and comply with regulations.
+- The third page explains the _Region Scopes_ used in Finland. Understanding these is essential: without it, your messages may not travel through the repeater network.
+- The fourth page introduces MeshCore's three channel types for group conversations.
+- The fifth page explains how to share your mesh “address” so others can send you private messages.
+- The sixth page covers private messaging and introduces _paths_.
+- The seventh page offers tips for advanced users and other applications of MeshCore.
+
+---

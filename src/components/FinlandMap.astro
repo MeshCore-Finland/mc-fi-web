@@ -4,12 +4,13 @@ import {
   finlandViewBox,
   finlandMainlandPath,
 } from '../lib/finland-map';
+import { DEFAULT_REPEATER_BUNDLE_URL } from '../lib/repeater-bundle';
 interface Props {
   bundleUrl?: string;
 }
 const {
   bundleUrl = import.meta.env.PUBLIC_REPEATER_BUNDLE_URL ||
-    'https://data.meshcore.fi/repeaters/v1.json',
+    DEFAULT_REPEATER_BUNDLE_URL,
 } = Astro.props;
 ---
 

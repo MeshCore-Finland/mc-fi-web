@@ -1,0 +1,37 @@
+---
+title: Building the MeshCore network
+description: Building a network is demanding but rewarding.
+translationChecked: '2026-10-21'
+translationSourceHash: sha256:5bd0941e7d29657bc985dd52dfc2607cae8b29f1c9c5e3550d7caf4fe4f152ca
+---
+
+import DocLink from '@components/DocLink.astro';
+
+These pages introduce building and managing repeaters. The topics linked at the bottom of each page follow roughly the order in which you will need them. Use the menu on the left, or the hamburger menu in the top bar on mobile, to jump between topics.
+
+## The essentials before you start
+
+The most important thing to understand is that **LoRa, the radio technology used by MeshCore, is slow**. Unlike the Internet, LoRa radios have very limited bandwidth. We hope everyone joining the community understands this constraint so we can avoid the excesses seen in mesh network projects around the world.
+
+Radio communications in Finland and elsewhere in Europe must comply with European ([CEPT](https://en.wikipedia.org/wiki/European_Conference_of_Postal_and_Telecommunications_Administrations)) and Finnish ([Traficom](https://traficom.fi/fi/radioluvat-ja-taajuudet)) regulations. These rules **must also be followed** when using MeshCore.
+
+The essentials are to stay within permitted frequency bands and radiated power limits, and to follow the EU-wide rule that **a single device may transmit for no more than 10% of any rolling one-hour period**. Using the recommended settings meets all these requirements.
+
+It is also useful to know that signals in the licence-free 868 MHz band do not readily pass through substantial obstacles such as terrain or concrete walls.
+
+## What this guide covers
+
+- The first two pages cover choosing repeater hardware and installing firmware. Some details differ from companion radios.
+- The third page helps you configure a device once its firmware is installed. You can also quickly check settings in the <DocLink page="faq/general">FAQ</DocLink>.
+- The fourth page covers the important topic of Region Scopes. Finland's community has strong recommendations, so it is worth reading: skipping scopes may mean your repeater's traffic is not forwarded by others.
+- Coming later: repeater construction and network planning.
+
+{/*
+* The fifth page covers enclosures, especially for outdoor repeaters, and offers construction ideas, including solar panels and batteries.
+
+* The sixth page provides tools and practical mesh planning advice: placing repeaters, testing sites beforehand, seasonal effects on radio propagation and other planning considerations.
+
+* The seventh page covers observers, CoreScope, getting repeaters onto maps, contributing coverage measurements and other mesh diagnostics and monitoring.
+
+* The eighth page looks ahead to meshes with many repeaters and users, explaining ways to fine-tune network performance.
+*/}
