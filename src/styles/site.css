@@ -135,8 +135,7 @@
   font-size: 0.8rem;
   line-height: 1.7;
 }
-.home-activity,
-.home-community {
+.home-activity {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
@@ -146,37 +145,6 @@
   margin-top: 1rem;
   color: var(--home-accent) !important;
   font-size: 0.8rem;
-}
-.discord-link {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem 1.2rem;
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 0.4rem;
-  font-size: 0.8rem;
-}
-.discord-link strong {
-  color: var(--home-accent);
-  font-size: 0.74rem;
-  font-weight: 500;
-}
-.regions {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.9rem;
-  margin-top: 1.5rem;
-}
-.regions h3 {
-  font-size: 0.8rem;
-  margin-bottom: 0.65rem;
-  font-weight: 500;
-}
-.regions a {
-  display: block;
-  margin-top: 0.4rem;
-  font-size: 0.67rem;
-  color: var(--sl-color-gray-3);
 }
 .home-footer {
   display: flex;
@@ -320,8 +288,7 @@ mesh-faq {
   .hero-actions {
     gap: 0.6rem;
   }
-  .home-activity,
-  .home-community {
+  .home-activity {
     gap: 1.5rem;
   }
 }
@@ -334,8 +301,7 @@ mesh-faq {
     font-size: 3.1rem;
   }
   .path-grid,
-  .home-activity,
-  .home-community {
+  .home-activity {
     grid-template-columns: 1fr;
   }
   .path-card h3 {

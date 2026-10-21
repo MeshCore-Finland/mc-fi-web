@@ -119,6 +119,8 @@ The title is rendered automatically; start article headings at `##`. Add the doc
 
 Add paths after their Finnish documents exist. Keep each page on its own line; comment out an entry to hide it from the sidebar without removing the page. The `prettier-ignore` comment preserves this layout when formatting. Titles and descriptions live in each translated article, not in the sidebar configuration.
 
+Published regional pages under `communities/` also appear in the homepage's local communities section when listed in the sidebar. The overview page `communities/start` is excluded. Links follow the sidebar order and use each translated page's title, falling back to Finnish when needed. Adding a region needs no separate homepage entry.
+
 ## Internal links
 
 Ordinary Markdown links work, including relative URLs. For an MDX reference that automatically follows the reader's selected language, use:

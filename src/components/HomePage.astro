@@ -3,7 +3,8 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import NetworkStats from './NetworkStats.astro';
 import FinlandMap from './FinlandMap.astro';
-import { resources, regions } from '../lib/site';
+import CommunityLinks from './CommunityLinks.astro';
+import { resources } from '../lib/site';
 import { defaultLocale } from '../lib/locales';
 const locale = Astro.currentLocale ?? defaultLocale;
 const t = Astro.locals.t;
@@ -97,27 +98,16 @@ const t = Astro.locals.t;
       </div>
       <NetworkStats />
     </section>
-    <section class="home-community">
+    <section
+      class="home-community"
+      id="communities"
+      aria-labelledby="local-communities"
+    >
       <div class="section-heading">
         <p class="eyebrow">03 / {t('app.home.communitySection')}</p>
-        <h2>{t('app.home.community')}</h2>
-        <p>{t('app.home.communityText')}</p>
+        <h2 id="local-communities">{t('app.home.community')}</h2>
       </div>
-      <div class="community-links">
-        <a class="discord-link" href={resources.discord}>
-          <span>Mesh Finland Discord</span>
-          <strong>{t('app.home.join')} ↗</strong>
-        </a>
-        <div class="regions">
-          {regions.map((region) => (
-            <div>
-              <h3>{region.name}</h3>
-              <a href={region.map}>{t('app.home.regionMap')} ↗</a>
-              {region.site && <a href={region.site}>{t('app.home.visit')} ↗</a>}
-            </div>
-          ))}
-        </div>
-      </div>
+      <CommunityLinks />
     </section>
     <footer class="home-footer">
       <span>{t('app.home.footer')}</span>
