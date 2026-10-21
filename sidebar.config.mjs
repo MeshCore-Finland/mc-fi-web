@@ -54,6 +54,8 @@ export default [
       'communities/southern-finland',
       'communities/southwest-finland',
       'communities/pirkanmaa',
+      'communities/pohjanmaat',
+      'communities/other-regions',
     ],
   },
 

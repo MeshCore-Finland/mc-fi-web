@@ -6,15 +6,6 @@ export const resources = {
   flasher: 'https://flasher.meshcore.io',
   official: 'https://meshcore.io',
 };
-export const regions = [
-  {
-    name: 'Pirkanmaa',
-    site: 'https://meshpirkanmaa.org/',
-    map: 'https://tmp.meshmapper.net/',
-  },
-  { name: 'Uusimaa', map: 'https://hel.meshmapper.net/' },
-  { name: 'Seinäjoki', map: 'https://sjy.meshmapper.net/' },
-];
 export const radioSettings = {
   preset: 'EU/UK Narrow',
   frequency: '869.618 MHz',

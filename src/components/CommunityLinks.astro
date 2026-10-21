@@ -1,0 +1,89 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getCollection } from 'astro:content';
+import sidebar from '../../sidebar.config.mjs';
+import { defaultLocale } from '../lib/locales';
+
+const locale = Astro.currentLocale ?? defaultLocale;
+const pages = new Map(
+  (await getCollection('docs')).map((page) => [page.id, page]),
+);
+// Follow the docs navigation, using translated titles or the Finnish fallback.
+const regions = sidebar
+  .flatMap(({ items }) => items)
+  .filter(
+    (path) => path.startsWith('communities/') && path !== 'communities/start',
+  )
+  .flatMap((path) => {
+    const source = pages.get(`${defaultLocale}/${path}`);
+    if (!source || source.data.draft) return [];
+    const translated = pages.get(`${locale}/${path}`);
+    const page = translated && !translated.data.draft ? translated : source;
+    return [
+      { href: getRelativeLocaleUrl(locale, path), label: page.data.title },
+    ];
+  });
+---
+
+<nav aria-label={Astro.locals.t('app.home.community')}>
+  <ul class="community-links">
+    {regions.map(({ href, label }) => (
+      <li>
+        <a href={href}>
+          <span>{label}</span>
+          <span class="link-arrow" aria-hidden="true">
+            →
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .community-links {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+  }
+  .community-links a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 5rem;
+    height: 100%;
+    padding: 1.2rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    color: var(--sl-color-white);
+    font-size: 1rem;
+    font-weight: 600;
+    transition:
+      color 0.15s,
+      border-color 0.15s,
+      background 0.15s;
+  }
+  .link-arrow {
+    color: var(--home-accent);
+  }
+  .community-links a:hover,
+  .community-links a:focus-visible {
+    color: var(--home-accent);
+    border-color: var(--home-accent);
+    background: var(--sl-color-gray-6);
+  }
+  @media (max-width: 800px) {
+    .community-links {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 480px) {
+    .community-links {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
