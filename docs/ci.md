@@ -28,7 +28,7 @@ Draft PRs have the same triggers. Switching a PR between draft and ready for rev
 Both link jobs need a successful `build` and reuse that artifact. They run independently of each other:
 
 - **`links`** runs strict internal link, anchor and duplicate-ID validation. A failure is intended to block merging when this check is required in the branch ruleset.
-- **`external-links`** checks external HTTP/HTTPS responses with Lychee. It follows redirects, permits up to two retries for retryable failures, uses a 20-second request timeout and checks at most four URLs concurrently. The job has a 10-minute limit. Internal URLs on `meshcore.fi`, private network addresses and external fragment validation are excluded. HTTP/network failures fail this advisory job, allowing the merge approver to judge temporary outages or blocked automated requests. An empty external-link set succeeds.
+- **`external-links`** checks external HTTP/HTTPS responses with Lychee. It follows redirects, permits up to two retries for retryable failures, uses a 20-second request timeout and checks at most four URLs concurrently. The job has a 10-minute limit. Internal URLs on `meshcore.fi`, private network addresses and external fragment validation are excluded. Lychee also skips `meshmapper.net` and its subdomains because they return HTTP 403 to automated checks. HTTP/network failures fail this advisory job, allowing the merge approver to judge temporary outages or blocked automated requests. An empty external-link set succeeds.
 
 External results appear in the job summary and in the `external-link-report` artifact, retained for seven days. The report upload is attempted even after a scan failure, unless the run is cancelled. This workflow posts no PR comments.
 
