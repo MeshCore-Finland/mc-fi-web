@@ -1,3 +1,6 @@
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { rename } from 'node:fs/promises';
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import react from '@astrojs/react';
@@ -6,6 +9,13 @@ import faqPages from './src/lib/faq-pages.mjs';
 import { defaultLocale, locales } from './src/lib/locales';
 import { resources } from './src/lib/site';
 import sidebar from './sidebar.config.mjs';
+
+// Give Pagefind's runtime and index a new URL whenever the locked dependencies change.
+const dependencyHash = createHash('sha256')
+  .update(readFileSync(new URL('./package-lock.json', import.meta.url)))
+  .digest('hex')
+  .slice(0, 12);
+const pagefindDirectory = `pagefind-${dependencyHash}`;
 
 export default defineConfig({
   site: 'https://meshcore.fi',
@@ -36,6 +46,17 @@ export default defineConfig({
       defaultLocale,
       locales,
       routeMiddleware: './src/routeData.ts',
+      head: [
+        {
+          tag: 'script',
+          attrs: { type: 'importmap' },
+          content: JSON.stringify({
+            imports: {
+              '/pagefind/pagefind.js': `/${pagefindDirectory}/pagefind.js`,
+            },
+          }),
+        },
+      ],
       // The dedicated src/pages/404.astro route uses our Starlight layout.
       disable404Route: true,
       social: [
@@ -55,6 +76,17 @@ export default defineConfig({
       sidebar,
       credits: false,
     }),
+    {
+      name: 'version-pagefind-assets',
+      hooks: {
+        // Starlight writes the bundle first. Pagefind loads its worker and index beside the runtime.
+        'astro:build:done': ({ dir }) =>
+          rename(
+            new URL('pagefind/', dir),
+            new URL(`${pagefindDirectory}/`, dir),
+          ),
+      },
+    },
     react(),
     faqPages(),
   ],
